@@ -1,0 +1,2 @@
+# MasterCamp
+MoneyScamer
