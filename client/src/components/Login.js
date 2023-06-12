@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
-
+import bcrypt from 'bcryptjs';
 
 
 
@@ -25,18 +25,25 @@ const Login = () => {
     console.log(isLoggedIn)
     e.preventDefault();
 
-    if(username === "lucas" && password === "test"){
-      console.log("reussi")
-      login({name: username, password: password})
-      navigate('/contact', {replace: true})   
+    //encryption on submit
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const encryptedPassword = bcrypt.hashSync(password, salt);
 
+    //test, to remove/modify later
+    console.log(password)
+    console.log(encryptedPassword)
 
-    }else{
-      console.log("fail")
+    const test = bcrypt.compareSync(password, encryptedPassword)
+
+    if (test) {
+      console.log("success")
+      login({name: username, password: encryptedPassword})
+      navigate('/contact', {replace: true})
     }
-
-    
-
+    else {
+      console.log("failure")
+    }
   };
   
   return (
