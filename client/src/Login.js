@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import bcrypt from 'bcryptjs';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -15,14 +16,23 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const bcrypt = require("bcrypt");
+    //encryption on submit
     const saltRounds = 10;
-  
-    const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    console.log("username : ", username)
-    console.log("password : ", password)
-    console.log("hashed password : ", hashedPassword)
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const encryptedPassword = bcrypt.hashSync(password, salt);
 
+    //test, to remove later
+    console.log(password)
+    console.log(encryptedPassword)
+
+    const test = bcrypt.compareSync(password, encryptedPassword)
+
+    if (test) {
+      console.log("success")
+    }
+    else {
+      console.log("failure")
+    }
   };
 
   return (
