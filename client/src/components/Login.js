@@ -1,7 +1,17 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
+// TODO: import le logo depuis la source
+import imageSrc from "./logo.png";
 
+//TODO : un composant pour l'input
+function test(props) {
+  return (
+    <div>
+      <h1>test</h1>
+    </div>
+  );
+}
 
 const Login = () => {
   const { isLoggedIn, login, logout } = useContext(AuthContext);
@@ -33,8 +43,10 @@ const Login = () => {
 
   return (
     <div>
-      <h1>Page d'accueil</h1>
-      <Link to="/contact">Aller à la page de contact</Link>
+      <div className="Logo">
+        <img src={imageSrc} alt="ImageLogo" />
+        <p>CreditExpress</p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username : </label>
@@ -54,6 +66,7 @@ const Login = () => {
             onChange={handlePasswordChange}
           />
         </div>
+        <Link to="/SignIn">New in Credit Express</Link>
         <button type="submit">Login</button>
       </form>
     </div>
