@@ -1,28 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
-const NavBar = () => {
-  return (
-    <div>
-      <Link to="/">Faire une demandes</Link>
-      <Link to="/contact">Mes demandes</Link>
-      <Avatar img="https://www.w3schools.com/howto/img_avatar.png" />
-    </div>
-  );
-};
-
-const Avatar = (props) => {
-  return (
-    <div className="Avatar" class="bg-sky-500 hover:bg-sky-700">
-      <img src={props.img} alt="avatar" />;
-    </div>
-  );
-};
+import React, { useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 
 const ContactPage = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const returnHome = () => {
+    console.log('home');
+    navigate('/', {replace: true});
+  };
+
   return (
     <div>
-      <NavBar />
+      <h1>Page de contact {user.name}</h1>
+      <button onClick={returnHome}>retour</button>
       {/* Contenu de la page de contact */}
     </div>
   );
