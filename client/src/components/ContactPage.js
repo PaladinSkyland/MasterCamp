@@ -1,11 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 
 const ContactPage = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const returnHome = () => {
+    console.log('home');
+    navigate('/', {replace: true});
+  };
+
   return (
     <div>
-      <h1>Page de contact</h1>
-      <Link to="/">Aller à la page home</Link>
+      <h1>Page de contact {user.name}</h1>
+      <button onClick={returnHome}>retour</button>
       {/* Contenu de la page de contact */}
     </div>
   );
