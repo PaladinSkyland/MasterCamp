@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../authentification/AuthContext';
 import {login, setHttpOnlyCookie}  from '../authentification/login'
 import bcrypt from 'bcryptjs';
@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 
 const LoginPage = () => {
 
-  const { setIsLoggedIn, isLoggedIn, logout } = useContext(AuthContext);
+  const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate()
  
   const [username, setUsername] = useState('');
@@ -22,7 +22,7 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit =  (e) => {
+  const handleLogin =  (e) => {
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -34,32 +34,20 @@ const LoginPage = () => {
       localStorage.setItem('token', token);
       setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)
       setIsLoggedIn(true)
+      navigate('/contact')
     })
     
     e.preventDefault();
   };
 
-  const logoutt = () => {
+  const HandleLogout = () => {
     logout()
-  }
-
-  const testfunction = () => {
-
-      console.log('function de test')
-      console.log(isLoggedIn)
-      if(isLoggedIn){
-        navigate('/contact')
-      }else{
-        console.log('vtf')  
-      }
-      
-
   }
   
   return (
     <div>
       <h1>Page d'accueil</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
       <div>
         <label htmlFor="username">Username : </label>
         <input
@@ -80,8 +68,7 @@ const LoginPage = () => {
       </div>
       <button type="submit">Login</button>
     </form>
-    <button onClick={testfunction}>Test</button>
-    <button onClick={logoutt}>logout</button>
+    <button onClick={HandleLogout}>logout</button>
     </div>
     
   );
