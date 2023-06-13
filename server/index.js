@@ -63,13 +63,26 @@ app.post("/register", async (req, res) => {
         // L'utilisateur existe déjà, renvoyer une réponse d'erreur
         return res.status(400).json({ message: "L'utilisateur existe déjà." });
       }
-      
-  
-      // Continuer avec le reste de la logique d'enregistrement de l'utilisateur
-      // ...
-      
-      // Répondre au client avec une réponse de succès
-      res.status(200).json({ message: "Utilisateur enregistré avec succès !" });
+      else {
+        // Enregistrement de l'utilisateur dans la base de données
+        await db("Users").insert({
+          Email: email,
+          Password: password,
+          Name: username,
+          FirstName: userfirstname
+        }).then(() => {
+          console.log('Utilisateur inséré avec succès dans la base de données.');
+          res.status(200).json({ message: "Utilisateur enregistré avec succès !" });
+        })
+        .catch((error) => {
+          console.error(error);
+          // Gérer les erreurs d'insertion dans la base de données
+          return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+        });;
+
+
+      }
+
     } catch (error) {
       console.error(error);
       // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
