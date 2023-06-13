@@ -21,6 +21,11 @@
       "src": "logo.png",
       "type": "image/png",
       "sizes": "546x528"
+    },
+    {
+      "src": "wallpaper.png",
+      "type": "image/png",
+      "sizes": "1920x1080"
     }
   ],
   "start_url": ".",
