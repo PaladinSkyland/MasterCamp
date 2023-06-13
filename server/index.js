@@ -86,7 +86,7 @@ app.post("/register", async (req, res) => {
     } catch (error) {
       console.error(error);
       // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
-      res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+      res.status(500).json({ message: "Connextion avec la DB impossible" });
     }
   });
 
