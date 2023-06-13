@@ -2,6 +2,8 @@ import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../authentification/AuthContext';
 import {login, setHttpOnlyCookie}  from '../authentification/login'
+import bcrypt from 'bcryptjs';
+
 
 const LoginPage = () => {
 
@@ -22,8 +24,12 @@ const LoginPage = () => {
 
   const handleSubmit =  (e) => {
 
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const encryptedPassword = bcrypt.hashSync(password, salt);
+
     // Vérification de l'utilisateur
-    login(username, password).then(result => {
+    login(username, encryptedPassword).then(result => {
       let token = result
       localStorage.setItem('token', token);
       setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)
