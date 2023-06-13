@@ -1,5 +1,4 @@
 export async function login(username, password){
-  console.log("je suis icii")
 
   // Specification des options de la méthode fetch
   const options = {
@@ -17,4 +16,15 @@ export async function login(username, password){
 
     return data.token
 
+}
+
+export function setHttpOnlyCookie(name, value, expiration) {
+  //Créer un cookie avec un nom, une valeur et une date d'expiration
+  var cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; HttpOnly`;
+  //Ajoute une date d'expiration au cookie
+  if (expiration) {
+    cookie += `; Expires=${expiration.toUTCString()}`;
+  }
+  //Défini le cookie dans le navigateur
+  document.cookie = cookie;
 }

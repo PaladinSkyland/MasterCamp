@@ -1,15 +1,16 @@
 import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../authentification/AuthContext';
-import {login}  from '../authentification/login'
+import {login, setHttpOnlyCookie}  from '../authentification/login'
 
 const LoginPage = () => {
 
-  //const { isLoggedIn, login, logout } = useContext(AuthContext);
+  const { setIsLoggedIn, isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate()
  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -21,25 +22,37 @@ const LoginPage = () => {
 
   const handleSubmit =  (e) => {
 
-    var token
+    // Vérification de l'utilisateur
     login(username, password).then(result => {
-      token = result
+      let token = result
+      localStorage.setItem('token', token);
+      setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)
+      setIsLoggedIn(true)
     })
-
-    console.log('le token,',token)
-    
-
-      /* fetch('/protected', {
-        headers: {Authorization: `Bearer ${token}`}
-      }) */
     
     e.preventDefault();
   };
+
+  const logoutt = () => {
+    logout()
+  }
+
+  const testfunction = () => {
+
+      console.log('function de test')
+      console.log(isLoggedIn)
+      if(isLoggedIn){
+        navigate('/contact')
+      }else{
+        console.log('vtf')  
+      }
+      
+
+  }
   
   return (
     <div>
       <h1>Page d'accueil</h1>
-      <Link to="/contact">Aller à la page de contact</Link>
       <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="username">Username : </label>
@@ -61,6 +74,8 @@ const LoginPage = () => {
       </div>
       <button type="submit">Login</button>
     </form>
+    <button onClick={testfunction}>Test</button>
+    <button onClick={logoutt}>logout</button>
     </div>
     
   );
