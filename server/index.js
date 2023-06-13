@@ -44,24 +44,26 @@ app.post("/register",  async (req,res) => {
     
 })*/
 
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
     //try {
-    console.log("register")
-    res.send({"test": "lalala"})
-      const test = req.body;
-      console.log(test);
-        /*
+    console.log("register :")
+    //res.send({"test": "lalala"})
+    const {username, userfirstname, email, password} = req.body;
+    console.log(email);
+    
       // Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
+      
       const result = await db
-        .select("Password")
-        .from("utilisateur")
-        .where({ Email_utilisateur: username });
-  
+        .select("Email")
+        .from("Users")
+        .where({ Email: email });
+    /*
       if (result.length > 0) {
         const user = result[0];
         // L'utilisateur existe déjà, renvoyer une réponse d'erreur
         return res.status(400).json({ message: "L'utilisateur existe déjà." });
       }
+      /*
   
       // Continuer avec le reste de la logique d'enregistrement de l'utilisateur
       // ...
