@@ -1,9 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../authentification/AuthContext';
 
 const ContactPage = () => {
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [name, setName] = useState('')
 
