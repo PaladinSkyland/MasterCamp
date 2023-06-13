@@ -1,4 +1,4 @@
-const knex = require('knew')({
+const knex = require('knex')({
     client: process.env.MYSQL_CLIENT,
     connection:{
         host:process.env.MYSQL_HOST,

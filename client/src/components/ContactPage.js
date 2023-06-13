@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../authentification/AuthContext';
 
 const ContactPage = () => {
   const { user } = useContext(AuthContext);

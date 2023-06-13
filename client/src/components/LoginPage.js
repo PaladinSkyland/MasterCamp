@@ -1,13 +1,11 @@
 import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../authentification/AuthContext';
+import {login}  from '../authentification/login'
 
+const LoginPage = () => {
 
-
-
-const Login = () => {
-
-  const { isLoggedIn, login, logout } = useContext(AuthContext);
+  //const { isLoggedIn, login, logout } = useContext(AuthContext);
   const navigate = useNavigate()
  
   const [username, setUsername] = useState('');
@@ -21,22 +19,21 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (e) => {
-    console.log(isLoggedIn)
-    e.preventDefault();
+  const handleSubmit =  (e) => {
 
-    if(username === "lucas" && password === "test"){
-      console.log("reussi")
-      login({name: username, password: password})
-      navigate('/contact', {replace: true})   
+    var token
+    login(username, password).then(result => {
+      token = result
+    })
 
-
-    }else{
-      console.log("fail")
-    }
-
+    console.log('le token,',token)
     
 
+      /* fetch('/protected', {
+        headers: {Authorization: `Bearer ${token}`}
+      }) */
+    
+    e.preventDefault();
   };
   
   return (
@@ -69,4 +66,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

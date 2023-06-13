@@ -1,9 +1,9 @@
 
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from './authentification/AuthContext';
 
-import Login from './components/Login';
+import LoginPage from './components/LoginPage';
 import ContactPage from './components/ContactPage';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
       <Router>
         <AuthProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
         </AuthProvider>
