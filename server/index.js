@@ -45,7 +45,7 @@ app.post("/register",  async (req,res) => {
 })*/
 
 app.post("/register", async (req, res) => {
-    //try {
+    try {
     console.log("register :")
     //res.send({"test": "lalala"})
     const {username, userfirstname, email, password} = req.body;
@@ -57,13 +57,13 @@ app.post("/register", async (req, res) => {
         .select("Email")
         .from("Users")
         .where({ Email: email });
-    /*
+    
       if (result.length > 0) {
         const user = result[0];
         // L'utilisateur existe déjà, renvoyer une réponse d'erreur
         return res.status(400).json({ message: "L'utilisateur existe déjà." });
       }
-      /*
+      
   
       // Continuer avec le reste de la logique d'enregistrement de l'utilisateur
       // ...
@@ -74,7 +74,7 @@ app.post("/register", async (req, res) => {
       console.error(error);
       // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
       res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
-    }*/
+    }
   });
 
 app.listen(port, () => {
