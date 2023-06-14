@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './authentification/AuthContext';
 
 import LoginPage from './components/LoginPage';
+import Register from './components/Register';
 import ContactPage from './components/ContactPage';
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
       <Router>
         <AuthProvider>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<Login />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
         </AuthProvider>
