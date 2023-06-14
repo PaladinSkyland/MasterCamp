@@ -69,7 +69,6 @@ const LoginPage = () => {
       <button type="submit">Login</button>
     </form>
     <button onClick={HandleLogout}>logout</button>
-    <button onClick={navigate("/register")}>Register</button> 
     </div>
     
   );

@@ -7,8 +7,6 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bcryptjs": "^2.4.3",
-    "crypto-browserify": "^3.12.0",
-    "crypto-js": "^3.1.9-1",
     "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,7 +24,7 @@
     "eject": "react-scripts eject",
     "client": "nodemon /src/index.js"
   },
-  "proxy": "http://localhost:6000",
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",
