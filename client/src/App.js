@@ -1,9 +1,9 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./AuthContext";
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './authentification/AuthContext';
 
-import LoginPage from "./components/LoginPage";
-import ContactPage from "./components/ContactPage";
+import LoginPage from './components/LoginPage';
+import ContactPage from './components/ContactPage';
 
 const App = () => {
   return (
