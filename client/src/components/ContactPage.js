@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import React, { useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 const ContactPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const returnHome = () => {
-    console.log('home');
-    navigate('/', {replace: true});
+    console.log("home");
+    navigate("/", { replace: true });
   };
 
   return (
