@@ -11,20 +11,20 @@ app.use(express.json()); //Middleware express
 
 app.post("/login", async (req,res) => {
 
-    //Récupération du mdp et de l'username passé dans le formulaire de login
-    const {username, password} = req.body;
+    //Récupération du mdp et de l'email passé dans le formulaire de login
+    const {email, password} = req.body;
 
     //Récupération du mdp de l'utilisateur dans la BDD
 
 
-    const request = db.query("SELECT Password, ID_user from Utilisateur where Email_utilisateur = ?", [username], (error, results) => {
+    const request = db.query("SELECT Password, ID_user from users where Email = ?", [email], (error, results) => {
       if (error) {
         console.log(error)
       } else {
         if(results.length > 0 ){
           if(password === results[0].Password){
             const ID = results[0].ID_user
-            const token = jwt.sign({ username, ID }, process.env.secretKey, { expiresIn: '10s' });
+            const token = jwt.sign({ Email, ID }, process.env.secretKey, { expiresIn: '10s' });
             res.json({ token });
           }else {
             res.status(401).json({ error: 'Identifiants invalides' });
@@ -53,7 +53,7 @@ function authenticateToken(req, res, next) {
 
 app.get('/protected', authenticateToken, async (req, res) => {
   const response = await userQueries.getNameByID(res, req.user.ID)
-  res.json({name: response.Nom_utilsateur})
+  res.json({name: response.Email})
 });
 
 

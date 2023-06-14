@@ -10,12 +10,12 @@ const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate()
  
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -29,7 +29,7 @@ const LoginPage = () => {
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
-    login(username, encryptedPassword).then(result => {
+    login(email, encryptedPassword).then(result => {
       let token = result
       localStorage.setItem('token', token);
       setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)
@@ -49,12 +49,12 @@ const LoginPage = () => {
       <h1>Page d'accueil</h1>
       <form onSubmit={handleLogin}>
       <div>
-        <label htmlFor="username">Username : </label>
+        <label htmlFor="email">email : </label>
         <input
           type="text"
-          id="username"
+          id="email"
           value={username}
-          onChange={handleUsernameChange}
+          onChange={handleEmailChange}
         />
       </div>
       <div>
