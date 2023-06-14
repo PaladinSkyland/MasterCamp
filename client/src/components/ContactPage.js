@@ -6,12 +6,11 @@ const ContactPage = () => {
   const [name, setName] = useState('')
 
   const returnHome = () => {
-    console.log('home');
     navigate('/', {replace: true});
   };
   const storedToken = localStorage.getItem('token');
 
-  fetch('/protected', {
+  /* fetch('/protected', {
     headers: {
       'Authorization': `Bearer ${storedToken}`
     }
@@ -19,13 +18,12 @@ const ContactPage = () => {
     response.json()
   ).then(data => {
     setName(data.name)
-  })
+  }) */
 
   return (
     <div>
       <h1>Page de contact {name}</h1>
       <button onClick={returnHome}>retour</button>
-      {/* Contenu de la page de contact */}
     </div>
   );
 };
