@@ -29,7 +29,7 @@ const LoginPage = () => {
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
-    login(username, encryptedPassword).then(result => {
+    login(username, password).then(result => {
       let token = result
       localStorage.setItem('token', token);
       setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)

@@ -1,5 +1,5 @@
 export async function login(username, password){
-
+  console.log(username, password)
   // Specification des options de la méthode fetch
   const options = {
     method: "POST", //Post pour ne pas mettre le mdp dans l'url

@@ -6,7 +6,6 @@ const ContactPage = () => {
   const [name, setName] = useState('')
 
   const returnHome = () => {
-    console.log('home');
     navigate('/', {replace: true});
   };
   const storedToken = localStorage.getItem('token');
