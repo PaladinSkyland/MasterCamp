@@ -4,7 +4,6 @@ import { AuthProvider } from "./AuthContext";
 
 import LoginPage from "./components/LoginPage";
 import ContactPage from "./components/ContactPage";
-import SignInPage from "./components/SignInPage";
 import TestPage from "./components/TestPage";
 
 const App = () => {
@@ -14,7 +13,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/signin" element={<SignInPage />} />
           <Route path="/test" element={<TestPage />} />
         </Routes>
       </AuthProvider>
