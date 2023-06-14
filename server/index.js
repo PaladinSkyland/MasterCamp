@@ -15,24 +15,26 @@ app.post("/login", async (req,res) => {
     const {username, password} = req.body;
 
     //Récupération du mdp de l'utilisateur dans la BDD
-    const request = await db.select("Password","ID_user").from("utilisateur").where({Email_utilisateur: username})
-    
 
-    if(request.length > 0 ){
-      if(password === request[0].Password){
-        const ID = request[0].ID_user
-        const token = jwt.sign({ username, ID }, process.env.secretKey, { expiresIn: '1h' });
-        res.json({ token });
-      }else {
-        res.status(401).json({ error: 'Identifiants invalides' });
-      }
 
-      
+    const request = db.query("SELECT Password, ID_user from Utilisateur where Email_utilisateur = ?", [username], (error, results) => {
+      if (error) {
+        console.log(error)
+      } else {
+        if(results.length > 0 ){
+          if(password === results[0].Password){
+            const ID = results[0].ID_user
+            const token = jwt.sign({ username, ID }, process.env.secretKey, { expiresIn: '10s' });
+            res.json({ token });
+          }else {
+            res.status(401).json({ error: 'Identifiants invalides' });
+          }
     }
+      }
+    });
 })
 
 function authenticateToken(req, res, next) {
-    console.log(req.headers)
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
   
@@ -42,21 +44,16 @@ function authenticateToken(req, res, next) {
   
     jwt.verify(token, process.env.secretKey, (err, user) => {
       if (err) {
-        console.log("test", token)
         return res.sendStatus(403);
       }
       req.user = user;
-      console.log('ça marche')
       next();
     });
 }
 
-app.get('/protected', authenticateToken, (req, res) => {
-  console.log(req.user.ID)
-  const response = userQueries.getNameByID(req.user.ID)
-  response.then(r => {
-    res.json(r)
-  })
+app.get('/protected', authenticateToken, async (req, res) => {
+  const response = await userQueries.getNameByID(res, req.user.ID)
+  res.json({name: response.Nom_utilsateur})
 });
 
 app.listen(port, () => {
