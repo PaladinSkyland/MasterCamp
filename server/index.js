@@ -14,35 +14,6 @@ app.get("/api", (req,res) => {
     res.send({"test": "lucas"})
 })
 
-/*
-app.post("/register", (req,res) => {
-    console.log("/register")
-    res.send({"test": "lucas"})
-})
-
-/*
-app.post("/register",  async (req,res) => {
-
-    
-    //Récupération du mdp et de l'username passé dans le formulaire de login
-    const {username, password} = req.body;
-
-    //Récupération du mdp de l'utilisateur dans la BDD
-    const request = await db.select("Password").from("utilisateur").where({Email_utilisateur: username})
-
-    if(request.length > 0 ){
-      if(password === request[0].Password){
-        const token = jwt.sign({ username }, process.env.secretKey, { expiresIn: '1h' });
-        console.log({token})
-        res.json({ token });
-      }else {
-        res.status(401).json({ error: 'Identifiants invalides' });
-      }
-
-      
-    }
-    
-})*/
 
 app.post("/register", async (req, res) => {
     try {
