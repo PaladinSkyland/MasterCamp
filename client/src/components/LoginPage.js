@@ -84,6 +84,7 @@ const LoginPage = () => {
         text-white 
         px-4 py-2
         hover:text-black
+        my-3
         "
               type="submit"
             >
@@ -95,6 +96,7 @@ const LoginPage = () => {
         to-violet-300 rounded-full
         text-white 
         px-4 py-2
+        my-3
         hover:text-black
         "
               onClick={HandleLogout}
