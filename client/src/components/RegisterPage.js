@@ -10,6 +10,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [radiobutton, setRadiobutton] = useState('');
   const [employeebankrep, setemployeebankrep] = useState(null);
+  const [selectedbankOption, setSelectedbankOption] = useState('');
  
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -25,6 +26,10 @@ const RegisterPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const handleSelectOptionChange = (event) => {
+    setSelectedbankOption(event.target.value);
   };
 
   const handleRadiobuttonChange = (event) => {
@@ -49,6 +54,34 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
 
     e.preventDefault();
+    
+    if (radiobutton !== "employee") {
+      fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          // Récupérez les valeurs du formulaire pour les envoyer au serveur
+          username: username,
+          userfirstname: userfirstname,
+          email: email,
+          password: password,
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+  
+          // Gérer la réponse du serveur ici
+          console.log(data);
+        })
+        .catch(error => {
+          
+          // Gérer les erreurs ici
+          console.error(error);
+        });
+    }
+    else if (radiobutton === "employee") {
 
     fetch('/register', {
       method: 'POST',
@@ -61,6 +94,8 @@ const RegisterPage = () => {
         userfirstname: userfirstname,
         email: email,
         password: password,
+        type: "employee",
+        bankref: selectedbankOption
       })
     })
       .then(response => response.json())
@@ -74,6 +109,7 @@ const RegisterPage = () => {
         // Gérer les erreurs ici
         console.error(error);
       });
+    }
   };
   
   return (
@@ -132,14 +168,19 @@ const RegisterPage = () => {
         />
       </div>
       <button type="submit">Sign in</button>
-    </form>
 
-    {radiobutton === "employee" && employeebankrep && (
+      {radiobutton === "employee" && employeebankrep && (
         <div>
           <h2>Réponse du serveur :</h2>
-          <pre>{JSON.stringify(employeebankrep, null, 2)}</pre>
+          <select value={selectedbankOption} onChange={handleSelectOptionChange}>
+            <option value="">Sélectionner une option</option>
+            {employeebankrep.map((bank, index) => (
+              <option key={index} value={bank.Name}>{bank.Name}</option>
+            ))}
+          </select>
         </div>
       )}
+    </form>
 
     </div>
     

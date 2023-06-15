@@ -65,8 +65,14 @@ app.get('/protected', authenticateToken, (req, res) => {
 app.post("/register", async (req, res) => {
   try {
 
-    const { username, userfirstname, email, password } = req.body;
+    const { username, userfirstname, email, password, type, bankref } = req.body;
     console.log(email);
+    console.log(password);
+    console.log(username);
+    console.log(userfirstname);
+    console.log(type);
+    console.log(bankref);
+
 
     // Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
     db.query('SELECT Email FROM Users WHERE Email = ?', [email], (error, results) => {
@@ -86,19 +92,62 @@ app.post("/register", async (req, res) => {
         }
         else {
 
-          // Enregistrement de l'utilisateur dans la base de données
-          db.query('INSERT INTO Users SET ?', { Email: email, Password: password, Name: username, FirstName: userfirstname }, (error, results) => {
-            if (error) {
+          if (type == "employee") {
 
-              // Gérer les erreurs d'insertion dans la base de données
-              console.error(error);
-              return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
-            } else {
+            db.query('INSERT INTO Users SET ?', { Email: email, Password: password, Name: username, FirstName: userfirstname }, (error, results) => {
+              if (error) {
+                // Gérer les erreurs d'insertion dans la base de données
+                console.error(error);
+                return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+              } else {
 
-              console.log('Utilisateur inséré avec succès dans la base de données.');
-              res.status(200).json({ message: "Utilisateur enregistré avec succès !" });
-            }
-          });
+
+                console.log('Utilisateur inséré avec succès dans la base de données.');
+                console.log('resultat de la requete : ', results.insertId);
+                const ID_user = results.insertId;
+                db.query('SELECT ID_bank FROM Banks WHERE Name = ?', [bankref], (error, results) => {
+                  if (error) {
+                    // Gérer les erreurs d'insertion dans la base de données
+                    console.error(error);
+                    return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+
+
+                  } else {
+                    console.log('resultat de la requete : ', results[0].ID_bank);
+                    const ID_bank = results[0].ID_bank;
+                    db.query('INSERT INTO Employees SET ?', { ID_user: ID_user, ID_bank: ID_bank }, (error, results) => {
+                      if (error) {
+                        // Gérer les erreurs d'insertion dans la base de données
+                        console.error(error);
+                        return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+
+
+                      } else {
+                      
+                        console.log('Employé inséré avec succès dans la base de données.');
+                        res.status(200).json({ message: "Employé enregistré avec succès !" });
+                      }
+                    });
+                  }
+                })
+              }
+            });
+          }
+          else  {
+            // Enregistrement de l'utilisateur dans la base de données
+            db.query('INSERT INTO Users SET ?', { Email: email, Password: password, Name: username, FirstName: userfirstname }, (error, results) => {
+              if (error) {
+
+                // Gérer les erreurs d'insertion dans la base de données
+                console.error(error);
+                return res.status(500).json({ message: "Une erreur s'est produite lors de l'enregistrement de l'utilisateur." });
+              } else {
+
+                console.log('Utilisateur inséré avec succès dans la base de données.');
+                res.status(200).json({ message: "Utilisateur enregistré avec succès !" });
+              }
+            });
+          }
         }
       }
     });
