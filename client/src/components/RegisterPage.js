@@ -8,6 +8,7 @@ const RegisterPage = () => {
   const [userfirstname, setUserfirstname] = useState('');
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
+  const [radiobutton, setRadiobutton] = useState('');
  
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -23,6 +24,24 @@ const RegisterPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const handleRadiobuttonChange = (event) => {
+    console.log(event.target.value);
+    if (event.target.value === "employee") {
+      fetch("/getBanks")
+      .then(response => response.json())
+      .then(data => {
+        // Gérer la réponse du serveur ici
+        console.log(data);
+      })
+      .catch(error => {
+        // Gérer les erreurs ici
+        console.error(error);
+      });
+};
+
+    setRadiobutton(event.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -60,15 +79,15 @@ const RegisterPage = () => {
       <h1>Page de sign in</h1>
       
       <form onSubmit={handleSubmit}>
-        <div class="radio">
+        <div className="radio">
           <label>
-            <input type="radio" name="role" value="client" defaultChecked />
+            <input type="radio" name="role" value="client" onChange={handleRadiobuttonChange} defaultChecked />
             Client
           </label>
         </div>
-        <div class="radio">
+        <div className="radio">
           <label>
-            <input type="radio" name="role" value="employé" />
+            <input type="radio" name="role" value="employee" onChange={handleRadiobuttonChange} />
             Employé
           </label>
         </div>        
