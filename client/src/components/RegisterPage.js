@@ -60,6 +60,20 @@ const RegisterPage = () => {
       <h1>Page de sign in</h1>
       
       <form onSubmit={handleSubmit}>
+        <div class="radio">
+          <label>
+            <input type="radio" name="role" value="client" defaultChecked />
+            Client
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="role" value="employé" />
+            Employé
+          </label>
+        </div>        
+
+
       <div>
         <label htmlFor="username">Username : </label>
         <input
