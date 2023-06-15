@@ -10,15 +10,15 @@ const ContactPage = () => {
   };
   const storedToken = localStorage.getItem('token');
 
-  /* fetch('/protected', {
+  fetch('/protected', {
     headers: {
       'Authorization': `Bearer ${storedToken}`
     }
   }).then(response => 
     response.json()
   ).then(data => {
-    setName(data.name)
-  }) */
+    setName(data.Name)
+  })
 
   return (
     <div>

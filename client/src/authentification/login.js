@@ -11,11 +11,11 @@ export async function login(email, password){
       password: password
     })
   }
+    //On attend la réponse du serveur avec login
     const response = await fetch('/login', options)
     const data = await response.json()
 
-    return data.token
-
+    return data
 }
 
 export function setHttpOnlyCookie(name, value, expiration) {
