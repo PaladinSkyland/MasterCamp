@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../authentification/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import {login, setHttpOnlyCookie}  from '../authentification/login'
 import bcrypt from 'bcryptjs';
 
@@ -49,7 +49,7 @@ const LoginPage = () => {
 
       //On met le contexte login à true, et on se déplace sur la page voulue
       setIsLoggedIn(true)
-      navigate('/contact')
+      navigate('/home')
       
     })
   };

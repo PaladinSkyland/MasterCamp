@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./authentification/AuthContext";
+import { AuthProvider,  } from "./context/AuthContext";
 
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
-import ContactPage from './components/ContactPage';
+import ContactPage from './components/HomePage';
+import { UserProvider } from "./context/UserContext";
 
 const App = () => {
   return (
@@ -12,8 +13,8 @@ const App = () => {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/register" element={<UserProvider><RegisterPage /></UserProvider>} />
+          <Route path="/home" element={<UserProvider><ContactPage /></UserProvider>} />
         </Routes>
       </AuthProvider>
     </Router>

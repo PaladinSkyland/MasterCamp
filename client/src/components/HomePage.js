@@ -1,31 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-const ContactPage = () => {
+const HomePage = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  
 
+  const { userData, setUserData } = useContext(UserContext)
+  
   const returnHome = () => {
     navigate("/", { replace: true });
   };
   const storedToken = localStorage.getItem("token");
 
-  fetch('/protected', {
+  fetch('/home', {
     headers: {
       'Authorization': `Bearer ${storedToken}`
     }
   }).then(response => 
     response.json()
   ).then(data => {
-    setName(data.Name)
+    setUserData(data)
   })
 
   return (
     <div>
-      <h1>Page de contact {name}</h1>
+      <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
       <button onClick={returnHome}>retour</button>
     </div>
   );
 };
 
-export default ContactPage;
+export default HomePage;

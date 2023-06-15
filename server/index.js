@@ -23,8 +23,10 @@ app.post("/login", async (req, res) => {
         if (password === results[0].Password) {
 
           const ID = results[0].ID_user
-          const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '10s' });
+
+          const token = jwt.sign({ email, ID,  }, process.env.secretKey, { expiresIn: '10s' });
           res.json({ token });
+
         } else {
           res.status(401).json({ error: 'Identifiants invalides' });
         }
@@ -53,8 +55,12 @@ function authenticateToken(req, res, next) {
   });
 }
 
-app.get('/protected', authenticateToken, (req, res) => {
-  const response = userQueries.getNameByID(req.user.ID)
+app.get('/home', authenticateToken, (req, res) => {
+
+  const ID = req.user.ID
+
+  const response = userQueries.getUserInfoByID(ID)
+  
   response.then(response => {
     res.json(response)
   })
@@ -62,7 +68,7 @@ app.get('/protected', authenticateToken, (req, res) => {
 });
 
 
-app.post("/register", async (req, res) => {
+/* app.post("/register", async (req, res) => {
   try {
     console.log("register :")
     //res.send({"test": "lalala"})
@@ -106,7 +112,7 @@ app.post("/register", async (req, res) => {
     // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
     res.status(500).json({ message: "Connextion avec la DB impossible" });
   }
-});
+}); */
 
 app.listen(port, () => {
   console.log("listening on port", port)
