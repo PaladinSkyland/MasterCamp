@@ -9,6 +9,7 @@ const RegisterPage = () => {
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [radiobutton, setRadiobutton] = useState('');
+  const [employeebankrep, setemployeebankrep] = useState(null);
  
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -28,12 +29,13 @@ const RegisterPage = () => {
 
   const handleRadiobuttonChange = (event) => {
     console.log(event.target.value);
-    if (event.target.value === "employee") {
+    if ((event.target.value === "employee")&&(employeebankrep === null)) {
       fetch("/getBanks")
       .then(response => response.json())
       .then(data => {
         // Gérer la réponse du serveur ici
-        console.log(data);
+          setemployeebankrep(data);
+          console.log(data);
       })
       .catch(error => {
         // Gérer les erreurs ici
@@ -131,6 +133,14 @@ const RegisterPage = () => {
       </div>
       <button type="submit">Sign in</button>
     </form>
+
+    {radiobutton === "employee" && employeebankrep && (
+        <div>
+          <h2>Réponse du serveur :</h2>
+          <pre>{JSON.stringify(employeebankrep, null, 2)}</pre>
+        </div>
+      )}
+
     </div>
     
   );
