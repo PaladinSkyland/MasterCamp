@@ -29,7 +29,7 @@ const RegisterPage = () => {
 
     e.preventDefault();
 
-    fetch('/signin', {
+    fetch('/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
