@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 
-const Register = () => {
+const RegisterPage = () => {
   //const navigate = useNavigate()
  
   const [username, setUsername] = useState('');
@@ -17,7 +17,7 @@ const Register = () => {
     setUserfirstname(event.target.value);
   };
 
-  const handleemailChange = (event) => {
+  const handleEmailChange = (event) => {
     setemail(event.target.value);
   };
 
@@ -29,7 +29,7 @@ const Register = () => {
 
     e.preventDefault();
 
-    fetch('/register', {
+    fetch('/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ const Register = () => {
           type="text"
           id="email"
           value={email}
-          onChange={handleemailChange}
+          onChange={handleEmailChange}
         />
       </div>
       <div>
@@ -103,4 +103,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

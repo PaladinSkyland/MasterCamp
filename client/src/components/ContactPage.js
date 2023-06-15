@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../authentification/AuthContext";
 
 const ContactPage = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('')
+  const [name, setName] = useState("");
 
   const returnHome = () => {
-    navigate('/', {replace: true});
+    navigate("/", { replace: true });
   };
-  const storedToken = localStorage.getItem('token');
+  const storedToken = localStorage.getItem("token");
 
   fetch('/protected', {
     headers: {

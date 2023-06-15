@@ -1,28 +1,22 @@
-
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './authentification/AuthContext';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./authentification/AuthContext";
 
 import LoginPage from './components/LoginPage';
-import Register from './components/Register';
+import RegisterPage from './components/RegisterPage';
 import ContactPage from './components/ContactPage';
 
 const App = () => {
-
-
   return (
-    
-      <Router>
-        <AuthProvider>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/singin" element={<RegisterPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/register" element={<Register />} />
         </Routes>
-        </AuthProvider>
-      </Router>
-    
+      </AuthProvider>
+    </Router>
   );
 };
-
-export default App
+export default App;
