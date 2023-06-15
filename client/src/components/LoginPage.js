@@ -4,9 +4,6 @@ import { AuthContext } from "../authentification/AuthContext";
 import { login, setHttpOnlyCookie } from "../authentification/login";
 import bcrypt from "bcryptjs";
 
-//TODO : image mettre en grand sur le pourcentage
-//TODO : rencentrer credit express
-
 const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -66,7 +63,10 @@ const LoginPage = () => {
       </div>
       <div class="md:w-1/2 justify-center flex flex-col h-full">
         <div class="flex justify-center">
-          <form onSubmit={handleLogin} class="grid grid-cols-1 gap-4">
+          <form
+            onSubmit={handleLogin}
+            class="grid grid-cols-1 gap-4 rounded-md shadow-md p-10"
+          >
             <div class="">
               <label htmlFor="email">Email : </label>
               <input
