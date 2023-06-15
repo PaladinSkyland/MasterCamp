@@ -10,34 +10,49 @@ const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate()
  
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  };
+  }; 
 
   const handleLogin =  (e) => {
 
+    //Permet d'éviter le comportement de base du formulaire
+    e.preventDefault();
+
+    //Cryptage du mdp
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
-    login(username, password).then(result => {
-      let token = result
+    login(email, password).then(data => {
+
+      for (let key in data){
+        if (data[key] === "Identifiants invalides"){
+          alert("identifiants invalides") 
+          return
+        }
+      }
+
+      let token = data.token
+
+      //On stocke le token en local, mais aussi dans un cookie HTTP only
       localStorage.setItem('token', token);
       setHttpOnlyCookie('token', token, new Date(Date.now() + (3600 * 1000))); // expiration dans 1 heure (en millisecondes)
+
+      //On met le contexte login à true, et on se déplace sur la page voulue
       setIsLoggedIn(true)
       navigate('/contact')
+      
     })
-    
-    e.preventDefault();
   };
 
   const HandleLogout = () => {
@@ -49,12 +64,12 @@ const LoginPage = () => {
       <h1>Page d'accueil</h1>
       <form onSubmit={handleLogin}>
       <div>
-        <label htmlFor="username">Username : </label>
+        <label htmlFor="email">email : </label>
         <input
           type="text"
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
+          id="email"
+          value={email}
+          onChange={handleEmailChange}
         />
       </div>
       <div>

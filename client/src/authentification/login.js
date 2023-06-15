@@ -1,5 +1,5 @@
-export async function login(username, password){
-  console.log(username, password)
+export async function login(email, password){
+
   // Specification des options de la méthode fetch
   const options = {
     method: "POST", //Post pour ne pas mettre le mdp dans l'url
@@ -7,15 +7,15 @@ export async function login(username, password){
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      username: username,
+      email: email,
       password: password
     })
   }
+    //On attend la réponse du serveur avec login
     const response = await fetch('/login', options)
     const data = await response.json()
 
-    return data.token
-
+    return data
 }
 
 export function setHttpOnlyCookie(name, value, expiration) {

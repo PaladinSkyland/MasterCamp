@@ -17,14 +17,13 @@ const ContactPage = () => {
   }).then(response => 
     response.json()
   ).then(data => {
-    setName(data.name)
+    setName(data.Name)
   })
 
   return (
     <div>
       <h1>Page de contact {name}</h1>
       <button onClick={returnHome}>retour</button>
-      {/* Contenu de la page de contact */}
     </div>
   );
 };
