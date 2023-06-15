@@ -17,7 +17,7 @@ app.post("/login", async (req,res) => {
     //Récupération du mdp de l'utilisateur dans la BDD
 
 
-    const request = db.query("SELECT Password, ID_user from Utilisateur where Email_utilisateur = ?", [username], (error, results) => {
+    const request = db.query("SELECT Password, ID_user from Users where Email = ?", [username], (error, results) => {
       if (error) {
         console.log(error)
       } else {
