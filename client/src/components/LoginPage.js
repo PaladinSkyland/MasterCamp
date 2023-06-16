@@ -11,6 +11,8 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [messagealert, setmessagealert] = useState("");
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -33,7 +35,7 @@ const LoginPage = () => {
     login(email, password).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
-          alert("identifiants invalides");
+          setmessagealert("Identifiants invalides");
           return;
         }
       }
@@ -90,6 +92,13 @@ const LoginPage = () => {
                 class="block rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
+            {messagealert !== "" && (
+                <div>
+                  <p className="text-red-500">{messagealert}</p>
+                </div>
+              )}
+
+
             <div class="grid">
               <Link to="/register" class="text-blue-400">
                 New in Credit Express
