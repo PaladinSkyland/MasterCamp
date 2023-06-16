@@ -5,7 +5,7 @@ const NavBar = () => {
     return (
       <div className="flex">
         <ComponentLogo />
-        <ul className="absolute ml-3">
+        <ul className=" ml-3">
           <li>test</li>
           <li>test2</li>
         </ul>
