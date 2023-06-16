@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const HomePage = () => {
     navigate("/", { replace: true });
   };
   const storedToken = localStorage.getItem("token");
-
+    
     useEffect(() => {
       if(storedToken != null){
       fetch('/home', {
@@ -36,9 +37,14 @@ const HomePage = () => {
     /* Si connecté */
     userData ? (
     <div>
-      <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
+      <NavBar/> 
+      <div>
+        <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
       <button onClick={returnHome}>retour</button>
-    </div> ) 
+      </div>
+    </div>
+    
+    ) 
     
     : 
     /* Sinon */ 

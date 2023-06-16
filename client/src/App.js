@@ -8,7 +8,7 @@ import ContactPage from './components/HomePage';
 import { UserProvider } from "./context/UserContext";
 
 const App = () => {
-  return (
+  return (  
     <Router>
       <AuthProvider>
         <Routes>
