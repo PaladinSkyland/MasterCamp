@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -13,21 +13,38 @@ const HomePage = () => {
   };
   const storedToken = localStorage.getItem("token");
 
-  fetch('/home', {
-    headers: {
-      'Authorization': `Bearer ${storedToken}`
+    useEffect(() => {
+      if(storedToken != null){
+      fetch('/home', {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`
+        }
+      }).then(response => 
+        response.json()
+      ).then(data => {
+        setUserData(data)
+      })
     }
-  }).then(response => 
-    response.json()
-  ).then(data => {
-    setUserData(data)
-  })
+    }, [])
+
+    console.log(userData)
+
+
+  
 
   return (
+    /* Si connecté */
+    userData ? (
     <div>
       <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
       <button onClick={returnHome}>retour</button>
-    </div>
+    </div> ) 
+    
+    : 
+    /* Sinon */ 
+    (<div>
+      <h1> non connecté</h1>
+    </div>)
   );
 };
 
