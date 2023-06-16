@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../authentification/AuthContext";
-import { login, setHttpOnlyCookie } from "../authentification/login";
-import bcrypt from "bcryptjs";
+import React, {useState, useContext} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import {login, setHttpOnlyCookie}  from '../authentification/login'
+import bcrypt from 'bcryptjs';
+
 
 const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
@@ -10,6 +11,8 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [messagealert, setmessagealert] = useState("");
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -32,7 +35,7 @@ const LoginPage = () => {
     login(email, password).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
-          alert("identifiants invalides");
+          setmessagealert("Identifiants invalides");
           return;
         }
       }
@@ -45,7 +48,7 @@ const LoginPage = () => {
 
       //On met le contexte login à true, et on se déplace sur la page voulue
       setIsLoggedIn(true);
-      navigate("/contact");
+      navigate("/home");
     });
   };
 
@@ -89,8 +92,15 @@ const LoginPage = () => {
                 className="block rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-            <div className="grid">
-              <Link to="/signin" className="text-blue-400">
+            {messagealert !== "" && (
+                <div>
+                  <p className="text-red-500">{messagealert}</p>
+                </div>
+              )}
+
+
+            <div class="grid">
+              <Link to="/register" class="text-blue-400">
                 New in Credit Express
               </Link>
               <button
