@@ -46,7 +46,7 @@ const LoginPage = () => {
 
       //On met le contexte login à true, et on se déplace sur la page voulue
       setIsLoggedIn(true);
-      navigate("/contact");
+      navigate("/home");
     });
   };
 
