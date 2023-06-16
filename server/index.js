@@ -47,11 +47,9 @@ function authenticateToken(req, res, next) {
   
     jwt.verify(token, process.env.secretKey, (err, user) => {
 
-      console.log(user)
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const expiryTimestamp = user.exp;
       const remainingSeconds = expiryTimestamp - currentTimestamp;
-      //console.log(remainingSeconds)
 
       if (err) {
         return res.sendStatus(403);
@@ -62,16 +60,8 @@ function authenticateToken(req, res, next) {
         const email = user.email
         const newToken = jwt.sign({email, ID}, process.env.secretKey, {expiresIn: '1h'});
 
-
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const expiryTimestamp = jwt.verify(newToken, process.env.secretKey).exp;
-        const remainingSeconds = expiryTimestamp - currentTimestamp;
-
-        //console.log("DATE DEXPIRATION", remainingSeconds)
-        console.log("NEW TOKEN",newToken)
         req.headers['authorization'] = newToken;
         req.user = jwt.verify(newToken, process.env.secretKey)
-        console.log(req.user)
         next();
       } else {
       req.user = user;
