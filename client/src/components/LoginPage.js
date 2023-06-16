@@ -54,12 +54,14 @@ const LoginPage = () => {
 
   return (
     <div className="md:flex h-screen overflow-y-hidden">
-      <ComponentLogo />
+      <div className="absolute top-4 left-4">
+        <ComponentLogo />
+      </div>
       <div className="md:w-1/2 justify-center flex flex-col h-full">
         <div className="flex justify-center">
           <form
             onSubmit={handleLogin}
-            className="grid grid-cols-1 gap-4 rounded-md shadow-md p-10"
+            className="flex flex-col rounded-md shadow-md p-10"
           >
             <div className="">
               <label htmlFor="email">Email : </label>
@@ -89,7 +91,7 @@ const LoginPage = () => {
               </div>
             )}
 
-            <div className="grid">
+            <div className="flex flex-col">
               <Link to="/register" className="text-blue-400">
                 New in Credit Express
               </Link>
