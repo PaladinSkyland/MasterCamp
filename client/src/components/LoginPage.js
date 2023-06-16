@@ -1,9 +1,10 @@
-import React, {useState, useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import {login, setHttpOnlyCookie}  from '../authentification/login'
-import bcrypt from 'bcryptjs';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { login, setHttpOnlyCookie } from "../authentification/login";
+import bcrypt from "bcryptjs";
 
+import ComponentLogo from "./Logo";
 
 const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
@@ -12,7 +13,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [messagealert, setmessagealert] = useState("");
-
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -54,16 +54,7 @@ const LoginPage = () => {
 
   return (
     <div className="md:flex h-screen overflow-y-hidden">
-      <div className="flex gap-x-4 absolute top-4 left-4">
-        <img
-          className="h-10 w-13 flex-none rounded-full bg-gray-50"
-          src="logo.png"
-          alt="logo credit express"
-        />
-        <p className="text-lm font-semibold leading-6 text-gray-900 my-auto">
-          Credit Express
-        </p>
-      </div>
+      <ComponentLogo />
       <div className="md:w-1/2 justify-center flex flex-col h-full">
         <div className="flex justify-center">
           <form
@@ -93,14 +84,13 @@ const LoginPage = () => {
               />
             </div>
             {messagealert !== "" && (
-                <div>
-                  <p className="text-red-500">{messagealert}</p>
-                </div>
-              )}
+              <div>
+                <p className="text-red-500">{messagealert}</p>
+              </div>
+            )}
 
-
-            <div class="grid">
-              <Link to="/register" class="text-blue-400">
+            <div className="grid">
+              <Link to="/register" className="text-blue-400">
                 New in Credit Express
               </Link>
               <button
