@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ComponentLogo from "./Logo.js";
+const bcrypt = require('bcryptjs')
 
 const RegisterPage = () => {
   //const navigate = useNavigate()
@@ -55,6 +56,12 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    //cryptage
+
+    const saltRounds = process.env.cryptedKey;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const encryptedPassword = bcrypt.hashSync(password, salt);
+
     if (radiobutton !== "employee") {
       fetch("/register", {
         method: "POST",
@@ -66,7 +73,7 @@ const RegisterPage = () => {
           username: username,
           userfirstname: userfirstname,
           email: email,
-          password: password,
+          password: encryptedPassword,
         }),
       })
         .then((response) => response.json())
@@ -89,7 +96,7 @@ const RegisterPage = () => {
           username: username,
           userfirstname: userfirstname,
           email: email,
-          password: password,
+          password: encryptedPassword,
           type: "employee",
           bankref: selectedbankOption,
         }),
