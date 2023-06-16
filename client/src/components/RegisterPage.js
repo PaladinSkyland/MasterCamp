@@ -132,7 +132,7 @@ const RegisterPage = () => {
 
 
       <div>
-        <label htmlFor="username">Username : </label>
+        <label htmlFor="username">LastName : </label>
         <input
           type="text"
           id="username"
@@ -150,7 +150,7 @@ const RegisterPage = () => {
         />
       </div>
       <div>
-        <label htmlFor="email">email : </label>
+        <label htmlFor="email">encryptedPasswordmail : </label>
         <input
           type="text"
           id="email"
