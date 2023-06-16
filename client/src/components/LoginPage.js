@@ -57,7 +57,7 @@ const LoginPage = () => {
           src="logo.png"
           alt="logo credit express"
         />
-        <p classNameName="text-lm font-semibold leading-6 text-gray-900 my-auto">
+        <p className="text-lm font-semibold leading-6 text-gray-900 my-auto">
           Credit Express
         </p>
       </div>
