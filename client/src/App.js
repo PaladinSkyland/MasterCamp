@@ -9,7 +9,7 @@ import ErrorPage from './components/ErrorPage';
 import { UserProvider } from "./context/UserContext";
 
 const App = () => {
-  return (
+  return (  
     <Router>
       <AuthProvider>
         <Routes>
