@@ -1,10 +1,10 @@
 import React from "react";
 
-const ComponentLogo = () => {
+const ComponentLogo = (props) => {
   return (
-    <div className="flex gap-x-4 absolute top-4 left-4">
+    <div className="flex flex-row gap-x-4">
       <img
-        className="h-10 w-13 flex-none rounded-full bg-gray-50"
+        className="h-10 w-13 flex-none"
         src="logo.png"
         alt="logo credit express"
       />
