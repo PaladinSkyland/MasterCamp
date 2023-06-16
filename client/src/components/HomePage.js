@@ -1,33 +1,52 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  
 
-  const { userData, setUserData } = useContext(UserContext)
-  
+  const { userData, setUserData } = useContext(UserContext);
+
   const returnHome = () => {
     navigate("/", { replace: true });
   };
   const storedToken = localStorage.getItem("token");
 
-  fetch('/home', {
-    headers: {
-      'Authorization': `Bearer ${storedToken}`
+  useEffect(() => {
+    if (storedToken != null) {
+      fetch("/home", {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUserData(data);
+        });
     }
-  }).then(response => 
-    response.json()
-  ).then(data => {
-    setUserData(data)
-  })
+  }, []);
+
+  console.log(userData);
 
   return (
-    <div>
-      <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
-      <button onClick={returnHome}>retour</button>
-    </div>
+    /* Si connecté */
+    userData ? (
+      <div>
+        <NavBar />
+        <div>
+          <h1>
+            Bienvenue {userData.Name}, {userData.UserType}{" "}
+          </h1>
+          <button onClick={returnHome}>retour</button>
+        </div>
+      </div>
+    ) : (
+      /* Sinon */
+      <div>
+        <h1> non connecté</h1>
+      </div>
+    )
   );
 };
 
