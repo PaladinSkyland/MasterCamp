@@ -116,31 +116,6 @@ const RegisterPage = () => {
             onSubmit={handleSubmit}
             className="flex flex-col rounded-md shadow-md p-4"
           >
-            <div className="radio">
-              <label>
-                <input
-                  type="radio"
-                  name="role"
-                  value="client"
-                  onChange={handleRadiobuttonChange}
-                  defaultChecked
-                  className="mr-2"
-                />
-                Client
-              </label>
-            </div>
-            <div className="radio">
-              <label>
-                <input
-                  type="radio"
-                  name="role"
-                  value="employee"
-                  onChange={handleRadiobuttonChange}
-                  className="mr-2"
-                />
-                Employé
-              </label>
-            </div>
             <div>
               <label htmlFor="username">LastName : </label>
               <input
@@ -181,6 +156,33 @@ const RegisterPage = () => {
                 className="block rounded-md border-0 py-0.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
               />
             </div>
+            <div className="m-2">
+              <div className="radio">
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="client"
+                    onChange={handleRadiobuttonChange}
+                    defaultChecked
+                    className="mr-2"
+                  />
+                  Client
+                </label>
+              </div>
+              <div className="radio">
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="employee"
+                    onChange={handleRadiobuttonChange}
+                    className="mr-2"
+                  />
+                  Employé
+                </label>
+              </div>
+            </div>
             {radiobutton === "employee" && employeebankrep && (
               <div className="">
                 <select
@@ -205,7 +207,7 @@ const RegisterPage = () => {
                 className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
                 type="submit"
               >
-                Sing In
+                Sin In
               </button>
             </div>
           </form>

@@ -3,14 +3,11 @@ import ComponentLogo from "./Logo";
 import { UserContext } from "../context/UserContext";
 
 const NavBar = () => {
-
+  const { getOnglets } = useContext(UserContext);
   useEffect(() => {
-    const {getOnglets} = useContext(UserContext)
-  
-    const onglets = getOnglets()
-  }, [])
-  
-  
+    const onglets = getOnglets();
+  }, []);
+
   return (
     <div className="h-16 flex justify-between shadow-md">
       <ComponentLogo />
@@ -27,4 +24,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar
+export default NavBar;

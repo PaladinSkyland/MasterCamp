@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import { UserContext } from "../context/UserContext";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import ComponentLogo from "./Logo";
