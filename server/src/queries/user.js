@@ -1,8 +1,8 @@
 const db = require('../db') //Chemin vers les infos de connexion à la db
 
-exports.getNameByID = function(id) {
+exports.getUserInfoByID = function(id) {
     return new Promise((resolve, reject) => {
-      db.query("SELECT Name from Users where ID_user = ?", [id], (error, result) => {
+      db.query("SELECT * from Users where ID_user = ?", [id], (error, result) => {
         if (error) {
           console.log(error);
           reject(error);

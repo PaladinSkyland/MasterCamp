@@ -1,28 +1,23 @@
-
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './authentification/AuthContext';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider,  } from "./context/AuthContext";
 
 import LoginPage from './components/LoginPage';
-import Register from './components/Register';
-import ContactPage from './components/ContactPage';
+import RegisterPage from './components/RegisterPage';
+import ContactPage from './components/HomePage';
+import { UserProvider } from "./context/UserContext";
 
 const App = () => {
-
-
   return (
-    
-      <Router>
-        <AuthProvider>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<UserProvider><RegisterPage /></UserProvider>} />
+          <Route path="/home" element={<UserProvider><ContactPage /></UserProvider>} />
         </Routes>
-        </AuthProvider>
-      </Router>
-    
+      </AuthProvider>
+    </Router>
   );
 };
-
-export default App
+export default App;
