@@ -22,7 +22,9 @@ app.post("/login", async (req,res) => {
         console.log(error);
       } else {
         if(results.length > 0 ){
-          if(bcrypt.compare(password, results[0].Password)){
+          console.log(password, results[0].Password)
+          if(bcrypt.compare(results[0].Password,password )){
+            console.log('rentré')
             const ID = results[0].ID_user
             const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
             res.json({ token });
