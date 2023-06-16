@@ -20,19 +20,19 @@ const LoginPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  };
+  }; 
 
   const handleLogin = (e) => {
     //Permet d'éviter le comportement de base du formulaire
     e.preventDefault();
 
     //Cryptage du mdp
-    const saltRounds = 10;
+    const saltRounds = process.env.cryptedKey;
     const salt = bcrypt.genSaltSync(saltRounds);
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
-    login(email, password).then((data) => {
+    login(email, encryptedPassword).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
           setmessagealert("Identifiants invalides");
