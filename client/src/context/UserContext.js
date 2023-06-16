@@ -5,15 +5,22 @@ export const UserContext = createContext()
 export const UserProvider = ({ children }) => {
 
     const [userData, setUserData] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const logout = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem('token');
-    };
+    const getOnglets = () => {
+
+      const type = userData.UserType
+
+      switch(type){
+        case 'customer':
+          return ["Demande de prêt", "Mes demandes"]
+        case 'employee':
+          return ["Demandes","Suivi demandes"]
+      }
+    }
+
 
     return (
-    <UserContext.Provider value={{ userData, setUserData, setIsLoggedIn, isLoggedIn, logout}}>
+    <UserContext.Provider value={{ userData, setUserData, getOnglets }}>
       {children}
     </UserContext.Provider>
     )

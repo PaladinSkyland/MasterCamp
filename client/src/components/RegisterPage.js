@@ -205,7 +205,7 @@ const RegisterPage = () => {
               </div>
             )}
             <div className="flex flex-col">
-              <Link to="/" className="text-blue-400">
+              <Link to="/login" className="text-blue-400">
                 Connected to credit express
               </Link>
               <button
