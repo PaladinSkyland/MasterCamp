@@ -91,7 +91,7 @@ const LoginPage = () => {
               />
             </div>
             <div class="grid">
-              <Link to="/signin" class="text-blue-400">
+              <Link to="/register" class="text-blue-400">
                 New in Credit Express
               </Link>
               <button
