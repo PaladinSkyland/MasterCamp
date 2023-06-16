@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ContactPage = () => {
@@ -10,15 +10,19 @@ const ContactPage = () => {
   };
   const storedToken = localStorage.getItem('token');
 
-  fetch('/protected', {
-    headers: {
-      'Authorization': `Bearer ${storedToken}`
-    }
-  }).then(response => 
-    response.json()
-  ).then(data => {
-    setName(data.Name)
-  })
+  useEffect(() => {
+    fetch('/protected', {
+      headers: {
+        'Authorization': `Bearer ${storedToken}`
+      }
+    }).then(response =>
+      response.json()).then(data => {
+      localStorage.setItem('token',data.newToken)
+      setName(data.Name)
+    })  
+  }, [])
+
+  
 
   return (
     <div>

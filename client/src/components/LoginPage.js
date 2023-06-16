@@ -28,12 +28,12 @@ const LoginPage = () => {
     e.preventDefault();
 
     //Cryptage du mdp
-    const saltRounds = 10;
+    const saltRounds = process.env.cryptedKey;
     const salt = bcrypt.genSaltSync(saltRounds);
     const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
-    login(email, password).then(data => {
+    login(email, encryptedPassword).then(data => {
 
       for (let key in data){
         if (data[key] === "Identifiants invalides"){

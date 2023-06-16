@@ -1,6 +1,7 @@
 require('dotenv').config() //Fichier de configuration .env
 const jwt = require('jsonwebtoken')
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const db = require('./src/db') //Chemin vers les infos de connexion à la db
 const userQueries = require('./src/queries/user')
 const app = express()
@@ -22,10 +23,11 @@ app.post("/login", async (req,res) => {
         console.log(error)
       } else {
         if(results.length > 0 ){
-          if(password === results[0].Password){
+          if(bcrypt.compare(password, results[0].Password)){
 
             const ID = results[0].ID_user
-            const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '10s' });
+            const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '6m' });
+            //console.log("BASED TOKEN",jwt.verify(token, process.env.secretKey).exp, "  ", token)
             res.json({ token });
           }else {
             res.status(401).json({ error: 'Identifiants invalides' });
@@ -44,17 +46,57 @@ function authenticateToken(req, res, next) {
     }
   
     jwt.verify(token, process.env.secretKey, (err, user) => {
+
+      console.log(user)
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const expiryTimestamp = user.exp;
+      const remainingSeconds = expiryTimestamp - currentTimestamp;
+      //console.log(remainingSeconds)
+
       if (err) {
         return res.sendStatus(403);
       }
+      else if (remainingSeconds < 600) {
+        
+        const ID = user.ID
+        const email = user.email
+        const newToken = jwt.sign({email, ID}, process.env.secretKey, {expiresIn: '1h'});
+
+
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const expiryTimestamp = jwt.verify(newToken, process.env.secretKey).exp;
+        const remainingSeconds = expiryTimestamp - currentTimestamp;
+
+        //console.log("DATE DEXPIRATION", remainingSeconds)
+        console.log("NEW TOKEN",newToken)
+        req.headers['authorization'] = newToken;
+        req.user = jwt.verify(newToken, process.env.secretKey)
+        console.log(req.user)
+        next();
+      } else {
       req.user = user;
       next();
+      }
     });
+}
+
+function checkExpiration(token) {
+  const decodedToken = jwt.verify(token, process.env.secretKey);
+
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const expiryTimestamp = decodedToken.exp;
+  const remainingSeconds = expiryTimestamp - currentTimestamp;
+  if (remainingSeconds < 300) {
+    return true
+  }
+  return false
 }
 
 app.get('/protected', authenticateToken, (req, res) => {
   const response = userQueries.getNameByID(req.user.ID)
+  const newToken = req.headers['authorization']
   response.then(response => {
+    response['newToken'] = newToken
     res.json(response)
   })
   
