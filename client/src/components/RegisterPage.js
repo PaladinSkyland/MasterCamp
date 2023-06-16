@@ -107,7 +107,7 @@ const RegisterPage = () => {
   };
   return (
     <div className="md:flex h-screen overflow-y-hidden">
-      <div className="flex flex-row gap-x-4 absolute top-4 right-4">
+      <div className="flex flex-row gap-x-4 absolute top-4 left-4">
         <ComponentLogo />
       </div>
       <div className="md:w-1/2 justify-center flex flex-col h-full">
