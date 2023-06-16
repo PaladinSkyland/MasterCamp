@@ -24,10 +24,8 @@ app.post("/login", async (req,res) => {
       } else {
         if(results.length > 0 ){
           if(bcrypt.compare(password, results[0].Password)){
-
             const ID = results[0].ID_user
-            const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '6m' });
-            //console.log("BASED TOKEN",jwt.verify(token, process.env.secretKey).exp, "  ", token)
+            const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
             res.json({ token });
           }else {
             res.status(401).json({ error: 'Identifiants invalides' });
@@ -46,15 +44,14 @@ function authenticateToken(req, res, next) {
     }
   
     jwt.verify(token, process.env.secretKey, (err, user) => {
-
+      if (err) {
+        return res.sendStatus(403);
+      }
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const expiryTimestamp = user.exp;
       const remainingSeconds = expiryTimestamp - currentTimestamp;
 
-      if (err) {
-        return res.sendStatus(403);
-      }
-      else if (remainingSeconds < 600) {
+      if (remainingSeconds < 600) {
         
         const ID = user.ID
         const email = user.email
