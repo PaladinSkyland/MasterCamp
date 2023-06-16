@@ -5,52 +5,48 @@ import NavBar from "./NavBar";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  
 
-  const { userData, setUserData } = useContext(UserContext)
-  
+  const { userData, setUserData } = useContext(UserContext);
+
   const returnHome = () => {
     navigate("/", { replace: true });
   };
   const storedToken = localStorage.getItem("token");
-    
-    useEffect(() => {
-      if(storedToken != null){
-      fetch('/home', {
+
+  useEffect(() => {
+    if (storedToken != null) {
+      fetch("/home", {
         headers: {
-          'Authorization': `Bearer ${storedToken}`
-        }
-      }).then(response => 
-        response.json()
-      ).then(data => {
-        setUserData(data)
+          Authorization: `Bearer ${storedToken}`,
+        },
       })
+        .then((response) => response.json())
+        .then((data) => {
+          setUserData(data);
+        });
     }
-    }, [])
+  }, []);
 
-    console.log(userData)
-
-
-  
+  console.log(userData);
 
   return (
     /* Si connecté */
     userData ? (
-    <div>
-      <NavBar/> 
       <div>
-        <h1>Bienvenue {userData.Name}, {userData.UserType} </h1>
-      <button onClick={returnHome}>retour</button>
+        <NavBar />
+        <div>
+          <h1>
+            Bienvenue {userData.Name}, {userData.UserType}{" "}
+          </h1>
+          <button onClick={returnHome}>retour</button>
+        </div>
       </div>
-    </div>
-    
-    ) 
-    
-    : 
-    /* Sinon */ 
-    (<div>
-      <h1> non connecté</h1>
-    </div>)
+    ) : (
+      /* Sinon */
+      <div>
+        <h1> non connecté</h1>
+      </div>
+    )
   );
 };
 
