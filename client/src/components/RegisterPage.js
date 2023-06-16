@@ -124,6 +124,7 @@ const RegisterPage = () => {
                   value="client"
                   onChange={handleRadiobuttonChange}
                   defaultChecked
+                  className="mr-2"
                 />
                 Client
               </label>
@@ -135,6 +136,7 @@ const RegisterPage = () => {
                   name="role"
                   value="employee"
                   onChange={handleRadiobuttonChange}
+                  className="mr-2"
                 />
                 Employé
               </label>
@@ -176,14 +178,15 @@ const RegisterPage = () => {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
-                className="block rounded-md border-0 py-0.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
+                className="block rounded-md border-0 py-0.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
               />
             </div>
             {radiobutton === "employee" && employeebankrep && (
-              <div className="my-2 rounded-md block">
+              <div className="">
                 <select
                   value={selectedbankOption}
                   onChange={handleSelectOptionChange}
+                  className="block my-3 rounded-md border-0 py-0.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
                 >
                   <option value="">Sélectionner une option</option>
                   {employeebankrep.map((bank, index) => (
