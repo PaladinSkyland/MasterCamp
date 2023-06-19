@@ -27,8 +27,6 @@ const HomePage = () => {
     }
   }, []);
 
-  console.log(userData);
-
   return (
     /* Si connecté */
     userData ? (

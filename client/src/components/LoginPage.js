@@ -12,6 +12,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [encryptedPassword, setEncryptedPassword] = useState("");
   const [messagealert, setmessagealert] = useState("");
 
   const handleEmailChange = (event) => {
@@ -22,17 +23,12 @@ const LoginPage = () => {
     setPassword(event.target.value);
   }; 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     //Permet d'éviter le comportement de base du formulaire
     e.preventDefault();
 
-    //Cryptage du mdp
-    const saltRounds = process.env.cryptedKey;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const encryptedPassword = bcrypt.hashSync(password, salt);
-
     // Vérification de l'utilisateur
-    login(email, encryptedPassword).then((data) => {
+    login(email, password).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
           setmessagealert("Identifiants invalides");

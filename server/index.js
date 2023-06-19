@@ -22,7 +22,7 @@ app.post("/login", async (req,res) => {
         console.log(error);
       } else {
         if(results.length > 0 ){
-          if(bcrypt.compare(password, results[0].Password)){
+          if(bcrypt.compareSync(password, results[0].Password)){
             const ID = results[0].ID_user
             const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
             res.json({ token });
@@ -82,12 +82,12 @@ app.post("/register", async (req, res) => {
   try {
     const { username, userfirstname, email, password, type, bankref } =
       req.body;
-    console.log(email);
+    /*console.log(email);
     console.log(password);
     console.log(username);
     console.log(userfirstname);
     console.log(type);
-    console.log(bankref);
+    console.log(bankref);*/
 
     // Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
     //vérification si user déjà existant
@@ -107,15 +107,16 @@ app.post("/register", async (req, res) => {
               .status(400)
               .json({ message: "L'utilisateur existe déjà." });
           } else {
-            const saltRounds = parseInt(process.env.cryptedKey);
+            /*const saltRounds = parseInt(process.env.cryptedKey);
             const salt = bcrypt.genSaltSync(saltRounds);
             const encryptedPassword = bcrypt.hashSync(password, salt);
+            console.log("registered",encryptedPassword)*/
             if (type == "employee") {
               db.query(
                 "INSERT INTO Users SET ?",
                 {
                   Email: email,
-                  Password: encryptedPassword,
+                  Password: password,
                   Name: username,
                   FirstName: userfirstname,
                 },
@@ -183,7 +184,7 @@ app.post("/register", async (req, res) => {
                 "INSERT INTO Users SET ?",
                 {
                   Email: email,
-                  Password: encryptedPassword,
+                  Password: password,
                   Name: username,
                   FirstName: userfirstname,
                 },
@@ -224,6 +225,17 @@ app.get("/getBanks", async (req, res) => {
     }
   });
 });
+
+app.post("/getHashPassword", async (req, res) => {
+  db.query("SELECT Password FROM Users where Email = ?", [req.body.email], (error, results) => {
+    if (error) {
+      res.status(500).json({message: "Couldn't get info from DB"})
+    } else {
+      console.log(results[0].Password, "ICIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+      res.json(results)
+    }
+  })
+})
 
 
 app.post("/register", async (req, res) => {
