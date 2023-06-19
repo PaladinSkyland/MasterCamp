@@ -28,10 +28,10 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Vérification de l'utilisateur
-    login(email, password).then((data) => {
+    login(email, encryptedPassword).then((data) => {
+      
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
-          setmessagealert("Identifiants invalides");
           return;
         }
       }
@@ -88,7 +88,7 @@ const LoginPage = () => {
             )}
 
             <div className="flex flex-col">
-              <Link to="/register" className="text-blue-400">
+              <Link to="/authentification/register" className="text-blue-400">
                 New in Credit Express
               </Link>
               <button
@@ -104,7 +104,7 @@ const LoginPage = () => {
       <div className="md:w-2/3">
         <img
           className="w-full h-full object-cover"
-          src="wallpaper.png"
+          src="../wallpaper.png"
           alt="wallpaper"
         ></img>
       </div>

@@ -37,7 +37,7 @@ const RegisterPage = () => {
   const handleRadiobuttonChange = (event) => {
     console.log(event.target.value);
     if (event.target.value === "employee" && employeebankrep === null) {
-      fetch("/getBanks")
+      fetch("/authentification/getBanks")
         .then((response) => response.json())
         .then((data) => {
           // Gérer la réponse du serveur ici
@@ -64,7 +64,7 @@ const RegisterPage = () => {
     console.log("Client side", encryptedPassword)
 
     if (radiobutton !== "employee") {
-      fetch("/register", {
+      fetch("/authentification/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const RegisterPage = () => {
           console.error(error);
         });
     } else if (radiobutton === "employee") {
-      fetch("/register", {
+      fetch("/authentification/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,7 +206,7 @@ const RegisterPage = () => {
               </div>
             )}
             <div className="flex flex-col">
-              <Link to="/login" className="text-blue-400">
+              <Link to="/authentification/login" className="text-blue-400">
                 Connected to credit express
               </Link>
               <button
@@ -222,7 +222,7 @@ const RegisterPage = () => {
       <div className="md:w-2/3">
         <img
           className="w-full h-full object-cover"
-          src="wallpaper.png"
+          src="../wallpaper.png"
           alt="wallpaper"
         ></img>
       </div>
