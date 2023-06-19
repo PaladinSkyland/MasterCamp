@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 
 const HomePage = () => {
-  const navigate = useNavigate();
-
   const banque = ["Bank1", "Bank2", "Bank3", "Bank4", "Bank5", "Bank6"];
-
+  const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
 
   const storedToken = localStorage.getItem("token");
@@ -24,9 +22,7 @@ const HomePage = () => {
           setUserData(data);
         });
     }
-  }, []);
-
-  console.log(userData);
+  });
 
   return (
     /* Si connecté */
