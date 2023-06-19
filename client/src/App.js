@@ -6,6 +6,7 @@ import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import ContactPage from "./components/HomePage";
 import BienvenuePage from "./components/BienvenuePage";
+import AccountPage from "./components/AccountPage";
 import { UserProvider } from "./context/UserContext";
 
 const App = () => {
@@ -28,6 +29,14 @@ const App = () => {
             element={
               <UserProvider>
                 <ContactPage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <UserProvider>
+                <AccountPage />
               </UserProvider>
             }
           />
