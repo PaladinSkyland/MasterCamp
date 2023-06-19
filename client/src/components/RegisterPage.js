@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ComponentLogo from "./Logo.js";
-const bcrypt = require('bcryptjs')
+const bcrypt = require("bcryptjs");
 
 const RegisterPage = () => {
   //const navigate = useNavigate()
@@ -61,7 +61,7 @@ const RegisterPage = () => {
     const saltRounds = process.env.cryptedKey;
     const salt = bcrypt.genSaltSync(saltRounds);
     const encryptedPassword = bcrypt.hashSync(password, salt);
-    console.log("Client side", encryptedPassword)
+    console.log("Client side", encryptedPassword);
 
     if (radiobutton !== "employee") {
       fetch("/authentification/register", {
@@ -113,6 +113,7 @@ const RegisterPage = () => {
         });
     }
   };
+
   return (
     <div className="md:flex h-screen overflow-y-hidden">
       <div className="flex flex-row gap-x-4 absolute top-4 left-4">
