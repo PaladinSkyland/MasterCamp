@@ -6,11 +6,10 @@ import NavBar from "./NavBar";
 const HomePage = () => {
   const navigate = useNavigate();
 
+  const banque = ["Bank1", "Bank2", "Bank3", "Bank4", "Bank5", "Bank6"];
+
   const { userData, setUserData } = useContext(UserContext);
 
-  const returnHome = () => {
-    navigate("/", { replace: true });
-  };
   const storedToken = localStorage.getItem("token");
 
   useEffect(() => {
@@ -34,17 +33,25 @@ const HomePage = () => {
     userData ? (
       <div>
         <NavBar />
-        <div>
-          <h1>
-            Bienvenue {userData.Name}, {userData.UserType}{" "}
-          </h1>
-          <button onClick={returnHome}>retour</button>
+        <div className="m-3">
+          <h1 className="">Bienvenue {userData.Name}</h1>
+          <h2>Vous etes connecté en tant que {userData.UserType}</h2>
+        </div>
+        <div className="w-full">
+          <h1>Voici les banques disponibles :</h1>
+          <div className="flex flex-row gap-x-10">
+            {banque.map((onglet, index) => (
+              <p className="" key={index} onClick={() => navigate("/login")}>
+                {onglet}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     ) : (
       /* Sinon */
       <div>
-        <h1> non connecté</h1>
+        <h1> Page erreur 401</h1>
       </div>
     )
   );
