@@ -2,9 +2,11 @@ import NavBar from "./NavBar";
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const AccountPage = () => {
   const { userData, setUserData } = useContext(UserContext);
+  const {logout} = useContext(AuthContext)
 
   return userData ? (
     <div>
@@ -21,6 +23,7 @@ const AccountPage = () => {
             )
         )}
       </form>
+      <button onClick={logout}>deco</button>
     </div>
   ) : (
     /* Sinon */

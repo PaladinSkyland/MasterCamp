@@ -4,10 +4,14 @@ import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const { getOnglets } = useContext(UserContext);
+  const { getOnglets, userData } = useContext(UserContext);
 
   const onglets = getOnglets();
   const navigate = useNavigate();
+
+  const goTo = (onglet) => {
+    navigate("/" + userData.UserType + "/" +onglet)
+  }
 
   return (
     <div className="h-16 flex justify-between shadow-md">
@@ -17,9 +21,9 @@ const NavBar = () => {
           <li
             className="hover:bg-sky-100 p-2 rounded-md"
             key={index}
-            onClick={() => navigate("/login")}
+            onClick={() => goTo(onglet[1])}
           >
-            {onglet}
+            {onglet[0]}
           </li>
         ))}
         <img
