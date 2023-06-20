@@ -7,6 +7,7 @@ import RegisterPage from "./components/RegisterPage";
 import ContactPage from "./components/HomePage";
 import BienvenuePage from "./components/BienvenuePage";
 import AccountPage from "./components/AccountPage";
+import SearchPage from "./components/SearchPage";
 import { UserProvider } from "./context/UserContext";
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<BienvenuePage />} />
+          <Route path="/" element={<SearchPage />} />
           <Route path="/authentification/login" element={<LoginPage />} />
           <Route
             path="/authentification/register"
