@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ContactPage from './components/HomePage';
 import ErrorPage from './components/ErrorPage';
+import SearchPage from './components/SearchPage';
 import { UserProvider } from "./context/UserContext";
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/register" element={<UserProvider><RegisterPage /></UserProvider>} />
           <Route path="/home" element={<UserProvider><ContactPage /></UserProvider>} />
           <Route path="/error" element={<UserProvider><ErrorPage /></UserProvider>} />
+          <Route path="/search" element={<UserProvider><SearchPage /></UserProvider>} />
         </Routes>
       </AuthProvider>
     </Router>
