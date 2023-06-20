@@ -20,16 +20,11 @@ const LoginPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  };
+  }; 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     //Permet d'éviter le comportement de base du formulaire
     e.preventDefault();
-
-    //Cryptage du mdp
-    const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
@@ -92,7 +87,7 @@ const LoginPage = () => {
             )}
 
             <div className="flex flex-col">
-              <Link to="/register" className="text-blue-400">
+              <Link to="/authentification/register" className="text-blue-400">
                 New in Credit Express
               </Link>
               <button
@@ -108,7 +103,7 @@ const LoginPage = () => {
       <div className="md:w-2/3">
         <img
           className="w-full h-full object-cover"
-          src="wallpaper.png"
+          src="../wallpaper.png"
           alt="wallpaper"
         ></img>
       </div>
