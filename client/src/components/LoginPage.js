@@ -1,9 +1,10 @@
-import React, {useState, useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import {login, setHttpOnlyCookie}  from '../authentification/login'
-import bcrypt from 'bcryptjs';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { login, setHttpOnlyCookie } from "../authentification/login";
+import bcrypt from "bcryptjs";
 
+import ComponentLogo from "./Logo";
 
 const LoginPage = () => {
   const { setIsLoggedIn, logout } = useContext(AuthContext);
@@ -11,6 +12,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [messagealert, setmessagealert] = useState("");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -18,22 +20,17 @@ const LoginPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  };
+  }; 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     //Permet d'éviter le comportement de base du formulaire
     e.preventDefault();
-
-    //Cryptage du mdp
-    const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const encryptedPassword = bcrypt.hashSync(password, salt);
 
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
-          alert("identifiants invalides");
+          setmessagealert("Identifiants invalides");
           return;
         }
       }
@@ -51,24 +48,17 @@ const LoginPage = () => {
   };
 
   return (
-    <div class="md:flex h-screen overflow-y-hidden">
-      <div class="flex gap-x-4 absolute top-4 left-4">
-        <img
-          className="h-10 w-13 flex-none rounded-full bg-gray-50"
-          src="logo.png"
-          alt="logo credit express"
-        />
-        <p className="text-lm font-semibold leading-6 text-gray-900 my-auto">
-          Credit Express
-        </p>
+    <div className="md:flex h-screen overflow-y-hidden">
+      <div className="absolute top-4 left-4">
+        <ComponentLogo />
       </div>
-      <div class="md:w-1/2 justify-center flex flex-col h-full">
-        <div class="flex justify-center">
+      <div className="md:w-1/2 justify-center flex flex-col h-full">
+        <div className="flex justify-center">
           <form
             onSubmit={handleLogin}
-            class="grid grid-cols-1 gap-4 rounded-md shadow-md p-10"
+            className="flex flex-col rounded-md shadow-md p-10"
           >
-            <div class="">
+            <div className="">
               <label htmlFor="email">Email : </label>
               <input
                 type="text"
@@ -79,7 +69,7 @@ const LoginPage = () => {
                 onChange={handleEmailChange}
               />
             </div>
-            <div class="">
+            <div className="">
               <label htmlFor="password">Password : </label>
               <input
                 type="password"
@@ -87,16 +77,22 @@ const LoginPage = () => {
                 value={password}
                 onChange={handlePasswordChange}
                 placeholder="Votre mot de passe"
-                class="block rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
-            <div class="grid">
-              <Link to="/signin" class="text-blue-400">
+            {messagealert !== "" && (
+              <div>
+                <p className="text-red-500">{messagealert}</p>
+              </div>
+            )}
+
+            <div className="flex flex-col">
+              <Link to="/authentification/register" className="text-blue-400">
                 New in Credit Express
               </Link>
               <button
-                class="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
-                type="submit"
+                className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
+                type="register"
               >
                 Login
               </button>
@@ -104,10 +100,10 @@ const LoginPage = () => {
           </form>
         </div>
       </div>
-      <div class="md:w-2/3">
+      <div className="md:w-2/3">
         <img
-          class="w-full h-full object-cover"
-          src="wallpaper.png"
+          className="w-full h-full object-cover"
+          src="../wallpaper.png"
           alt="wallpaper"
         ></img>
       </div>

@@ -1,12 +1,14 @@
 import React, { createContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate()
 
   const logout = () => {
-    setIsLoggedIn(false);
+    navigate("/")
     localStorage.removeItem('token');
   };
 
