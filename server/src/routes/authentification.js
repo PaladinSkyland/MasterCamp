@@ -56,15 +56,12 @@ router.post("/register", async (req, res) => {
               .status(400)
               .json({ message: "L'utilisateur existe déjà." });
           } else {
-            const saltRounds = parseInt(process.env.cryptedKey);
-            const salt = bcrypt.genSaltSync(saltRounds);
-            const encryptedPassword = bcrypt.hashSync(password, salt);
             if (type == "employee") {
               db.query(
                 "INSERT INTO Users SET ?",
                 {
                   Email: email,
-                  Password: encryptedPassword,
+                  Password: password,
                   Name: username,
                   FirstName: userfirstname,
                   UserType: type
@@ -133,7 +130,7 @@ router.post("/register", async (req, res) => {
                 "INSERT INTO Users SET ?",
                 {
                   Email: email,
-                  Password: encryptedPassword,
+                  Password: password,
                   Name: username,
                   FirstName: userfirstname,
                 },
