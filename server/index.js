@@ -11,6 +11,10 @@ app.use(express.json()); //Middleware express
 const authentificationRouter = require('./src/routes/authentification');
 app.use('/authentification', authentificationRouter)
 
+
+const adminRouter = require('./src/routes/admin');
+app.use('/admin', adminRouter)
+
 app.get("/home", authenticateToken, (req, res) => {
   const ID = req.user.ID;
 
