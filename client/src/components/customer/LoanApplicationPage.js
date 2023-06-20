@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import React, {useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SearchPage = () => {
+const LoanApplicationPage = () => {
   const navigate = useNavigate();
   const [interestRate, setInterestRate] = useState('');
   const [loanDuration, setLoanDuration] = useState('');
@@ -77,4 +76,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default LoanApplicationPage;

@@ -10,7 +10,7 @@ import HomePage from "./components/HomePage";
 import WelcomePage from "./components/WelcomePage";
 import AccountPage from "./components/AccountPage";
 import ErrorPage from "./components/ErrorPage";
-import LoanApplicationPage from "./components/LoanApplicationPage";
+import LoanApplicationPage from "./components/customer/LoanApplicationPage";
 
 
 const App = () => {
