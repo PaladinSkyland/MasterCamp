@@ -67,6 +67,7 @@ router.post("/register", async (req, res) => {
                   Password: encryptedPassword,
                   Name: username,
                   FirstName: userfirstname,
+                  UserType: type
                 },
                 (error, results) => {
                   if (error) {

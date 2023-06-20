@@ -10,9 +10,9 @@ export const UserProvider = ({ children }) => {
 
     switch (type) {
       case "customer":
-        return ["Demande de prêt", "Mes demandes"];
+        return [["Demande de prêt","loanApplication"], ["Mes demandes","myLoans"]];
       case "employee":
-        return ["Demandes", "Suivi demandes"];
+        return [["Demandes","loanApplications"], ["Suivi demandes","myLoans"]];
     }
   };
 
