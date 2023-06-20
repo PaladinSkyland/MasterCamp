@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import ComponentLogo from "./Logo";
 
-const BienvenuePage = () => {
+const WelcomePage = () => {
   const navigate = useNavigate();
 
   return (
@@ -30,4 +30,4 @@ const BienvenuePage = () => {
   );
 };
 
-export default BienvenuePage;
+export default WelcomePage;

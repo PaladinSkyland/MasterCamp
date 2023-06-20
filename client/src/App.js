@@ -1,23 +1,23 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
+
 
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
-import ContactPage from "./components/HomePage";
-import BienvenuePage from "./components/BienvenuePage";
+import HomePage from "./components/HomePage";
+import WelcomePage from "./components/WelcomePage";
 import AccountPage from "./components/AccountPage";
-import SearchPage from "./components/SearchPage";
-import { UserProvider } from "./context/UserContext";
+
 
 const App = () => {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<BienvenuePage />} />
+          <Route path="/" element={<WelcomePage />} />
           <Route path="/authentification/login" element={<LoginPage />} />
-          <Route path="/searchpage" element={<SearchPage/>} />
           <Route
             path="/authentification/register"
             element={
@@ -30,7 +30,7 @@ const App = () => {
             path="/home"
             element={
               <UserProvider>
-                <ContactPage />
+                <HomePage />
               </UserProvider>
             }
           />

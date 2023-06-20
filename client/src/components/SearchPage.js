@@ -15,10 +15,7 @@ const SearchPage = () => {
   const [flexibility, setFlexibility] = useState('');
   const [lenderReputation, setLenderReputation] = useState('');
   
-  
-  const returnHome = () => {
-    navigate("/", { replace: true });
-  };
+
   
 
   const handleSubmit = (e) => {
