@@ -9,6 +9,8 @@ import RegisterPage from "./components/RegisterPage";
 import HomePage from "./components/HomePage";
 import WelcomePage from "./components/WelcomePage";
 import AccountPage from "./components/AccountPage";
+import ErrorPage from "./components/ErrorPage";
+import LoanApplicationPage from "./components/LoanApplicationPage";
 
 
 const App = () => {
@@ -41,6 +43,14 @@ const App = () => {
                 <AccountPage />
               </UserProvider>
             }
+          />
+          <Route
+            path="/customer/loanApplication"
+            element={<LoanApplicationPage/>}
+            />
+          <Route
+            path="/*"
+            element={<ErrorPage />}
           />
         </Routes>
       </AuthProvider>

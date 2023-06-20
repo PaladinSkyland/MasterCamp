@@ -17,7 +17,7 @@ router.post("/login", async (req,res) => {
   //Récupération du mdp de l'utilisateur dans la BDD
 
 
-  const request = await db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
+  const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
     if (error) {
       console.log(error);
     } else {
@@ -56,12 +56,14 @@ router.post("/register", async (req, res) => {
           .status(500)
           .json({ message: "L'utilisateur existe déjà." });
       } else {
+        /*
         const saltRounds = parseInt(process.env.cryptedKey);
         const salt = bcrypt.genSaltSync(saltRounds);
         const encryptedPassword = bcrypt.hashSync(password, salt);
-        const userInsertInto = bankQueries.userInsertInto(
+        */
+        const userInsertInto = userQueries.userInsertInto(
           email,
-          encryptedPassword,
+          password,
           username,
           userfirstname,
           type,
