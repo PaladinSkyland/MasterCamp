@@ -1,5 +1,6 @@
 const e = require('express');
-const db = require('../db') //Chemin vers les infos de connexion à la db
+const db = require('../db'); //Chemin vers les infos de connexion à la db
+const bankQueries = require('./bank');
 
 exports.getUserInfoByID = function(id) {
     return new Promise((resolve, reject) => {
@@ -45,35 +46,12 @@ exports.userAlreadyExists = function(email) {
   });
 };
 
-const getBankbyName = function(name) {
-  return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT ID_bank FROM Bank WHERE Name = ?",
-      [name],
-      (error, results) => {
-        if (error) {
-          // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
-          console.error(error);
-          reject(new Error("Connection to DB failed"));
-        } else {
-          // Utiliser les résultats de la requête
-          if (results.length > 0) {
-            // La banque est existante
-            resolve(results[0].ID_bank);
-          }
-          else{
-            reject(new Error("Bank not found"));
-          }
-        }
-      }
-    );
-  });
-};
 
 
 exports.userInsertInto  = function(email,encryptedPassword,username,userfirstname,type,bankname) {
   return new Promise((resolve, reject) => {
   if (type == "employee") {
+    bankQueries.getBankVerifiedByName(bankname).then((ID_bank) => {
     db.query(
       "INSERT INTO Users SET ?",
       {
@@ -92,11 +70,9 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
           console.log(
             "Utilisateur inséré avec succès dans la base de données."
           );
-          console.log("resultat de la requete : ", results.insertId);
           const ID_user = results.insertId;
-          getBankbyName(bankname).then((ID_bank) => {
             db.query(
-              "INSERT INTO Employee SET ?",
+              "INSERT INTO Employees SET ?",
               {
                 ID_user: ID_user,
                 ID_bank: ID_bank
@@ -105,21 +81,18 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
                 if (error) {
                   // Gérer les erreurs d'insertion dans la base de données
                   console.error(error);
-                  reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'utilisateur."));
+                  reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
                 } else {
-                  console.log(
-                    "Employé inséré avec succès dans la base de données."
-                  );
                   resolve(true);
                 }
               }
             );
-          }
-          );
+          
         }
 
       }
     );
+    });
   }
   else {
     db.query(
