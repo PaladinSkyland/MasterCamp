@@ -8,6 +8,7 @@ import ContactPage from "./components/HomePage";
 import BienvenuePage from "./components/BienvenuePage";
 import AccountPage from "./components/AccountPage";
 import { UserProvider } from "./context/UserContext";
+import BankPage from "./components/admin/Bank";
 
 const App = () => {
   return (
@@ -37,6 +38,14 @@ const App = () => {
             element={
               <UserProvider>
                 <AccountPage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/admin/bank"
+            element={
+              <UserProvider>
+                <BankPage />
               </UserProvider>
             }
           />

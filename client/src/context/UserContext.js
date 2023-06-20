@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
       case "employee":
         return [["Demandes","loanApplications"], ["Suivi demandes","myLoans"]];
       case "admin":
-        return [["Validation employés", "employee"], "Validation banques", "bank"]
+        return [["Validation employés", "employee"], ["Validation banques", "bank"]]
     }
   };
 
