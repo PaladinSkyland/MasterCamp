@@ -32,7 +32,8 @@ exports.getBankNames = function() {
     return new Promise((resolve, reject) => {
         db.query("SELECT Name FROM Banks WHERE status = 'Accepted'", (error, results) => {
           if (error) {
-            reject(error);
+            console.log(error);
+            reject(new Error("Connection to DB failed"));
           } else {
             resolve(results);
           }

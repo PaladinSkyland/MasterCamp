@@ -76,7 +76,7 @@ router.post("/register", async (req, res) => {
         userInsertInto.then((result) => {
           if (result) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            return res.status(500).json({message : "Employé inséré"})
+            return res.status(500).json({message : "Utilisateur créé avec succès"})
           }
         });
       }
