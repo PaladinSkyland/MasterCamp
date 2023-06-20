@@ -1,7 +1,8 @@
 import React from "react";
-import AccountPage from "../AccountPage";
 
 const BankPage = () => {
+
+    
 
     return (
         <div>

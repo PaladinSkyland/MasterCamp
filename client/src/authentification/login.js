@@ -11,7 +11,6 @@ export async function login(email, password){
       password: password
     })
   }
-  console.log("test")
     //On attend la réponse du serveur avec login
     const response = await fetch('./login', options)
     const data = await response.json()

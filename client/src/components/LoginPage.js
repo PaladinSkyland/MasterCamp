@@ -12,7 +12,6 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [encryptedPassword, setEncryptedPassword] = useState("");
   const [messagealert, setmessagealert] = useState("");
 
   const handleEmailChange = (event) => {
@@ -28,10 +27,10 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Vérification de l'utilisateur
-    login(email, encryptedPassword).then((data) => {
-      
+    login(email, password).then((data) => {
       for (let key in data) {
         if (data[key] === "Identifiants invalides") {
+          setmessagealert("Identifiants invalides");
           return;
         }
       }
