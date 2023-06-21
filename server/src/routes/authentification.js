@@ -18,7 +18,7 @@ router.post("/login", async (req,res) => {
   //Récupération du mdp de l'utilisateur dans la BDD
 
 
-  const request = await db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
+  const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
     if (error) {
       console.log(error);
     } else {
@@ -43,6 +43,24 @@ router.post("/register", async (req, res) => {
     const { username, userfirstname, email, password, type, bankref } =
       req.body;
 
+    //verification des champs : username, userfirstname, email, password.
+    //Si un des champs est vide, renvoyer une réponse d'erreur
+    //Si l'email n'est pas sous le bon format, renvoyer une réponse d'erreur
+    //Si le mot de passe n'est pas assez fort, renvoyer une réponse d'erreur
+
+    if (!username || !userfirstname || !email || !password) {
+      return res
+        .status(500)
+        .json({ message: "Veuillez remplir tous les champs." });
+    }
+
+    if (!email.includes("@")) {
+      return res
+        .status(500)
+        .json({ message: "Veuillez entrer une adresse email valide." });
+    }
+
+
     //Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
     //vérification si user déjà existant
 
@@ -57,12 +75,14 @@ router.post("/register", async (req, res) => {
           .status(500)
           .json({ message: "L'utilisateur existe déjà." });
       } else {
+        /*
         const saltRounds = parseInt(process.env.cryptedKey);
         const salt = bcrypt.genSaltSync(saltRounds);
         const encryptedPassword = bcrypt.hashSync(password, salt);
-        const userInsertInto = bankQueries.userInsertInto(
+        */
+        const userInsertInto = userQueries.userInsertInto(
           email,
-          encryptedPassword,
+          password,
           username,
           userfirstname,
           type,
@@ -75,7 +95,7 @@ router.post("/register", async (req, res) => {
         userInsertInto.then((result) => {
           if (result) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            return res.status(500).json({message : "Employé inséré"})
+            return res.status(500).json({message : "Utilisateur créé avec succès"})
           }
         });
       }
