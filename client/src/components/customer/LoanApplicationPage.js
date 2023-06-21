@@ -2,33 +2,39 @@ import React, {useContext, useEffect, useState } from "react";
 import {UserContext} from '../../context/UserContext'
 
 const LoanApplicationPage = () => {
+
+  //Toutes les infos nécessaires pour un prêt + message d'erreur
   const [interestRate, setInterestRate] = useState('');
   const [loanDuration, setLoanDuration] = useState('');
   const [loanAmount, setLoanAmount] = useState('');
   const [feesAndCosts, setFeesAndCosts] = useState('');
   const [interestType, setInterestType] = useState('');
-  const [repaymentCapacity, setRepaymentCapacity] = useState('');
+  const [monthlyIncome, setMonthlyIncome] = useState('');
   const [repaymentOptions, setRepaymentOptions] = useState('');
   const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState('');
   const [bankOption, setBankOption] = useState('');
   const [errorMessage, setErrorMessage] = useState()
 
-  //const {userData} = useContext(UserContext)
+  //Info de l'utilisateur venant du contextUtilisateur
+  const {userData} = useContext(UserContext)
 
+  //Nom de tous les states
   const stateValues = {
     interestRate,
     loanDuration,
     loanAmount,
     feesAndCosts,
     interestType,
-    repaymentCapacity,
+    monthlyIncome,
     repaymentOptions,
     insuranceAndGuarantees,
     bankOption
   };
 
+  //Banques valides
   const [banks, setBanks] = useState(null)
 
+  //Chargé une seule fois au début de la page pour récupérer les banques valides
   useEffect(() => {
     fetch("/authentification/getBanks")
         .then((response) => response.json())
@@ -67,7 +73,7 @@ const LoanApplicationPage = () => {
     
     //S'il y a au moins un champ vide
     if(emptyStates.length !== 0){
-      setErrorMessage(`Les champs suivants sont vide : ${emptyStates.join(', ')}`) //Concatène les empty states avec ", espace"
+      setErrorMessage(`Les champs suivants sont vides : ${emptyStates.join(', ')}`) //Concatène les empty states avec ", espace"
       return
     }else{
       /* fetch('/customer/newLoan', options)
@@ -111,8 +117,8 @@ const LoanApplicationPage = () => {
           </select>
         </label>
         <label>
-          Capacité de remboursement :
-          <input type="number" value={repaymentCapacity} onChange={(e) => setRepaymentCapacity(e.target.value)} />
+          Revenu mensuel
+          <input type="number" value={monthlyIncome} onChange={(e) => setMonthlyIncome(e.target.value)} />
         </label>
         <label>
           Options de remboursement :
