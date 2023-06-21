@@ -163,7 +163,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/getBanks", async (req, res) => {
-  db.query("SELECT Name FROM Banks", (error, results) => {
+  db.query("SELECT Name FROM Banks where Status = 'Accepted'", (error, results) => {
     if (error) {
       res.status(500).json({ message: "Connextion avec la DB impossible" });
     } else {

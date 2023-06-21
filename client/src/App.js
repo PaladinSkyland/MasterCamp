@@ -46,7 +46,7 @@ const App = () => {
           />
           <Route
             path="/customer/loanApplication"
-            element={<LoanApplicationPage/>}
+            element={<UserProvider><LoanApplicationPage/></UserProvider>}
             />
           <Route
             path="/*"
