@@ -10,6 +10,8 @@ app.use(express.json()); //Middleware express
 const authentificationRouter = require('./src/routes/authentification');
 app.use('/authentification', authentificationRouter)
 
+const customerRouter = require('./src/routes/customer');
+app.use('/customer', customerRouter)
 
 const adminRouter = require('./src/routes/admin');
 app.use('/admin', adminRouter)

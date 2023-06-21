@@ -5,15 +5,20 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const db = require('../db')
 
+const userQueries = require("../queries/user");
+const bankQueries = require('../queries/bank');
+const e = require('express')
+
 router.post("/login", async (req,res) => {
 
+  console.log("gfdgsdfv")
   //Récupération du mdp et de l'email passé dans le formulaire de login
   const {email, password} = req.body;
 
   //Récupération du mdp de l'utilisateur dans la BDD
 
 
-  const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
+  const request = await db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
     if (error) {
       console.log(error);
     } else {
@@ -40,136 +45,57 @@ router.post("/register", async (req, res) => {
 
     //Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
     //vérification si user déjà existant
-    db.query(
-      "SELECT Email FROM Users WHERE Email = ?",
-      [email],
-      (error, results) => {
-        if (error) {
-          // Gérer les erreurs qui se produisent lors de l'exécution de la requête ou d'autres opérations asynchrones
-          console.error(error);
-          res.status(500).json({ message: "Connextion avec la DB impossible" });
-        } else {
-          // Utiliser les résultats de la requête
-          if (results.length > 0) {
-            // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            return res
-              .status(400)
-              .json({ message: "L'utilisateur existe déjà." });
-          } else {
-            if (type == "employee") {
-              db.query(
-                "INSERT INTO Users SET ?",
-                {
-                  Email: email,
-                  Password: password,
-                  Name: username,
-                  FirstName: userfirstname,
-                  UserType: type
-                },
-                (error, results) => {
-                  if (error) {
-                    // Gérer les erreurs d'insertion dans la base de données
-                    console.error(error);
-                    return res.status(500).json({
-                      message:
-                        "Une erreur s'est produite lors de l'enregistrement de l'utilisateur.",
-                    });
-                  } else {
-                    console.log(
-                      "Utilisateur inséré avec succès dans la base de données."
-                    );
-                    console.log("resultat de la requete : ", results.insertId);
-                    const ID_user = results.insertId;
-                    db.query(
-                      "SELECT ID_bank FROM Banks WHERE Name = ?",
-                      [bankref],
-                      (error, results) => {
-                        if (error) {
-                          // Gérer les erreurs d'insertion dans la base de données
-                          console.error(error);
-                          return res.status(500).json({
-                            message:
-                              "Une erreur s'est produite lors de l'enregistrement de l'utilisateur.",
-                          });
-                        } else {
-                          console.log(
-                            "resultat de la requete : ",
-                            results[0].ID_bank
-                          );
-                          const ID_bank = results[0].ID_bank;
-                          db.query(
-                            "INSERT INTO Employees SET ?",
-                            { ID_user: ID_user, ID_bank: ID_bank },
-                            (error, results) => {
-                              if (error) {
-                                // Gérer les erreurs d'insertion dans la base de données
-                                console.error(error);
-                                return res.status(500).json({
-                                  message:
-                                    "Une erreur s'est produite lors de l'enregistrement de l'utilisateur.",
-                                });
-                              } else {
-                                console.log(
-                                  "Employé inséré avec succès dans la base de données."
-                                );
-                                res.status(200).json({
-                                  message: "Employé enregistré avec succès !",
-                                });
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
-            } else {
-              // Enregistrement de l'utilisateur dans la base de données
-              db.query(
-                "INSERT INTO Users SET ?",
-                {
-                  Email: email,
-                  Password: password,
-                  Name: username,
-                  FirstName: userfirstname,
-                },
-                (error, results) => {
-                  if (error) {
-                    // Gérer les erreurs d'insertion dans la base de données
-                    console.error(error);
-                    return res.status(500).json({
-                      message:
-                        "Une erreur s'est produite lors de l'enregistrement de l'utilisateur.",
-                    });
-                  } else {
-                    console.log(
-                      "Utilisateur inséré avec succès dans la base de données."
-                    );
-                    res.status(200).json({
-                      message: "Utilisateur enregistré avec succès !",
-                    });
-                  }
-                }
-              );
-            }
-          }
-        }
-      }
+
+    const userAlreadyExists = userQueries.userAlreadyExists(
+      email
     );
-  } catch (error) {
-    console.log(error);
-  }
+    userAlreadyExists.then((result) => {
+
+      if (result) {
+        // L'utilisateur existe déjà, renvoyer une réponse d'erreur
+        return res
+          .status(500)
+          .json({ message: "L'utilisateur existe déjà." });
+      } else {
+        const saltRounds = parseInt(process.env.cryptedKey);
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const encryptedPassword = bcrypt.hashSync(password, salt);
+        const userInsertInto = bankQueries.userInsertInto(
+          email,
+          encryptedPassword,
+          username,
+          userfirstname,
+          type,
+          bankref
+        );
+        //affcier la réponse de userInsertInto
+        //userInsertInto est une promesse
+        //affichage des erreurs si il y en a
+        
+        userInsertInto.then((result) => {
+          if (result) {
+            // L'utilisateur existe déjà, renvoyer une réponse d'erreur
+            return res.status(500).json({message : "Employé inséré"})
+          }
+        });
+      }
+    });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Erreur lors de l'inscription" });
+    }
 });
 
 router.get("/getBanks", async (req, res) => {
-  db.query("SELECT Name FROM Banks where Status = 'Accepted'", (error, results) => {
-    if (error) {
-      res.status(500).json({ message: "Connextion avec la DB impossible" });
-    } else {
-      res.json(results);
+  bankQueries.getBankNames().then((result) => {
+    if (result) {
+      res.json(result)
     }
+  }).catch((error) => {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des banques" });
   });
+
 });
   
   module.exports = router
