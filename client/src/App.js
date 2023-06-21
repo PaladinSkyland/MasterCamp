@@ -9,6 +9,7 @@ import BienvenuePage from "./components/BienvenuePage";
 import AccountPage from "./components/AccountPage";
 import SearchPage from "./components/SearchPage";
 import { UserProvider } from "./context/UserContext";
+import FileUploadForm from "./FileUpload";
 
 const App = () => {
   return (
@@ -39,6 +40,14 @@ const App = () => {
             element={
               <UserProvider>
                 <AccountPage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/customer"
+            element={
+              <UserProvider>
+                <FileUploadForm />
               </UserProvider>
             }
           />

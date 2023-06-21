@@ -11,6 +11,7 @@ const e = require('express')
 
 router.post("/login", async (req,res) => {
 
+  console.log("gfdgsdfv")
   //Récupération du mdp et de l'email passé dans le formulaire de login
   const {email, password} = req.body;
 
