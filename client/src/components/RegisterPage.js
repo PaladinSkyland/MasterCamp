@@ -81,7 +81,7 @@ const RegisterPage = () => {
         .then((data) => {
           // Gérer la réponse du serveur ici
           for (let key in data) {
-            setmessagealert(key + " : " + data[key]);
+            setmessagealert(data[key]);
             return;
           }
         })
