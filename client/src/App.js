@@ -61,14 +61,6 @@ const App = () => {
             path="/*"
             element={<ErrorPage />}
           />
-          <Route
-            path="/customer/loanApplication"
-            element={<LoanApplicationPage/>}
-            />
-          <Route
-            path="/*"
-            element={<ErrorPage />}
-          />
         </Routes>
       </AuthProvider>
     </Router>
