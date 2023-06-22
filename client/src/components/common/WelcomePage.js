@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import ComponentLogo from "./Logo";
+import ComponentLogo from "../Logo";
 
 const WelcomePage = () => {
   const navigate = useNavigate();

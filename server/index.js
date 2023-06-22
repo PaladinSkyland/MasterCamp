@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const port = 5000
 const userQueries = require('./src/queries/user')
-const db = require('./src/db') //Chemin vers les infos de connexion à la db
 const authenticateToken = require('./src/authenticateToken')
 
 app.use(express.json()); //Middleware express
@@ -11,6 +10,8 @@ app.use(express.json()); //Middleware express
 const authentificationRouter = require('./src/routes/authentification');
 app.use('/authentification', authentificationRouter)
 
+const customerRouter = require('./src/routes/customer');
+app.use('/customer', customerRouter)
 
 const adminRouter = require('./src/routes/admin');
 app.use('/admin', adminRouter)

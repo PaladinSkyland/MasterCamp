@@ -24,9 +24,6 @@ exports.getBankVerifiedByName = function(name) {
       );
     });
   };
-
-
-
   
 exports.getBankNames = function() {
     return new Promise((resolve, reject) => {

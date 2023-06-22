@@ -4,15 +4,15 @@ import { AuthProvider } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
 
 
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
-import HomePage from "./components/HomePage";
-import WelcomePage from "./components/WelcomePage";
-import AccountPage from "./components/AccountPage";
-import ErrorPage from "./components/ErrorPage";
+import LoginPage from "./components/common/LoginPage";
+import RegisterPage from "./components/common/RegisterPage";
+import HomePage from "./components/common/HomePage";
+import WelcomePage from "./components/common/WelcomePage";
+import AccountPage from "./components/common/AccountPage";
+import ErrorPage from "./components/common/ErrorPage";
 import LoanApplicationPage from "./components/customer/LoanApplicationPage";
 import ConversationPage from "./components/ConversationPage";
-
+import FileUploadForm from "./FileUpload";
 
 const App = () => {
   return (
@@ -47,11 +47,15 @@ const App = () => {
           />
           <Route
             path="/customer/loanApplication"
-            element={<LoanApplicationPage/>}
+            element={<UserProvider><LoanApplicationPage/></UserProvider>}
             />
           <Route
-            path="/*"
-            element={<ErrorPage />}
+            path="/customer"
+            element={
+              <UserProvider>
+                <FileUploadForm />
+              </UserProvider>
+            }
           />
 
           <Route
@@ -62,6 +66,9 @@ const App = () => {
               </UserProvider>
             }
           />
+          <Route
+            path="/*"
+            element={<ErrorPage />}/>
         </Routes>
       </AuthProvider>
     </Router>

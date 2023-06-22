@@ -7,7 +7,6 @@ const db = require('../db')
 
 const userQueries = require("../queries/user");
 const bankQueries = require('../queries/bank');
-const e = require('express')
 
 router.post("/login", async (req,res) => {
 
@@ -108,7 +107,6 @@ router.post("/register", async (req, res) => {
 router.get("/getBanks", async (req, res) => {
   bankQueries.getBankNames().then((result) => {
     if (result) {
-      // L'utilisateur existe déjà, renvoyer une réponse d'erreur
       res.json(result)
     }
   }).catch((error) => {
