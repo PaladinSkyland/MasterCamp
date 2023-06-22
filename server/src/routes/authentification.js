@@ -7,17 +7,12 @@ const db = require('../db')
 
 const userQueries = require("../queries/user");
 const bankQueries = require('../queries/bank');
-const e = require('express')
 
 router.post("/login", async (req,res) => {
-
-  console.log("gfdgsdfv")
   //Récupération du mdp et de l'email passé dans le formulaire de login
   const {email, password} = req.body;
 
   //Récupération du mdp de l'utilisateur dans la BDD
-
-
   const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
     if (error) {
       console.log(error);
