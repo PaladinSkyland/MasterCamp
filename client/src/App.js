@@ -1,7 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { AuthProvider } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
+
+import BankPage from "./components/admin/Bank";
+import EmployeePage from "./components/admin/Employee";
 
 
 import LoginPage from "./components/common/LoginPage";
@@ -63,6 +67,22 @@ const App = () => {
             element={
               <UserProvider>
                 <ConversationPage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/admin/Employee"
+            element={
+              <UserProvider>
+                <EmployeePage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/admin/bank"
+            element={
+              <UserProvider>
+                <BankPage />
               </UserProvider>
             }
           />
