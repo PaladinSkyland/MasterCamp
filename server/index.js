@@ -25,6 +25,9 @@ app.get("/home", authenticateToken, (req, res) => {
   });
 });
 
+const convRouter = require('./src/routes/conversation');
+app.use('/conversation', convRouter)
+
 app.listen(port, () => {
   console.log("listening on port", port);
 });

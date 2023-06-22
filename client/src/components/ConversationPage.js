@@ -1,36 +1,101 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import React, { useState, useEffect } from 'react';
 
-const ConversationPage = () => {
+const ChatPage = () => {
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
-  // Fonction pour ajouter un nouveau message
-  const addMessage = (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+  // Fonction pour envoyer un message
+  const sendMessage = async () => {
+    try {
+      const response = await fetch('/conversation/sendmessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: newMessage }),
+      });
+
+      if (response.ok) {
+        setNewMessage('');
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Exemple d'utilisation d'un effet pour simuler l'arrivée de nouveaux messages
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const newMessage = { id: Date.now(), content: `Message ${messages.length + 1}` };
-      addMessage(newMessage);
-    }, 3000);
+  // Fonction pour récupérer les messages
+  const fetchMessages = async () => {
+    fetch("/conversation/getmessage")
+        .then((response) => response.json())
+        .then((data) => {
+          setMessages(data);
+          console.log(data);
+        })
+        .catch((error) =>{
+          console.error(error);
+        }) ;
+  };
 
-    return () => clearInterval(timer);
+  // Charger les messages au chargement initial
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  // Rafraîchir les messages toutes les 5 secondes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div>
-      <h1>Chat</h1>
-      <div>
-        {messages.map((message) => (
-          <div key={message.id}>{message.content}</div>
-        ))}
-      </div>
-    </div>
+    
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+  <h1 class="text-2xl font-bold mb-4">Chat</h1>
+  <div class="chat-messages mb-4">
+    {Array.isArray(messages) && messages.length > 0 ? (
+      messages.map((message) => (
+        <div
+          key={message.ID_message}
+          class={`mb-4 ${
+            message.Sender === "Client" ? "text-right" : "text-left"
+          }`}
+        >
+          <div
+            class={`inline-block p-2 rounded-lg ${
+              message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
+            }`}
+          >
+            <p class="text-gray-600">{message.Description}</p>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div class="text-gray-400">Aucun message</div>
+    )}
+  </div>
+  <input
+    type="text"
+    value={newMessage}
+    onChange={(e) => setNewMessage(e.target.value)}
+    class="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
+  />
+  <button
+    onClick={sendMessage}
+    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
+  >
+    Envoyer
+  </button>
+</div>
+
+
+
+
   );
 };
 
-export default ConversationPage;
+export default ChatPage;
