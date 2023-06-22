@@ -7,13 +7,14 @@ const authenticateToken = require('./src/authenticateToken')
 
 app.use(express.json()); //Middleware express
 
+//Chemin vers les différents routeurs
 const authentificationRouter = require('./src/routes/authentification');
-app.use('/authentification', authentificationRouter)
-
 const customerRouter = require('./src/routes/customer');
-app.use('/customer', customerRouter)
-
 const adminRouter = require('./src/routes/admin');
+
+//Configuration des routes
+app.use('/authentification', authentificationRouter)
+app.use('/customer', customerRouter)
 app.use('/admin', adminRouter)
 
 app.get("/home", authenticateToken, (req, res) => {

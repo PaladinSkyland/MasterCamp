@@ -2,9 +2,11 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const db = require('../db')
+const authenticateToken = require('../authenticateToken')
 
 
-router.get("/getmessage", async (req,res) => {
+
+router.get("/getmessage", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
   const idconversation = 1;
   db.query("SELECT * from Messages where ID_conversation = ?", [idconversation], (error, results) => {
@@ -17,7 +19,7 @@ router.get("/getmessage", async (req,res) => {
 });
 
 
-router.post("/sendmessage", async (req,res) => {
+router.post("/sendmessage", authenticateToken, async (req,res) => {
   console.log("envoie message");
 
   const {message} = req.body;

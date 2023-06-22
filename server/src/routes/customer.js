@@ -2,6 +2,8 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const loanQueries = require('../queries/loan')
+const authenticateToken = require('../authenticateToken')
+
 
 // const multer = require('multer')
 
@@ -10,7 +12,7 @@ const loanQueries = require('../queries/loan')
 //     limits: {fileSize: 50 * 1024 * 1024}
 // });
 
-router.post("/upload", /*upload.single('filedata'),*/ async (req, res) => {
+router.post("/upload", authenticateToken, /*upload.single('filedata'),*/ async (req, res) => {
     const fileType = req.body.fileType;
     const file = req.body.file;
 
@@ -25,7 +27,7 @@ router.post("/upload", /*upload.single('filedata'),*/ async (req, res) => {
     }
 })
 
-router.post('/newLoan', (req, res) => {
+router.post('/newLoan', authenticateToken, (req, res) => {
     const {
         interestRate,
         loanDuration,

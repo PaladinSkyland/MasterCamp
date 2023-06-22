@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../db')
 const bankQueries = require('../queries/bank')
 const employeeQueries = require('../queries/employee')
+const authenticateToken = require('../authenticateToken')
 
-router.get("/getBanksPending", (req, res) => {
+
+router.get("/getBanksPending", authenticateToken, (req, res) => {
     const response = bankQueries.getBankPending()
 
     response.then(response => {
@@ -12,7 +13,7 @@ router.get("/getBanksPending", (req, res) => {
     })
 })
 
-router.get("/getBanksAccepted", (req, res) => {
+router.get("/getBanksAccepted", authenticateToken, (req, res) => {
     const response = bankQueries.getBankAccepted()
 
     response.then(response => {
@@ -20,7 +21,7 @@ router.get("/getBanksAccepted", (req, res) => {
     })
 })
 
-router.post("/changeBankStatus", (req, res) => {
+router.post("/changeBankStatus", authenticateToken, (req, res) => {
     const id = req.body.ID_bank
 
     const response = bankQueries.updateBankStatus(id)
@@ -30,7 +31,7 @@ router.post("/changeBankStatus", (req, res) => {
     })
 })
 
-router.delete("/deleteBank", (req, res) => {
+router.delete("/deleteBank", authenticateToken, (req, res) => {
     const id = req.body.ID_bank
 
     const response = bankQueries.deleteBankByID(id)
@@ -39,7 +40,7 @@ router.delete("/deleteBank", (req, res) => {
     })
 })
 
-router.get("/getEmployeesPending", (req, res) => {
+router.get("/getEmployeesPending",authenticateToken, (req, res) => {
     const response = employeeQueries.getEmployeePending()
 
     response.then(response => {
@@ -47,7 +48,7 @@ router.get("/getEmployeesPending", (req, res) => {
     })
 })
 
-router.get("/getEmployeesAccepted", (req, res) => {
+router.get("/getEmployeesAccepted",authenticateToken, (req, res) => {
     const response = employeeQueries.getEmployeeAccepted()
 
     response.then(response => {
@@ -55,7 +56,7 @@ router.get("/getEmployeesAccepted", (req, res) => {
     })
 })
 
-router.post("/changeEmployeeStatus", (req, res) => {
+router.post("/changeEmployeeStatus",authenticateToken, (req, res) => {
     const id = req.body.ID_employee
 
     const response = employeeQueries.updateEmployeeStatus(id)
@@ -65,7 +66,7 @@ router.post("/changeEmployeeStatus", (req, res) => {
     })
 })
 
-router.delete("/deleteEmployee", (req, res) => {
+router.delete("/deleteEmployee",authenticateToken, (req, res) => {
     const id = req.body.ID_employee
 
     const response = employeeQueries.deleteEmployeeByID(id)
