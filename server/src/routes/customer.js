@@ -1,7 +1,8 @@
 require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
-const db = require('../db')
+const loanQueries = require('../queries/loan')
+
 // const multer = require('multer')
 
 // const upload = multer({
@@ -22,6 +23,24 @@ router.post("/upload", /*upload.single('filedata'),*/ async (req, res) => {
     else {
         res.status(200).json({message: "upload success"})
     }
+})
+
+router.post('/newLoan', (req, res) => {
+    const {
+        interestRate,
+        loanDuration,
+        loanAmount,
+        //feesAndCosts,
+        interestType,
+        monthlyIncome,
+        repaymentOptions,
+        insuranceAndGuarantees,
+        //bankOption,
+        description,
+        ID_user
+    } = req.body
+    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user)
+    
 })
 
 module.exports = router

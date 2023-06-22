@@ -1,7 +1,7 @@
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import React, { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import { AuthContext } from "../context/AuthContext";
+import { UserContext } from "../../context/UserContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const AccountPage = () => {
   const { userData, setUserData } = useContext(UserContext);
