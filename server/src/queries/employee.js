@@ -1,8 +1,8 @@
 const db = require('../db')
 
-exports.getBankPending = function() {
+exports.getEmployeePending = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Banks where status = 'Pending'", (error, result) => {
+        db.query("SELECT * FROM Employees where status = 'Pending'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -13,9 +13,9 @@ exports.getBankPending = function() {
     })
 }
 
-exports.updateBankStatus = function (id) {
+exports.updateEmployeeStatus = function (id) {
     return new Promise((resolve, reject) => {
-        db.query("UPDATE Banks set Status = 'Accepted' where ID_bank = ?", [id],(error, result) => {
+        db.query("UPDATE Employees set Status = 'Accepted' where ID_employee = ?", [id],(error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -26,9 +26,9 @@ exports.updateBankStatus = function (id) {
     })
 }
 
-exports.deleteBankByID = function (id) {
+exports.deleteEmployeeByID = function (id) {
     return new Promise((resolve, reject) => {
-        db.query("DELETE from Banks where ID_bank = ?", [id], (error, result) => {
+        db.query("DELETE from Employees where ID_employee = ?", [id], (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -39,9 +39,9 @@ exports.deleteBankByID = function (id) {
     })
 }
 
-exports.getBankAccepted = function() {
+exports.getEmployeeAccepted = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Banks where status = 'Accepted'", (error, result) => {
+        db.query("SELECT * FROM Employees where status = 'Accepted'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)

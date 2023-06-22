@@ -3,11 +3,14 @@ import React, {useState, useEffect} from "react";
 
 const BankPage = () => {
 
-    const [bankList, setBankList] = useState([]);
-    const [bankListLength, setBankListLength] = useState(bankList.length)
+    const [bankListPending, setBankListPending] = useState([]);
+    const [bankListPendingLength, setBankListPendingLength] = useState(bankListPending.length)
+
+    const [bankListAccepted, setBankListAccepted] = useState([]);
+    const [bankListAcceptedLength, setBankListAcceptedLength] = useState(bankListPending.length)
 
     useEffect(() => {
-        const fetchBank = async () => {
+        const fetchBankPending = async () => {
             try {
                 const response = await fetch("/admin/getBanksPending", {
                     method: "GET",
@@ -16,19 +19,33 @@ const BankPage = () => {
                     },
                 });
                 const data = await response.json();
-                setBankList(data);
-                console.log("je suis la data", data)
+                setBankListPending(data);
             } catch (error) {
                 console.error("Une erreur s'est produite :", error);
             }
         };
-        fetchBank();
-    }, [bankListLength]);
-    console.log(bankList)
+        fetchBankPending();
+        const fetchBankAccepted = async () => {
+            try {
+                const response = await fetch("/admin/getBanksAccepted", {
+                    method: "GET",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                });
+                const data = await response.json();
+                setBankListAccepted(data);
+            } catch (error) {
+                console.error("Une erreur s'est produite :", error);
+            }
+        };
+        fetchBankAccepted();
+
+    }, [bankListPendingLength, bankListAcceptedLength]);
 
     const validateBank = async (id) => {
-        console.log("je suis po gentil")
-        const response = fetch("/admin/changeStatus", {
+        setBankListPendingLength(bankListPendingLength - 1)
+        const response = fetch("/admin/changeBankStatus", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -37,29 +54,69 @@ const BankPage = () => {
                 ID_bank: id
             })
         });
-        setBankListLength(bankListLength - 1)
     }
 
-    return bankList ? 
+    const deleteBank = async (id) => {
+        const toDel = bankListAccepted.filter((bank) => {
+            return bank.ID_bank === id
+        })
+
+        if (toDel.Status === "Accepted") {
+            setBankListAcceptedLength(bankListAcceptedLength - 1)
+        } else {
+            setBankListPendingLength(bankListPendingLength -1)
+        }
+        const response = fetch("/admin/deleteBank", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ID_bank: id
+            })
+        });
+        
+    }
+
+    return bankListPending ? 
         (
         
         <div>
-            <ul>
-                
-            {bankList.map((bank, index) => (
+            <ul>   
+            {bankListPending.map((bank, index) => (
                 <li
                 key = {index}
                 >
                     {bank.Name}
+                    {bank.Status}
 
-                <button onClick={ () => validateBank(bank.ID_bank)}>C'est moi tchoupi</button>
+
+                <button onClick={ () => validateBank(bank.ID_bank)}>Validate</button>
+
+                <button onClick={ () => deleteBank(bank.ID_bank)}>Delete</button>
 
                 </li>
                 
             ))
             }
+            </ul>
+            <br></br>
+            <br></br><br></br><br></br>
+            <ul>   
+            {bankListAccepted.map((bank, index) => (
+                <li
+                key = {index}
+                >
+                    {bank.Name}
+                    {bank.Status}
 
-            </ul> 
+
+                <button onClick={ () => deleteBank(bank.ID_bank)}>Delete</button>
+                </li>
+                
+            ))
+            }
+            </ul>  
         </div> ) : (  <p>non</p>)
             
 };

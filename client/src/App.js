@@ -9,6 +9,7 @@ import BienvenuePage from "./components/BienvenuePage";
 import AccountPage from "./components/AccountPage";
 import { UserProvider } from "./context/UserContext";
 import BankPage from "./components/admin/Bank";
+import EmployeePage from "./components/admin/Employee";
 
 const App = () => {
   return (
@@ -46,6 +47,14 @@ const App = () => {
             element={
               <UserProvider>
                 <BankPage />
+              </UserProvider>
+            }
+          />
+          <Route
+            path="/admin/employee"
+            element={
+              <UserProvider>
+                <EmployeePage />
               </UserProvider>
             }
           />
