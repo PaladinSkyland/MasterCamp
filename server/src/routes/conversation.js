@@ -1,12 +1,8 @@
 require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const db = require('../db')
 
-const userQueries = require("../queries/user");
-const bankQueries = require('../queries/bank');
 
 router.get("/getmessage", async (req,res) => {
   //Récupération des messages pour une conversation donnée
