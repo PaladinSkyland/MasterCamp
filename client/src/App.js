@@ -11,7 +11,7 @@ import WelcomePage from "./components/WelcomePage";
 import AccountPage from "./components/AccountPage";
 import ErrorPage from "./components/ErrorPage";
 import LoanApplicationPage from "./components/customer/LoanApplicationPage";
-import FileUploadForm from "./FileUpload";
+import FileUploadForm from "./components/customer/FileUpload";
 
 
 const App = () => {
@@ -46,7 +46,7 @@ const App = () => {
             }
           />
           <Route
-            path="/customer"
+            path="/customer/fileUpload"
             element={
               <UserProvider>
                 <FileUploadForm />
