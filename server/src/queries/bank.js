@@ -38,8 +38,6 @@ exports.getBankNames = function() {
     });
 }
 
-const db = require('../db')
-
 exports.getBankPending = function() {
     return new Promise((resolve, reject) => {
         db.query("SELECT * FROM Banks where status = 'Pending'", (error, result) => {
