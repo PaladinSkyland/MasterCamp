@@ -8,10 +8,10 @@ const db = require('../db')
 const userQueries = require("../queries/user");
 const bankQueries = require('../queries/bank');
 
-router.get("/getmessage", async (req,res) => {
+router.get("/getmessage/:conversationId", async (req,res) => {
   //Récupération des messages pour une conversation donnée
-  const idconversation = 1;
-  db.query("SELECT * from Messages where ID_conversation = ?", [idconversation], (error, results) => {
+  const conversationId = req.params.conversationId;
+  db.query("SELECT * from Messages where ID_conversation = ?", [conversationId], (error, results) => {
     if (error){
       return res.status(401).json({ error: "invalides" });
     }else {
@@ -21,16 +21,16 @@ router.get("/getmessage", async (req,res) => {
 });
 
 
-router.post("/sendmessage", async (req,res) => {
+router.post("/sendmessage/:conversationId", async (req,res) => {
   console.log("envoie message");
 
   const {message} = req.body;
   const who = "Client";
 
   //Récupération des messages pour une conversation donnée
-  const idconversation = 1;
+  const conversationId = req.params.conversationId;
   db.query("INSERT INTO Messages (Description, Sender, ID_conversation) VALUES (?,?,?);", 
-  [message,who,idconversation], (error, results) => {
+  [message,who,conversationId ], (error, results) => {
     if (error){
       return res.status(401).json({ error: "invalides", ok: false });
     }else {

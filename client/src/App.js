@@ -55,7 +55,7 @@ const App = () => {
           />
 
           <Route
-            path="/conversation"
+            path="/conversation/:conversationId"
             element={
               <UserProvider>
                 <ConversationPage />

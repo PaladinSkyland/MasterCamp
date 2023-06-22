@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ChatPage = () => {
+  const { conversationId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
     try {
-      const response = await fetch('/conversation/sendmessage', {
+      const response = await fetch(`/conversation/sendmessage/${conversationId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +29,7 @@ const ChatPage = () => {
 
   // Fonction pour récupérer les messages
   const fetchMessages = async () => {
-    fetch("/conversation/getmessage")
+    fetch(`/conversation/getmessage/${conversationId}`)
         .then((response) => response.json())
         .then((data) => {
           setMessages(data);
