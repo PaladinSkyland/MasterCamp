@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ComponentLogo from "./Logo.js";
+import ComponentLogo from "../Logo.js";
 const bcrypt = require("bcryptjs");
 
 const RegisterPage = () => {
@@ -13,6 +13,7 @@ const RegisterPage = () => {
   const [radiobutton, setRadiobutton] = useState("");
   const [employeebankrep, setemployeebankrep] = useState(null);
   const [selectedbankOption, setSelectedbankOption] = useState("");
+  const [messagealert, setmessagealert] = useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -42,7 +43,6 @@ const RegisterPage = () => {
         .then((data) => {
           // Gérer la réponse du serveur ici
           setemployeebankrep(data);
-          console.log(data);
         })
         .catch((error) => {
           // Gérer les erreurs ici
@@ -80,7 +80,10 @@ const RegisterPage = () => {
         .then((response) => response.json())
         .then((data) => {
           // Gérer la réponse du serveur ici
-          console.log(data);
+          for (let key in data) {
+            setmessagealert(data[key]);
+            return;
+          }
         })
         .catch((error) => {
           // Gérer les erreurs ici
@@ -212,6 +215,11 @@ const RegisterPage = () => {
               <Link to="/authentification/login" className="text-blue-400">
                 Connected to credit express
               </Link>
+              {messagealert !== "" && (
+              <div>
+                <p className="text-red-500">{messagealert}</p>
+              </div>
+              )}
               <button
                 className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
                 type="submit"

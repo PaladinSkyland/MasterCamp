@@ -34,10 +34,8 @@ exports.userAlreadyExists = function(email) {
           // Utiliser les résultats de la requête
           if (results.length > 0) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            //console.log("L'utilisateur existe déjà.");
             resolve(true);
           } else {
-            console.log("L'utilisateur n'existe pas.");
             resolve(false);
           }
         }
@@ -80,7 +78,7 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
               (error, results) => {
                 if (error) {
                   // Gérer les erreurs d'insertion dans la base de données
-                  console.error(error);
+                  console.log(error);
                   reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
                 } else {
                   resolve(true);
@@ -92,6 +90,9 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
 
       }
     );
+    }).catch((error) => {
+      console.log(error);
+      reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
     });
   }
   else {
@@ -109,10 +110,7 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
           console.error(error);
           reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'utilisateur."));
         } else {
-          console.log(
-            "Utilisateur inséré avec succès dans la base de données."
-          );
-          console.log("resultat de la requete : ", results.insertId);
+          console.log("Utilisateur inséré avec succès dans la base de données.");
           resolve(true);
         }
 
@@ -121,3 +119,20 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
   }
 }
   )}
+
+exports.getUserID = function() {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT ID_user from Users where ID_user = ?", [id], (error, result) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        if (result[0] === undefined) {
+          reject(new Error("User not found"));
+        } else {
+          resolve(result[0]);
+        }
+      }
+    });
+  })
+}

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 
 const HomePage = () => {
   const banque = ["Bank1", "Bank2", "Bank3", "Bank4", "Bank5", "Bank6"];

@@ -7,7 +7,6 @@ const db = require('../db')
 
 const userQueries = require("../queries/user");
 const bankQueries = require('../queries/bank');
-const e = require('express')
 
 router.post("/login", async (req,res) => {
 
@@ -41,6 +40,24 @@ router.post("/register", async (req, res) => {
   try {
     const { username, userfirstname, email, password, type, bankref } =
       req.body;
+
+    //verification des champs : username, userfirstname, email, password.
+    //Si un des champs est vide, renvoyer une réponse d'erreur
+    //Si l'email n'est pas sous le bon format, renvoyer une réponse d'erreur
+    //Si le mot de passe n'est pas assez fort, renvoyer une réponse d'erreur
+
+    if (!username || !userfirstname || !email || !password) {
+      return res
+        .status(500)
+        .json({ message: "Veuillez remplir tous les champs." });
+    }
+
+    if (!email.includes("@")) {
+      return res
+        .status(500)
+        .json({ message: "Veuillez entrer une adresse email valide." });
+    }
+
 
     //Effectuer la requête à la base de données pour obtenir le mot de passe de l'utilisateur
     //vérification si user déjà existant
@@ -76,7 +93,7 @@ router.post("/register", async (req, res) => {
         userInsertInto.then((result) => {
           if (result) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            return res.status(500).json({message : "Employé inséré"})
+            return res.status(500).json({message : "Utilisateur créé avec succès"})
           }
         });
       }
@@ -90,7 +107,6 @@ router.post("/register", async (req, res) => {
 router.get("/getBanks", async (req, res) => {
   bankQueries.getBankNames().then((result) => {
     if (result) {
-      // L'utilisateur existe déjà, renvoyer une réponse d'erreur
       res.json(result)
     }
   }).catch((error) => {
