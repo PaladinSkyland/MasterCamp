@@ -11,6 +11,7 @@ import WelcomePage from "./components/WelcomePage";
 import AccountPage from "./components/AccountPage";
 import ErrorPage from "./components/ErrorPage";
 import LoanApplicationPage from "./components/customer/LoanApplicationPage";
+import ConversationPage from "./components/ConversationPage";
 
 
 const App = () => {
@@ -51,6 +52,15 @@ const App = () => {
           <Route
             path="/*"
             element={<ErrorPage />}
+          />
+
+          <Route
+            path="/conversation"
+            element={
+              <UserProvider>
+                <ConversationPage />
+              </UserProvider>
+            }
           />
         </Routes>
       </AuthProvider>
