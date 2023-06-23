@@ -15,25 +15,24 @@ router.post("/login", async (req,res) => {
 
   //Récupération du mdp de l'utilisateur dans la BDD
 
-
-  const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
-    if (error) {
-      console.log(error);
-    } else {
-      if(results.length > 0 ){
-        if(bcrypt.compareSync(password, results[0].Password)){
-          const ID = results[0].ID_user
-          const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
-          res.json({ token });
-        } else {
-          res.status(401).json({ error: "Identifiants invalides" });
-        }
-      } else {
+  userQueries.getPasswordIDuser(email).then((result) => {
+    if (result) {
+      if(bcrypt.compareSync(password, result[0].Password)){
+        const ID = result[0].ID_user
+        const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
+        res.json({ token });
+      }
+      else {
         res.status(401).json({ error: "Identifiants invalides" });
       }
     }
-  }
-);
+    else {
+      res.status(401).json({ error: "Identifiants invalides" });
+    }
+  }).catch((error) => {
+    console.log(error);
+    res.status(500).json({ error: "Une erreur s'est produite lors de la connexion." });
+  });
 });
 
 router.post("/register", async (req, res) => {
