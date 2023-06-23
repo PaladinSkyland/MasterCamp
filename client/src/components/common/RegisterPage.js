@@ -38,7 +38,7 @@ const RegisterPage = () => {
   const handleRadiobuttonChange = (event) => {
     console.log(event.target.value);
     if (event.target.value === "employee" && employeebankrep === null) {
-      fetch("/authentification/getBanks")
+      fetch("/authentification/getBanks",)
         .then((response) => response.json())
         .then((data) => {
           // Gérer la réponse du serveur ici

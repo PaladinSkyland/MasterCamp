@@ -88,7 +88,8 @@ const App = () => {
           />
           <Route
             path="/*"
-            element={<ErrorPage />}/>
+            element={<ErrorPage />}
+          />
         </Routes>
       </AuthProvider>
     </Router>
