@@ -29,8 +29,44 @@ const RegisterPage = () => {
     setemail(event.target.value);
   };
 
+  const validatePassword = (password) => {
+    const regex = {
+      lowercase: /^(?=.*[a-z])/,
+      uppercase: /^(?=.*[A-Z])/,
+      digit: /^(?=.*\d)/,
+      specialChar: /^(?=.*[@$!%*?&])/,
+      length: /^.{8,}$/,
+    };
+  
+    const errorMessages = {
+      lowercase: "a,",
+      uppercase: "A,",
+      digit: "1,",
+      specialChar: "!/$&*?%",
+      length: "> 8 caractères",
+    };
+  
+    const missingConditions = [];
+  
+    for (const condition in regex) {
+      if (!regex[condition].test(password)) {
+        missingConditions.push(condition);
+      }
+    }
+  
+    if (missingConditions.length > 0) {
+      return missingConditions.map((condition) => errorMessages[condition]).join(" ");
+    }
+  
+    return "";
+  };
+
+
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    //Password validation
+    //const passwordError = validatePassword(event.target.value);
+    //setmessagealert(passwordError);
   };
 
   const handleSelectOptionChange = (event) => {
