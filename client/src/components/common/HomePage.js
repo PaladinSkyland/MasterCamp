@@ -22,7 +22,7 @@ const HomePage = () => {
           setUserData(data);
         });
     }
-  });
+  },[]);
 
   return (
     /* Si connecté */
