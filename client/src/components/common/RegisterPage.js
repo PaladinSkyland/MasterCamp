@@ -42,7 +42,6 @@ const RegisterPage = () => {
   };
 
   const handleRadiobuttonChange = (event) => {
-    console.log(event.target.value);
     if (event.target.value === "employee" && employeebankrep === null) {
       fetch("/authentification/getBanks")
         .then((response) => response.json())
@@ -93,10 +92,12 @@ const RegisterPage = () => {
           // Gérer la réponse du serveur ici
           for (let key in data) {
             setmessagealert(data[key]);
-            setTimeout(() => {
-              window.location.href = '/authentification/login';
-            }, 2000);
-            return;
+            if (data[key] === "Utilisateur créé avec succès"){
+              setTimeout(() => {
+                window.location.href = '/authentification/login';
+              }, 1000);
+              return;
+            }
           }
         })
         .catch((error) => {
@@ -123,7 +124,12 @@ const RegisterPage = () => {
         .then((data) => {
           for (let key in data) {
             setmessagealert(data[key]);
-            return;
+            if (data[key] === "Utilisateur créé avec succès"){
+              setTimeout(() => {
+                window.location.href = '/authentification/login';
+              }, 1000);
+              return;
+            }
           }
         })
         .catch((error) => {
