@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import ComponentLogo from "../Logo.js";
 const bcrypt = require("bcryptjs");
 
@@ -10,6 +11,7 @@ const RegisterPage = () => {
   const [userfirstname, setUserfirstname] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
+  const [confpassword, setConfPassword] = useState("");
   const [radiobutton, setRadiobutton] = useState("");
   const [employeebankrep, setemployeebankrep] = useState(null);
   const [selectedbankOption, setSelectedbankOption] = useState("");
@@ -35,6 +37,10 @@ const RegisterPage = () => {
     setSelectedbankOption(event.target.value);
   };
 
+  const handleConfPasswordChange = (event) => {
+    setConfPassword(event.target.value);
+  };
+
   const handleRadiobuttonChange = (event) => {
     console.log(event.target.value);
     if (event.target.value === "employee" && employeebankrep === null) {
@@ -55,6 +61,11 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (password !== confpassword) {
+      setmessagealert("Les mots de passe ne correspondent pas");
+      return;
+    }
 
     //cryptage
 
@@ -82,6 +93,9 @@ const RegisterPage = () => {
           // Gérer la réponse du serveur ici
           for (let key in data) {
             setmessagealert(data[key]);
+            setTimeout(() => {
+              window.location.href = '/authentification/login';
+            }, 2000);
             return;
           }
         })
@@ -107,8 +121,10 @@ const RegisterPage = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          // Gérer la réponse du serveur ici
-          console.log(data);
+          for (let key in data) {
+            setmessagealert(data[key]);
+            return;
+          }
         })
         .catch((error) => {
           // Gérer les erreurs ici
@@ -165,6 +181,16 @@ const RegisterPage = () => {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
+                className="block rounded-md border-0 py-0.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
+              />
+            </div>
+            <div>
+              <label htmlFor="confpassword">Confirmation password : </label>
+              <input
+                type="password"
+                id="confpassword"
+                value={confpassword}
+                onChange={handleConfPasswordChange}
                 className="block rounded-md border-0 py-0.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:ring-inset focus:ring-blue-800 sm:text-sm sm:leading-6"
               />
             </div>
