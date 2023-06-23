@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const port = 5000
 const userQueries = require('./src/queries/user')
-const authenticateToken = require('./src/authenticateToken')
+const authenticateToken = require('./src/middleware/authenticateToken')
 
 app.use(express.json()); //Middleware express
 
