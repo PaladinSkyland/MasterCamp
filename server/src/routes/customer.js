@@ -1,27 +1,53 @@
 require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
-const db = require('../db')
-// const multer = require('multer')
+const authenticateToken = require('../authenticateToken')
+const fs = require('fs')
+const fileQueries = require("../queries/file");
+const multer = require('multer')
 
-// const upload = multer({
-//     dest: 'uploads/',
-//     limits: {fileSize: 50 * 1024 * 1024}
-// });
+//set up multer storage configuration
+const storage = multer.diskStorage({
+    //set the destination folder where the uploaded files will be stored
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    //use the original file name as the stored file name
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+});
 
-router.post("/upload", /*upload.single('filedata'),*/ async (req, res) => {
-    const fileType = req.body.fileType;
-    const file = req.body.file;
+//create multer instance with the storage configuration
+const upload = multer({ storage });
 
-    console.log("req.body : ", req.body);
-    console.log("file type : ", fileType, " | file : ", file[0].name);
+router.post("/upload", authenticateToken, upload.single('file'), async (req, res) => {
+    const file = req.file; //uploaded file
+    const type = req.body.fileType; //selected option
+    const name = req.body.fileName; //file name
+    const userID = req.user.ID; //user ID
 
-    if (fileType == "") {
-        res.status(401).json({error: "Pas de type de fichier choisi"})
+    try {
+        //inserting into the DB
+        const fileInsertInto = fileQueries.fileInsertInto(name, type, file, userID);
+
+        //return the result of the insertion request
+        fileInsertInto.then((result) => {
+            if (result) {
+                fs.unlink(file.path, (error) => {
+                    if (error) {
+                      console.error('Error deleting temporary file on the server : ', error);
+                    } else {
+                      console.log('Temporary file on the server deleted successfully');
+                    }
+                })
+                return res.status(200).send("Fichier ajouté avec succès");
+            }
+        });
     }
-    else {
-        res.status(200).json({message: "upload success"})
+    catch (error) {
+        res.status(500).json({error: "Erreur lors de l'insertion du fichier"});
     }
-})
+});
 
 module.exports = router
