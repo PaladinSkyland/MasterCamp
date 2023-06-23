@@ -1,12 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { login, setHttpOnlyCookie } from "../authentification/login";
+import { AuthContext } from "../../context/AuthContext";
+import { login, setHttpOnlyCookie } from "../../authentification/login";
 
-import ComponentLogo from "./Logo";
+import ComponentLogo from "../Logo";
 
 const LoginPage = () => {
-  const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -41,7 +40,6 @@ const LoginPage = () => {
       setHttpOnlyCookie("token", token, new Date(Date.now() + 3600 * 1000)); // expiration dans 1 heure (en millisecondes)
 
       //On met le contexte login à true, et on se déplace sur la page voulue
-      setIsLoggedIn(true);
       navigate("/home");
     });
   };

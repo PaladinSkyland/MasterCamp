@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ComponentLogo from "./Logo.js";
+import ComponentLogo from "../Logo.js";
 const bcrypt = require("bcryptjs");
 
 const RegisterPage = () => {
