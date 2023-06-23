@@ -22,7 +22,7 @@ const AccountPage = () => {
             )
         )}
       </form>
-      <button onClick={logout}>deco</button>
+      <button className="btn-primary" onClick={logout}>deco</button>
     </div>
   ) : (
     /* Sinon */
