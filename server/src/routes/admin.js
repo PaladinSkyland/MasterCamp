@@ -2,10 +2,11 @@ const express = require('express')
 const router = express.Router()
 const bankQueries = require('../queries/bank')
 const employeeQueries = require('../queries/employee')
-const authenticateToken = require('../authenticateToken')
+const authenticateToken = require('../middleware/authenticateToken')
+const adminAccess = require('../middleware/adminAccess')
 
 
-router.get("/getBanksPending", authenticateToken, (req, res) => {
+router.get("/getBanksPending", authenticateToken, adminAccess, (req, res) => {
     const response = bankQueries.getBankPending()
 
     response.then(response => {
@@ -13,7 +14,7 @@ router.get("/getBanksPending", authenticateToken, (req, res) => {
     })
 })
 
-router.get("/getBanksAccepted", authenticateToken, (req, res) => {
+router.get("/getBanksAccepted", authenticateToken, adminAccess, (req, res) => {
     const response = bankQueries.getBankAccepted()
 
     response.then(response => {
@@ -21,7 +22,7 @@ router.get("/getBanksAccepted", authenticateToken, (req, res) => {
     })
 })
 
-router.post("/changeBankStatus", authenticateToken, (req, res) => {
+router.post("/changeBankStatus", authenticateToken, adminAccess, (req, res) => {
     const id = req.body.ID_bank
 
     const response = bankQueries.updateBankStatus(id)
@@ -31,7 +32,7 @@ router.post("/changeBankStatus", authenticateToken, (req, res) => {
     })
 })
 
-router.delete("/deleteBank", authenticateToken, (req, res) => {
+router.delete("/deleteBank", authenticateToken, adminAccess, (req, res) => {
     const id = req.body.ID_bank
 
     const response = bankQueries.deleteBankByID(id)
@@ -40,7 +41,7 @@ router.delete("/deleteBank", authenticateToken, (req, res) => {
     })
 })
 
-router.get("/getEmployeesPending",authenticateToken, (req, res) => {
+router.get("/getEmployeesPending",authenticateToken, adminAccess, (req, res) => {
     const response = employeeQueries.getEmployeePending()
 
     response.then(response => {
@@ -48,7 +49,7 @@ router.get("/getEmployeesPending",authenticateToken, (req, res) => {
     })
 })
 
-router.get("/getEmployeesAccepted",authenticateToken, (req, res) => {
+router.get("/getEmployeesAccepted",authenticateToken, adminAccess, (req, res) => {
     const response = employeeQueries.getEmployeeAccepted()
 
     response.then(response => {
@@ -56,7 +57,7 @@ router.get("/getEmployeesAccepted",authenticateToken, (req, res) => {
     })
 })
 
-router.post("/changeEmployeeStatus",authenticateToken, (req, res) => {
+router.post("/changeEmployeeStatus",authenticateToken, adminAccess, (req, res) => {
     const id = req.body.ID_employee
 
     const response = employeeQueries.updateEmployeeStatus(id)
@@ -66,7 +67,7 @@ router.post("/changeEmployeeStatus",authenticateToken, (req, res) => {
     })
 })
 
-router.delete("/deleteEmployee",authenticateToken, (req, res) => {
+router.delete("/deleteEmployee",authenticateToken, adminAccess, (req, res) => {
     const id = req.body.ID_employee
 
     const response = employeeQueries.deleteEmployeeByID(id)

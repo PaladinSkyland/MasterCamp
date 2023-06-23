@@ -36,6 +36,7 @@ const EmployeePage = () => {
                     "Content-Type": "application/json",
                     },
                 });
+                console.log("il est long ce lait")
                 const data = await response.json();
                 setEmployeeListAccepted(data);
             } catch (error) {
