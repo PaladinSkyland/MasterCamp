@@ -18,6 +18,7 @@ const LoanApplicationPage = () => {
 
   //Info de l'utilisateur venant du contextUtilisateur
   const { userData } = useContext(UserContext)
+  const storedToken = localStorage.getItem("token")
 
   //Nom de tous les states
   const stateValues = {
@@ -78,6 +79,7 @@ const LoanApplicationPage = () => {
       let options = {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${storedToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({

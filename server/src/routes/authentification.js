@@ -8,31 +8,38 @@ const db = require('../db')
 const userQueries = require("../queries/user");
 const bankQueries = require('../queries/bank');
 
-router.post("/login", async (req,res) => {
+router.post("/login", async (req, res) => {
 
   //Récupération du mdp et de l'email passé dans le formulaire de login
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
-  //Récupération du mdp de l'utilisateur dans la BDD
+  //On récupère les infos (mdp, user ID et mdp crypté correspondant aux infos donnés)
+  const userCredentials = await checkCredentials(email, password)
+  const ID_user = userCredentials.ID_user
+  
+  //Check du type d'user
+  if (userCredentials.UserType === "employee") {
 
-  userQueries.getPasswordIDuser(email).then((result) => {
-    if (result) {
-      if(bcrypt.compareSync(password, result[0].Password)){
-        const ID = result[0].ID_user
-        const token = jwt.sign({ email, ID }, process.env.secretKey, { expiresIn: '1h' });
-        res.json({ token });
-      }
-      else {
-        res.status(401).json({ error: "Identifiants invalides" });
-      }
+    //On récupère le status de l'employée
+    const statusEmployee = await getStatusEmployee(ID_user)
+    
+    //On check s'il est accepté ou non
+    if(statusEmployee.Status === "Pending"){
+      res.status(401).json({ error: "Compte non vérifié" })
+      return
     }
-    else {
+  }
+
+  if (userCredentials !== null) {
+    if (bcrypt.compareSync(password, userCredentials.Password)) {
+      const token = jwt.sign({ email, ID_user }, process.env.secretKey, { expiresIn: '1h' });
+      res.json({ token });
+    } else {
       res.status(401).json({ error: "Identifiants invalides" });
     }
-  }).catch((error) => {
-    console.log(error);
-    res.status(500).json({ error: "Une erreur s'est produite lors de la connexion." });
-  });
+  } else {
+    res.status(401).json({ error: "Identifiants invalides" });
+  }
 });
 
 router.post("/register", async (req, res) => {
@@ -88,19 +95,19 @@ router.post("/register", async (req, res) => {
         //affcier la réponse de userInsertInto
         //userInsertInto est une promesse
         //affichage des erreurs si il y en a
-        
+
         userInsertInto.then((result) => {
           if (result) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
-            return res.status(500).json({message : "Utilisateur créé avec succès"})
+            return res.status(500).json({ message: "Utilisateur créé avec succès" })
           }
         });
       }
     });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Erreur lors de l'inscription" });
-    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de l'inscription" });
+  }
 });
 
 router.get("/getBanks", async (req, res) => {
@@ -114,5 +121,36 @@ router.get("/getBanks", async (req, res) => {
   });
 
 });
-  
-  module.exports = router
+
+function checkCredentials(email, password) {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT Password, ID_user, UserType FROM Users WHERE Email = ?", [email], (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        if (result.length > 0) {
+          resolve(result[0]);
+        } else {
+          reject(new Error("Utilisateur non trouvé"));
+        }
+      }
+    });
+  });
+}
+
+function getStatusEmployee(ID_user) {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT Status FROM Employees WHERE ID_user = ?", [ID_user], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result[0])
+      }
+    }
+    )
+  }
+  )
+}
+
+
+module.exports = router
