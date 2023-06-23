@@ -89,3 +89,19 @@ exports.getBankAccepted = function() {
         })
     })
 }
+
+exports.getIdBankByName = function (name){
+    return new Promise((resolve,reject) => {
+        db.query("SELECT ID_bank FROM Banks WHERE Name = ?", [name], (error, result) => {
+            if(error){
+                reject(error)
+            }else{
+                if(result.length > 0){
+                    resolve(result[0])
+                }else{
+                    resolve(null)
+                }
+            }
+        })
+    })
+}

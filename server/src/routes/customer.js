@@ -2,17 +2,11 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const loanQueries = require('../queries/loan')
+const bankQueries = require('../queries/bank')
 const authenticateToken = require('../authenticateToken')
 
 
-// const multer = require('multer')
-
-// const upload = multer({
-//     dest: 'uploads/',
-//     limits: {fileSize: 50 * 1024 * 1024}
-// });
-
-router.post("/upload", authenticateToken, /*upload.single('filedata'),*/ async (req, res) => {
+router.post("/upload", authenticateToken, async (req, res) => {
     const fileType = req.body.fileType;
     const file = req.body.file;
 
@@ -27,21 +21,24 @@ router.post("/upload", authenticateToken, /*upload.single('filedata'),*/ async (
     }
 })
 
-router.post('/newLoan', authenticateToken, (req, res) => {
+router.post('/newLoan', authenticateToken, async (req, res) => {
+    //Récupération de ce qui est passé en paramètre par le formulaire
     const {
         interestRate,
         loanDuration,
         loanAmount,
-        //feesAndCosts,
         interestType,
         monthlyIncome,
         repaymentOptions,
         insuranceAndGuarantees,
-        //bankOption,
+        bankOption,
         description,
         ID_user
     } = req.body
-    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user)
+    const response = await bankQueries.getIdBankByName(bankOption)
+    //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié
+    const ID_bank = response ? response.ID_bank : null
+    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user,ID_bank)
     
 })
 
