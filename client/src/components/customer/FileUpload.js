@@ -4,6 +4,8 @@ const FileUploadForm = () => {
   const [file, setFile] = useState();
   const [selectedOption, setSelectedOption] = useState('');
   const storedToken = localStorage.getItem("token");
+  const MAX_FILE_SIZE = 16 * 1024 * 1024; // 16MB
+  const allowedExtensions = ['pdf', 'png', 'jpeg']; //allowed extensions
 
   const handleSelectChange = (e) => {
     e.preventDefault();
@@ -14,6 +16,19 @@ const FileUploadForm = () => {
     e.preventDefault();
 
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        console.log('File size exceeds the limit.');
+        return;
+      }
+
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
+
+      // Check the file extension
+      if (!allowedExtensions.includes(fileExtension)) {
+        console.log('Invalid file extension.');
+        return;
+      }
+
       //creating a FormData to send the data to the server
       const formData = new FormData();
       formData.append('fileType', selectedOption);
