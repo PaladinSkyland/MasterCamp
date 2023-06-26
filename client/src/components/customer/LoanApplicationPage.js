@@ -18,8 +18,8 @@ const LoanApplicationPage = () => {
   const [errorMessage, setErrorMessage] = useState();
 
   //Info de l'utilisateur venant du contextUtilisateur
-  const { userData } = useContext(UserContext)
-  const storedToken = localStorage.getItem("token")
+  const { userData } = useContext(UserContext);
+  const storedToken = localStorage.getItem("token");
 
   //Nom de tous les states
   const stateValues = {
@@ -118,7 +118,7 @@ const LoanApplicationPage = () => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
         >
           {path}
@@ -161,8 +161,8 @@ const LoanApplicationPage = () => {
             <FormField
               path={
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               }
