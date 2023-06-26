@@ -13,32 +13,39 @@ router.post("/login", async (req, res) => {
   //Récupération du mdp et de l'email passé dans le formulaire de login
   const { email, password } = req.body;
 
-  //On récupère les infos (mdp, user ID et mdp crypté correspondant aux infos donnés)
-  const userCredentials = await checkCredentials(email, password)
-  const ID_user = userCredentials.ID_user
+  try {
+    //On récupère les infos (mdp, user ID et mdp crypté correspondant aux infos donnés)
+    const userCredentials = await checkCredentials(email, password)
+    if (userCredentials !== null) {
 
-  //Check du type d'user
-  if (userCredentials.UserType === "employee") {
+      const ID_user = userCredentials.ID_user
+      const UserType = userCredentials.UserType
+      
+      //Check du type d'user
+      if (userCredentials.UserType === "employee") {
 
-    //On récupère le status de l'employée
-    const statusEmployee = await getStatusEmployee(ID_user)
-    
-    //On check s'il est accepté ou non
-    if(statusEmployee.Status === "Pending"){
-      res.status(401).json({ error: "Compte non vérifié" })
-      return
-    }
-  }
+        //On récupère le status de l'employée
+        const statusEmployee = await getStatusEmployee(ID_user)
+        
+        //On check s'il est accepté ou non
+        if(statusEmployee.Status === "Pending"){
+          res.status(401).json({ error: "Compte non vérifié" })
+          return
+        }
+      }
 
-  if (userCredentials !== null) {
-    if (bcrypt.compareSync(password, userCredentials.Password)) {
-      const token = jwt.sign({ email, ID_user }, process.env.secretKey, { expiresIn: '1h' });
-      res.json({ token });
+      if (bcrypt.compareSync(password, userCredentials.Password)) {
+        const token = jwt.sign({ email, ID_user, UserType }, process.env.secretKey, { expiresIn: '1h' });
+        res.json({ token });
+      } else {
+        res.status(401).json({ error: "Identifiants invalides" });
+      }
     } else {
       res.status(401).json({ error: "Identifiants invalides" });
     }
-  } else {
-    res.status(401).json({ error: "Identifiants invalides" });
+  } catch {
+    res.status(401).json({ error: "User not found" });
+    res.end();
   }
 });
 

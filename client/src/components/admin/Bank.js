@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+const storedToken = localStorage.getItem("token");
 
 
 const BankPage = () => {
@@ -15,6 +16,7 @@ const BankPage = () => {
                 const response = await fetch("/admin/getBanksPending", {
                     method: "GET",
                     headers: {
+                    Authorization: `Bearer ${storedToken}`,
                     "Content-Type": "application/json",
                     },
                 });
@@ -30,6 +32,7 @@ const BankPage = () => {
                 const response = await fetch("/admin/getBanksAccepted", {
                     method: "GET",
                     headers: {
+                    Authorization: `Bearer ${storedToken}`,
                     "Content-Type": "application/json",
                     },
                 });
@@ -48,6 +51,7 @@ const BankPage = () => {
         const response = fetch("/admin/changeBankStatus", {
             method: "POST",
             headers: {
+                Authorization: `Bearer ${storedToken}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -69,6 +73,7 @@ const BankPage = () => {
         const response = fetch("/admin/deleteBank", {
             method: "DELETE",
             headers: {
+                Authorization: `Bearer ${storedToken}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({

@@ -3,10 +3,19 @@ const express = require('express')
 const router = express.Router()
 const loanQueries = require('../queries/loan')
 const bankQueries = require('../queries/bank')
-const authenticateToken = require('../authenticateToken')
+
+const authenticateToken = require('../middleware/authenticateToken')
+const customerAccess = require('../middleware/customerAccess')
 
 
-router.post("/upload", authenticateToken, async (req, res) => {
+// const multer = require('multer')
+
+// const upload = multer({
+//     dest: 'uploads/',
+//     limits: {fileSize: 50 * 1024 * 1024}
+// });
+
+router.post("/upload", authenticateToken, customerAccess, /*upload.single('filedata'),*/ async (req, res) => {
     const fileType = req.body.fileType;
     const file = req.body.file;
 
@@ -21,8 +30,7 @@ router.post("/upload", authenticateToken, async (req, res) => {
     }
 })
 
-router.post('/newLoan', authenticateToken, async (req, res) => {
-    //Récupération de ce qui est passé en paramètre par le formulaire
+router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
     const {
         interestRate,
         loanDuration,

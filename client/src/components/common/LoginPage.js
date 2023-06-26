@@ -26,9 +26,12 @@ const LoginPage = () => {
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
-        if (data[key] === "Identifiants invalides") {
+        if (data[key] === "Identifiants invalides" || data[key] === "User not found") {
           setmessagealert("Identifiants invalides");
           return;
+        } else if (data[key] === "Compte non vérifié") {
+          setmessagealert("Compte non vérifié")
+          return
         }
       }
 
