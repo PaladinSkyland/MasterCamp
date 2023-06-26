@@ -14,7 +14,7 @@ const LoanApplicationPage = () => {
   const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState('');
   const [description, setDescription] = useState('');
   const [bankOption, setBankOption] = useState('');
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState('')
 
   //Info de l'utilisateur venant du contextUtilisateur
   const { userData } = useContext(UserContext)
@@ -50,6 +50,7 @@ const LoanApplicationPage = () => {
 
   const handleSelectOptionChange = (event) => {
     setBankOption(event.target.value);
+    console.log(bankOption)
   };
 
 
@@ -92,7 +93,7 @@ const LoanApplicationPage = () => {
           repaymentOptions: repaymentOptions,
           insuranceAndGuarantees: insuranceAndGuarantees,
           description: description,
-          //bankOption: bankOption,
+          bankOption: bankOption,
           ID_user: userData.ID_user
         })
       }

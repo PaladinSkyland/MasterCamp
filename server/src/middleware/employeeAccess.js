@@ -12,6 +12,7 @@ function employeeAccess(req, res, next) {
   const UserType = jwt.verify(token, process.env.secretKey)
 
   if (UserType.UserType !== "employee") {
+    console.log("test erreur")
     return res.sendStatus(401);
   }
   next();
