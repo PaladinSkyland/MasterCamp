@@ -17,7 +17,7 @@ exports.getBankVerifiedByName = function(name) {
               resolve(results[0].ID_bank);
             }
             else{
-              reject(new Error("Bank not found"));
+              reject(error);
             }
           }
         }
