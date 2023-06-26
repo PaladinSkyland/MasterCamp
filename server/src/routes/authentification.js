@@ -91,6 +91,9 @@ router.post("/register", async (req, res) => {
         const salt = bcrypt.genSaltSync(saltRounds);
         const encryptedPassword = bcrypt.hashSync(password, salt);
         */
+        //affcier la réponse de userInsertInto
+        //userInsertInto est une promesse
+        //affichage des erreurs si il y en a
         const userInsertInto = userQueries.userInsertInto(
           email,
           password,
@@ -98,17 +101,15 @@ router.post("/register", async (req, res) => {
           userfirstname,
           type,
           bankref
-        );
-        //affcier la réponse de userInsertInto
-        //userInsertInto est une promesse
-        //affichage des erreurs si il y en a
-
-        userInsertInto.then((result) => {
+        ).then((result) => {
           if (result) {
             // L'utilisateur existe déjà, renvoyer une réponse d'erreur
             return res.status(500).json({ message: "Utilisateur créé avec succès" })
           }
-        });
+        }).catch((error) => {
+          console.log(error)
+          res.status(500).json({ message: "Veuillez sélectionner une banque"})
+        })
       }
     });
   } catch (error) {

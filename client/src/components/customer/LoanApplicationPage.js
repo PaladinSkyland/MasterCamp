@@ -9,13 +9,13 @@ const LoanApplicationPage = () => {
   const [loanDuration, setLoanDuration] = useState("");
   const [loanAmount, setLoanAmount] = useState("");
   //const [feesAndCosts, setFeesAndCosts] = useState('');
-  const [interestType, setInterestType] = useState("");
-  const [monthlyIncome, setMonthlyIncome] = useState("");
-  const [repaymentOptions, setRepaymentOptions] = useState("");
-  const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState("");
-  const [description, setDescription] = useState("");
-  const [bankOption, setBankOption] = useState("");
-  const [errorMessage, setErrorMessage] = useState();
+  const [interestType, setInterestType] = useState('');
+  const [monthlyIncome, setMonthlyIncome] = useState('');
+  const [repaymentOptions, setRepaymentOptions] = useState('');
+  const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState('');
+  const [description, setDescription] = useState('');
+  const [bankOption, setBankOption] = useState('');
+  const [errorMessage, setErrorMessage] = useState()
 
   //Info de l'utilisateur venant du contextUtilisateur
   const { userData } = useContext(UserContext);
