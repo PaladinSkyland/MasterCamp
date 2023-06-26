@@ -3,6 +3,16 @@ import { UserContext } from "../../context/UserContext";
 
 const AllLoanApplicationsPage = () => {
 
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openPopup = () => {
+        setIsOpen(true);
+    };
+
+    const closePopup = () => {
+        setIsOpen(false);
+    };
+
     //Import des données de l'utilisateur connecté
     const { userData } = useContext(UserContext)
     const storedToken = localStorage.getItem("token")
@@ -53,6 +63,24 @@ const AllLoanApplicationsPage = () => {
 
                     </div>
                 ))}
+
+                <div>
+                    <button onClick={openPopup}>Ouvrir la fenêtre contextuelle</button>
+
+                    {isOpen && (
+                        <div className="overlay">
+                            <div className="border-4 ">
+                                <div className="bg-blue-100">
+                                    <h2>Fenêtre contextuelle</h2>
+                                    <p>Contenu de la fenêtre contextuelle</p>
+                                    <button onClick={closePopup}>Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {isOpen && <div className="overlay-background" onClick={closePopup} />}
+                </div>
             </div>
 
         </div>
