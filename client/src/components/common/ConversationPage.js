@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ChatPage = () => {
+  const { conversationId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const storedToken = localStorage.getItem("token");
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
     try {
-      const response = await fetch('/conversation/sendmessage', {
+      const response = await fetch(`/conversation/sendmessage/${conversationId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${storedToken}`,
         },
         body: JSON.stringify({ message: newMessage }),
       });
 
       if (response.ok) {
         setNewMessage('');
+        fetchMessages();
       } else {
         throw new Error('Failed to send message');
       }
@@ -27,16 +32,24 @@ const ChatPage = () => {
 
   // Fonction pour récupérer les messages
   const fetchMessages = async () => {
-    fetch("/conversation/getmessage")
-        .then((response) => response.json())
-        .then((data) => {
-          setMessages(data);
-          console.log(data);
-        })
-        .catch((error) =>{
-          console.error(error);
-        }) ;
-  };
+    try {
+      const response = await fetch(`/conversation/getmessage/${conversationId}`, {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+        console.log(data);
+      } else {
+        throw new Error('Error fetching messages');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };  
 
   // Charger les messages au chargement initial
   useEffect(() => {

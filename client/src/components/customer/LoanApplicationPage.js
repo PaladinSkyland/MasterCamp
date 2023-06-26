@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import NavBar from "../NavBar";
-import Error from "../common/ErrorPage";
 import ErrorPage from "../common/ErrorPage";
 
 const LoanApplicationPage = () => {
@@ -19,7 +18,8 @@ const LoanApplicationPage = () => {
   const [errorMessage, setErrorMessage] = useState();
 
   //Info de l'utilisateur venant du contextUtilisateur
-  const { userData } = useContext(UserContext);
+  const { userData } = useContext(UserContext)
+  const storedToken = localStorage.getItem("token")
 
   //Nom de tous les states
   const stateValues = {
@@ -81,6 +81,7 @@ const LoanApplicationPage = () => {
       let options = {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${storedToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

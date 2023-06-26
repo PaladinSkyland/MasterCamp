@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+const storedToken = localStorage.getItem("token");
 
 
 const EmployeePage = () => {
@@ -15,6 +16,7 @@ const EmployeePage = () => {
                 const response = await fetch("/admin/getEmployeesPending", {
                     method: "GET",
                     headers: {
+                    Authorization: `Bearer ${storedToken}`,
                     "Content-Type": "application/json",
                     },
                 });
@@ -30,9 +32,11 @@ const EmployeePage = () => {
                 const response = await fetch("/admin/getEmployeesAccepted", {
                     method: "GET",
                     headers: {
+                    Authorization: `Bearer ${storedToken}`,
                     "Content-Type": "application/json",
                     },
                 });
+                console.log("il est long ce lait")
                 const data = await response.json();
                 setEmployeeListAccepted(data);
             } catch (error) {
@@ -48,6 +52,7 @@ const EmployeePage = () => {
         const response = fetch("/admin/changeEmployeeStatus", {
             method: "POST",
             headers: {
+                Authorization: `Bearer ${storedToken}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -69,6 +74,7 @@ const EmployeePage = () => {
         const response = fetch("/admin/deleteEmployee", {
             method: "DELETE",
             headers: {
+                Authorization: `Bearer ${storedToken}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({

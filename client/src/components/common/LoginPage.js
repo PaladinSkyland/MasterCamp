@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 import { login, setHttpOnlyCookie } from "../../authentification/login";
 
 import ComponentLogo from "../Logo";
@@ -27,9 +26,12 @@ const LoginPage = () => {
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
-        if (data[key] === "Identifiants invalides") {
+        if (data[key] === "Identifiants invalides" || data[key] === "User not found") {
           setmessagealert("Identifiants invalides");
           return;
+        } else if (data[key] === "Compte non vérifié") {
+          setmessagealert("Compte non vérifié")
+          return
         }
       }
 
