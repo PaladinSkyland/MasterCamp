@@ -2,6 +2,8 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const loanQueries = require('../queries/loan')
+const bankQueries = require('../queries/bank')
+
 const authenticateToken = require('../middleware/authenticateToken')
 const customerAccess = require('../middleware/customerAccess')
 
@@ -28,21 +30,23 @@ router.post("/upload", authenticateToken, customerAccess, /*upload.single('filed
     }
 })
 
-router.post('/newLoan', authenticateToken, customerAccess, (req, res) => {
+router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
     const {
         interestRate,
         loanDuration,
         loanAmount,
-        //feesAndCosts,
         interestType,
         monthlyIncome,
         repaymentOptions,
         insuranceAndGuarantees,
-        //bankOption,
+        bankOption,
         description,
         ID_user
     } = req.body
-    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user)
+    const response = await bankQueries.getIdBankByName(bankOption)
+    //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié
+    const ID_bank = response ? response.ID_bank : null
+    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user,ID_bank)
     
 })
 
