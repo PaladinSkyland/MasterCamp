@@ -108,8 +108,8 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
     }).catch((error) => {
-      console.log(error);
-      reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
+      //console.log(error);
+      reject(error);
     });
   }
   else {

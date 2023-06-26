@@ -102,6 +102,8 @@ const RegisterPage = () => {
       return;
     }
 
+    console.log(selectedbankOption)
+
     //cryptage
 
     const saltRounds = process.env.cryptedKey;
@@ -170,6 +172,7 @@ const RegisterPage = () => {
         })
         .catch((error) => {
           // Gérer les erreurs ici
+          setmessagealert("Bank non sélectionnée")
           console.error(error);
         });
     }
