@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import {UserContext} from '../../context/UserContext'
+
 
 const AllLoanApplicationsPage = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [selectedLoan, setSelectedLoan] = useState ('')
+    const [allLoans, setAllLoans] = useState("")
+
+    const storedToken = localStorage.getItem("token")
+
 
     const openPopup = (loan) => {
         setSelectedLoan(loan)
@@ -15,22 +21,36 @@ const AllLoanApplicationsPage = () => {
         setIsOpen(false);
     };
 
-    const storedToken = localStorage.getItem("token")
-    const [allLoans, setAllLoans] = useState("")
-
-    let options = {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${storedToken}`
-        }
-    }
+    
 
     const fetchAllLoans = async () => {
+        let options = {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${storedToken}`
+            }
+        }
+
         await fetch('/employee/allLoans', options)
             .then(response => response.json())
             .then(data => {
                 setAllLoans(data)
             })
+    }
+
+    const takeRequest = (loan) =>{
+        let options = {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${storedToken}`
+            },
+            body: JSON.stringify({
+                ID_application: loan.ID_application,
+                ID_user: loan.ID_user
+            })
+        }
+        fetch('employee/takeRequest', options)
+        
     }
 
     //Lors du chargement de la page, faire : 
@@ -51,7 +71,7 @@ const AllLoanApplicationsPage = () => {
                             <p className="w-80" key={index}>Montant : {loan.Amount}€</p>
                         </div>
                         <div className="flex flex-row gap-x-10">
-                            <svg onClick={(event) => { event.stopPropagation(); console.log("test2"); }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
+                            <svg onClick={(event) => { event.stopPropagation(); takeRequest(loan); }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="w-6 h-6">
