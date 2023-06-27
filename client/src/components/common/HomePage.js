@@ -28,7 +28,9 @@ const HomePage = () => {
       <div>
         <NavBar />
         <div className="m-3">
-          <h1 className="text-4xl text-blue-500">Bienvenue {userData.Name}</h1>
+          <h1 className="text-4xl text-blue-500">
+            Bienvenue {userData.LastName}
+          </h1>
           <h2>Vous êtes connecté en tant que {userData.UserType}</h2>
         </div>
       </div>
