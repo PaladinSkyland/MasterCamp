@@ -51,3 +51,16 @@ exports.getEmployeeAccepted = function() {
         })
     })
 }
+
+exports.getEmployeeIDByUserID = function (id) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT ID_employee from Employees where ID_user = ?", [id], (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(result[0])
+            }
+        })
+    })
+}

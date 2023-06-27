@@ -29,11 +29,17 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
 router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) => {
   const userID = req.user.ID_user;
   const conversationId = req.params.conversationId;
-  console.log("envoie message");
-  
+
+  let  who = "";
+  if (req.user.UserType == "customer"){
+    who = "Client";
+  }
+  else if (req.user.UserType == "employee"){
+    who = "Employee";
+  }
 
   const {message} = req.body;
-  const who = "Client";
+
 
   conversationqueries.getConvByIDandIDuser(conversationId,userID).then((result) => {
     if (result) {
