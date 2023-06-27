@@ -1,12 +1,24 @@
 const db = require('../db');
+const employeequeries = require('../queries/employee');
+const { use } = require('../routes/conversation');
 
 
 exports.getConvByIDandIDuser = function(conversationId,userID) {
     return new Promise((resolve, reject) => {
+      
+      
+      employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+        if (result) {
+          employeeID = result.ID_employee;
+        }
+      }).catch((error) => {
+        console.error(error);
+        reject(error);
+      });
 
         db.query(
             "SELECT * FROM Conversations WHERE ID_conversation = ? AND (ID_user = ? OR ID_employee = ?)",
-            [conversationId, userID, userID],
+            [conversationId, userID, employeeID],
             (error, result) => {
               if (error) {
                 console.error(error);

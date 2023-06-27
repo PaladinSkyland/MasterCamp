@@ -6,6 +6,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const storedToken = localStorage.getItem("token");
+  //const { userData } = useContext(UserContext);
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
@@ -42,7 +43,6 @@ const ChatPage = () => {
       if (response.ok) {
         const data = await response.json();
         setMessages(data);
-        console.log(data);
       } else {
         throw new Error('Error fetching messages');
       }
@@ -67,35 +67,35 @@ const ChatPage = () => {
 
   return (
     
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-  <h1 class="text-2xl font-bold mb-4">Chat</h1>
-  <div class="chat-messages mb-4">
+<div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+  <h1 className="text-2xl font-bold mb-4">Chat</h1>
+  <div className="chat-messages mb-4">
     {Array.isArray(messages) && messages.length > 0 ? (
       messages.map((message) => (
         <div
           key={message.ID_message}
-          class={`mb-4 ${
+          className={`mb-4 ${
             message.Sender === "Client" ? "text-right" : "text-left"
           }`}
         >
           <div
-            class={`inline-block p-2 rounded-lg ${
+            className={`inline-block p-2 rounded-lg ${
               message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
             }`}
           >
-            <p class="text-gray-600">{message.Description}</p>
+            <p className="text-gray-600">{message.Description}</p>
           </div>
         </div>
       ))
     ) : (
-      <div class="text-gray-400">Aucun message</div>
+      <div className="text-gray-400">Aucun message</div>
     )}
   </div>
   <input
     type="text"
     value={newMessage}
     onChange={(e) => setNewMessage(e.target.value)}
-    class="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
+    className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
   />
   <button
     onClick={sendMessage}
