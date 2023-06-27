@@ -19,23 +19,6 @@ exports.getUserInfoByID = function(id) {
     });
   };
 
-exports.getPasswordIDuser = function(email) {
-  return new Promise((resolve, reject) => {
-    const request = db.query("SELECT Password, ID_user from Users where Email = ?", [email], (error, results) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        if(results.length > 0 ){
-          resolve(results);
-        } else {
-          resolve(false);
-        }
-      }
-    }
-  );
-  });
-};
 
 exports.userAlreadyExists = function(email) {
   return new Promise((resolve, reject) => {
@@ -108,8 +91,8 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
     }).catch((error) => {
-      console.log(error);
-      reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
+      //console.log(error);
+      reject(error);
     });
   }
   else {

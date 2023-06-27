@@ -79,7 +79,7 @@ const RegisterPage = () => {
 
   const handleRadiobuttonChange = (event) => {
     if (event.target.value === "employee" && employeebankrep === null) {
-      fetch("/authentification/getBanks")
+      fetch("/authentification/getBanks",)
         .then((response) => response.json())
         .then((data) => {
           // Gérer la réponse du serveur ici
@@ -101,6 +101,8 @@ const RegisterPage = () => {
       setmessagealert("Les mots de passe ne correspondent pas");
       return;
     }
+
+    console.log(selectedbankOption)
 
     //cryptage
 
@@ -170,6 +172,7 @@ const RegisterPage = () => {
         })
         .catch((error) => {
           // Gérer les erreurs ici
+          setmessagealert("Bank non sélectionnée")
           console.error(error);
         });
     }
@@ -289,7 +292,7 @@ const RegisterPage = () => {
               </div>
               )}
               <button
-                className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
+                className="btn-primary"
                 type="submit"
               >
                 Sin In

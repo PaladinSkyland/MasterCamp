@@ -17,7 +17,7 @@ exports.getBankVerifiedByName = function(name) {
               resolve(results[0].ID_bank);
             }
             else{
-              reject(new Error("Bank not found"));
+              reject(error);
             }
           }
         }
@@ -85,6 +85,22 @@ exports.getBankAccepted = function() {
                 reject(error)
             } else {
                 resolve(result)
+            }
+        })
+    })
+}
+
+exports.getIdBankByName = function (name){
+    return new Promise((resolve,reject) => {
+        db.query("SELECT ID_bank FROM Banks WHERE Name = ?", [name], (error, result) => {
+            if(error){
+                reject(error)
+            }else{
+                if(result.length > 0){
+                    resolve(result[0])
+                }else{
+                    resolve(null)
+                }
             }
         })
     })

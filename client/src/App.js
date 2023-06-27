@@ -17,6 +17,7 @@ import ErrorPage from "./components/common/ErrorPage";
 import LoanApplicationPage from "./components/customer/LoanApplicationPage";
 import ConversationPage from "./components/common/ConversationPage";
 import FileUploadForm from "./FileUpload";
+import AllLoanApplicationsPage from "./components/employee/allLoanApplicationsPage";
 
 const App = () => {
   return (
@@ -87,8 +88,14 @@ const App = () => {
             }
           />
           <Route
+            path="/employee/loanApplications"
+            element={<UserProvider><AllLoanApplicationsPage/></UserProvider>}
+            />
+          <Route
             path="/*"
-            element={<ErrorPage />}/>
+            element={<ErrorPage />}
+          />
+          
         </Routes>
       </AuthProvider>
     </Router>
