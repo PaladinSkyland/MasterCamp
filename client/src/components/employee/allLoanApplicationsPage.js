@@ -45,8 +45,7 @@ const AllLoanApplicationsPage = () => {
                 Authorization: `Bearer ${storedToken}`
             },
             body: JSON.stringify({
-                ID_application: loan.ID_application,
-                ID_user: loan.ID_user
+                ID_application: loan.ID_application
             })
         }
         fetch('employee/takeRequest', options)
