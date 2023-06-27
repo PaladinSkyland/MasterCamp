@@ -45,7 +45,7 @@ const WelcomePage = () => {
         style={{ backgroundImage: "url('../wallpaper.png')" }}
       >
         <div className="flex flex-col items-center gap-10 p-20 rounded-md shadow-md bg-white m-20">
-          <h1 className="text-6xl font-mono text-center">
+          <h1 className="text-6xl font-mono text-center text-black">
             Bienvenue sur Credit Express
           </h1>
           <button
