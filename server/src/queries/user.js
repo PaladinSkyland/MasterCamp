@@ -91,8 +91,8 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
     }).catch((error) => {
-      console.log(error);
-      reject(new Error("Une erreur s'est produite lors de l'enregistrement de l'employé."));
+      //console.log(error);
+      reject(error);
     });
   }
   else {
@@ -117,5 +117,22 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
   }
-  }
-)}
+}
+  )}
+
+exports.getUserID = function() {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT ID_user from Users where ID_user = ?", [id], (error, result) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        if (result[0] === undefined) {
+          reject(new Error("User not found"));
+        } else {
+          resolve(result[0]);
+        }
+      }
+    });
+  })
+}

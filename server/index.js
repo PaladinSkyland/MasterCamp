@@ -3,8 +3,8 @@ const express = require('express')
 const app = express()
 const port = 5000
 const userQueries = require('./src/queries/user')
-const db = require('./src/db') //Chemin vers les infos de connexion à la db
-const authenticateToken = require('./src/authenticateToken')
+const authenticateToken = require('./src/middleware/authenticateToken')
+
 //npm install body-parser
 const bodyParser = require('body-parser');
 
@@ -17,17 +17,20 @@ app.use(express.json()); //Middleware express
 app.use(bodyParser.json({ limit: MAX_PAYLOAD_SIZE }));
 app.use(bodyParser.urlencoded({ limit: MAX_PAYLOAD_SIZE, extended: true }));
 
+//Chemin vers les différents routeurs
 const authentificationRouter = require('./src/routes/authentification');
-app.use('/authentification', authentificationRouter)
-
 const customerRouter = require('./src/routes/customer');
-app.use('/customer', customerRouter)
-
 const adminRouter = require('./src/routes/admin');
+const employeeRouter = require('./src/routes/employees')
+
+//Configuration des routes
+app.use('/authentification', authentificationRouter)
+app.use('/customer', customerRouter)
 app.use('/admin', adminRouter)
+app.use('/employee', employeeRouter)
 
 app.get("/home", authenticateToken, (req, res) => {
-  const ID = req.user.ID;
+  const ID = req.user.ID_user;
 
   const response = userQueries.getUserInfoByID(ID);
 
@@ -36,11 +39,9 @@ app.get("/home", authenticateToken, (req, res) => {
   });
 });
 
+const convRouter = require('./src/routes/conversation');
+app.use('/conversation', convRouter)
+
 app.listen(port, () => {
   console.log("listening on port", port);
 });
-
-
-
-
-

@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { login, setHttpOnlyCookie } from "../authentification/login";
+import { login, setHttpOnlyCookie } from "../../authentification/login";
 
-import ComponentLogo from "./Logo";
+import ComponentLogo from "../Logo";
 
 const LoginPage = () => {
-  const { setIsLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -28,9 +26,12 @@ const LoginPage = () => {
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
-        if (data[key] === "Identifiants invalides") {
+        if (data[key] === "Identifiants invalides" || data[key] === "User not found") {
           setmessagealert("Identifiants invalides");
           return;
+        } else if (data[key] === "Compte non vérifié") {
+          setmessagealert("Compte non vérifié")
+          return
         }
       }
 
@@ -41,7 +42,6 @@ const LoginPage = () => {
       setHttpOnlyCookie("token", token, new Date(Date.now() + 3600 * 1000)); // expiration dans 1 heure (en millisecondes)
 
       //On met le contexte login à true, et on se déplace sur la page voulue
-      setIsLoggedIn(true);
       navigate("/home");
     });
   };
@@ -90,8 +90,7 @@ const LoginPage = () => {
                 New in Credit Express
               </Link>
               <button
-                className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
-                type="register"
+                className="btn-primary" type="register"
               >
                 Login
               </button>

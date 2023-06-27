@@ -92,7 +92,7 @@ const FileUploadForm = () => {
           onChange={(e) => setFile(e.target.files[0])}
         />
         <br />
-        <button type="submit">Submit</button>
+        <button className="btn-primary" type="submit">Submit</button>
       </form>
     </div>
   );
