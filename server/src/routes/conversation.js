@@ -2,7 +2,7 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const db = require('../db')
-const authenticateToken = require('../authenticateToken')
+const authenticateToken = require('../middleware/authenticateToken')
 const conversationqueries = require('../queries/conversation_message')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
