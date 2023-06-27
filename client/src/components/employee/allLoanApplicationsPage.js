@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/UserContext";
+import React, { useEffect, useState } from "react";
 
 const AllLoanApplicationsPage = () => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [selectedLoan, setSelectedLoan] = useState ('')
 
-    const openPopup = () => {
+    const openPopup = (loan) => {
+        setSelectedLoan(loan)
         setIsOpen(true);
     };
 
     const closePopup = () => {
+        setSelectedLoan("")
         setIsOpen(false);
     };
 
-    //Import des données de l'utilisateur connecté
-    const { userData } = useContext(UserContext)
     const storedToken = localStorage.getItem("token")
     const [allLoans, setAllLoans] = useState("")
 
@@ -45,7 +45,7 @@ const AllLoanApplicationsPage = () => {
         <div>
             <div className="w-3/4 m-auto">
                 {allLoans.map((loan, index) => (
-                    <div className="shadow-md my-5 p-6 flex flex-row text-xl justify-between hover:bg-blue-100" onClick={() => console.log("test")}>
+                    <div className="shadow-md my-5 p-6 flex flex-row text-xl justify-between hover:bg-blue-100" onClick={() => openPopup(loan)}>
                         <div className=" flex flex-row gap-x-10">
                             <p className="w-40" key={index}>Demande n° {loan.ID_application} :</p>
                             <p className="w-80" key={index}>Montant : {loan.Amount}€</p>
@@ -65,21 +65,27 @@ const AllLoanApplicationsPage = () => {
                 ))}
 
                 <div>
-                    <button onClick={openPopup}>Ouvrir la fenêtre contextuelle</button>
-
                     {isOpen && (
-                        <div className="overlay">
                             <div className="border-4 ">
-                                <div className="bg-blue-100">
-                                    <h2>Fenêtre contextuelle</h2>
-                                    <p>Contenu de la fenêtre contextuelle</p>
+                                <div className="w-3/5 h-3/5 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-200">
+                                    {/* Mettre et styliser toutes les infos de la demande, pour l'instant je met juste tout en vrac*/}
+                                    <p>{selectedLoan.ID_application}</p>
+                                    <p>Nom du client : {selectedLoan.Name} {selectedLoan.FirstName}</p>
+                                    <p>Montant demandé : {selectedLoan.Amount}</p>
+                                    <p>Taux d'intérêt : {selectedLoan.interestRate}%, {selectedLoan.interestType}</p>
+                                    <p>Durée du prêt : {selectedLoan.Duration}</p>
+                                    <p>Revenus mensuels : {selectedLoan.MonthlyIncome}</p>
+                                    <p>Options de remboursements {selectedLoan.RepaymentOptions}</p>
+                                    <p>Assurance et garanties : {selectedLoan.InsuranceAndGuarantees}</p>
+                                    <p>Description : {selectedLoan.Description}</p>
+                                    <p>Date de la demande {selectedLoan.Creation_date}</p>
+
+                                    {/* Styliser aussi fermer popup */}
                                     <button onClick={closePopup}>Fermer</button>
                                 </div>
                             </div>
-                        </div>
                     )}
 
-                    {isOpen && <div className="overlay-background" onClick={closePopup} />}
                 </div>
             </div>
 
