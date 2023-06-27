@@ -35,8 +35,3 @@ app.use('/conversation', convRouter)
 app.listen(port, () => {
   console.log("listening on port", port);
 });
-
-
-
-
-

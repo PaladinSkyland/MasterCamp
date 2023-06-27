@@ -10,8 +10,8 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   const goTo = (onglet) => {
-    navigate("/" + userData.UserType + "/" +onglet)
-  }
+    navigate("/" + userData.UserType + "/" + onglet);
+  };
 
   return (
     <div className="h-16 flex justify-between shadow-md">
@@ -28,7 +28,7 @@ const NavBar = () => {
         ))}
         <img
           className="h-12 w-13 flex-none my-auto hover:bg-sky-100 rounded-full"
-          src="profile.png"
+          src="../profile.png"
           alt="profile image"
           onClick={() => navigate("/account")}
         />

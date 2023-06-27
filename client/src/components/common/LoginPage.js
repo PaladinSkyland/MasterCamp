@@ -119,8 +119,7 @@ const LoginPage = () => {
                 New in Credit Express
               </Link>
               <button
-                className="bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 hover:text-black my-3 w-1/8"
-                type="register"
+                className="btn-primary" type="register"
               >
                 Login
               </button>
