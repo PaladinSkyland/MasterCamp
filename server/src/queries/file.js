@@ -1,6 +1,4 @@
-const e = require('express');
 const db = require('../db'); //Chemin vers les infos de connexion à la db
-const userQueries = require('./user');
 
 exports.fileInsertInto = function(title, fileType, fileData, userID) {
     return new Promise((resolve, reject) => {
