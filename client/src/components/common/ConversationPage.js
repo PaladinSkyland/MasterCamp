@@ -6,7 +6,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const storedToken = localStorage.getItem("token");
-  const { userData } = useContext(UserContext);
+  //const { userData } = useContext(UserContext);
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
