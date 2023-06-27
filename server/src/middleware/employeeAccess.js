@@ -9,10 +9,9 @@ function employeeAccess(req, res, next) {
     return res.sendStatus(401);
   }
 
-  const UserType = jwt.verify(token, process.env.secretKey)
+  const user = jwt.verify(token, process.env.secretKey)
 
-  if (UserType.UserType !== "employee") {
-    console.log("test erreur")
+  if (user.UserType !== "employee") {
     return res.sendStatus(401);
   }
   next();
