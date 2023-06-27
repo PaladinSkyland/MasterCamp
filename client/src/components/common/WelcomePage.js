@@ -60,7 +60,7 @@ const SocialMediaLinks = [
 
 export const FeatureComponent = () => {
   return (
-    <div className="py-20 sm:py-32">
+    <div className="py-10 sm:py-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="max-w-2xl mx-auto lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-blue-500">

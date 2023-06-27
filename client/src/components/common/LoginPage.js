@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, setHttpOnlyCookie } from "../../authentification/login";
 
@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-  }; 
+  };
 
   const handleLogin = async (e) => {
     //Permet d'éviter le comportement de base du formulaire
@@ -26,12 +26,15 @@ const LoginPage = () => {
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
-        if (data[key] === "Identifiants invalides" || data[key] === "User not found") {
+        if (
+          data[key] === "Identifiants invalides" ||
+          data[key] === "User not found"
+        ) {
           setmessagealert("Identifiants invalides");
           return;
         } else if (data[key] === "Compte non vérifié") {
-          setmessagealert("Compte non vérifié")
-          return
+          setmessagealert("Compte non vérifié");
+          return;
         }
       }
 
@@ -89,9 +92,7 @@ const LoginPage = () => {
               <Link to="/authentification/register" className="text-blue-400">
                 New in Credit Express
               </Link>
-              <button
-                className="btn-primary" type="register"
-              >
+              <button className="btn-primary" type="register">
                 Login
               </button>
             </div>
@@ -99,11 +100,26 @@ const LoginPage = () => {
         </div>
       </div>
       <div className="md:w-2/3">
-        <img
-          className="w-full h-full object-cover"
-          src="../wallpaper.png"
-          alt="wallpaper"
-        ></img>
+        <div
+          className="flex-grow flex items-center justify-center bg-cover bg-center h-full"
+          style={{ backgroundImage: "url('../wallpaper.png')" }}
+        >
+          <div className="flex flex-col items-center gap-3 m-20 p-10">
+            <div className="text-center">
+              <span className="text-white text-5xl lg:text-7xl font-normal">
+                Welcome to{" "}
+              </span>
+              <span className="text-white text-5xl lg:text-7xl font-bold">
+                CreditExpress
+              </span>
+            </div>
+            <div className="w-1/3 text-center">
+              <span className="text-white text-2xl font-normal">
+                Please login to continue
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
