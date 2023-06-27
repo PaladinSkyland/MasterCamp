@@ -6,6 +6,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const storedToken = localStorage.getItem("token");
+  //const { userData } = useContext(UserContext);
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
@@ -48,7 +49,6 @@ const ChatPage = () => {
       if (response.ok) {
         const data = await response.json();
         setMessages(data);
-        console.log(data);
       } else {
         throw new Error("Error fetching messages");
       }

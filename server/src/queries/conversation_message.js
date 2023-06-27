@@ -1,12 +1,12 @@
 const db = require('../db');
 
 
-exports.getConvByIDandIDuser = function(conversationId,userID) {
+exports.getConvByIDandIDuser = function(conversationId,userID,employeeID) {
     return new Promise((resolve, reject) => {
 
         db.query(
             "SELECT * FROM Conversations WHERE ID_conversation = ? AND (ID_user = ? OR ID_employee = ?)",
-            [conversationId, userID, userID],
+            [conversationId, userID, employeeID],
             (error, result) => {
               if (error) {
                 console.error(error);
