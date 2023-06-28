@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, setHttpOnlyCookie } from "../../authentification/login";
 
@@ -7,9 +7,21 @@ import ComponentLogo from "../Logo";
 const LoginPage = () => {
   const navigate = useNavigate();
 
+  const loadFormDisabledState = () => {
+    const storedState = localStorage.getItem('isFormDisabled');
+    return storedState === 'true';
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [messagealert, setmessagealert] = useState("");
+  const [isFormDisabled, setIsFormDisabled] = useState(loadFormDisabledState());
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  
+
+  useEffect(() => {
+    localStorage.setItem('value', isFormDisabled.toString());
+  }, [isFormDisabled]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -20,21 +32,21 @@ const LoginPage = () => {
   };
 
   const handleLogin = async (e) => {
+
+
     //Permet d'éviter le comportement de base du formulaire
     e.preventDefault();
-
+    
+  
     // Vérification de l'utilisateur
     login(email, password).then((data) => {
       for (let key in data) {
-        if (
-          data[key] === "Identifiants invalides" ||
-          data[key] === "User not found"
-        ) {
+        if (data[key] === "Identifiants invalides" || data[key] === "User not found") {
           setmessagealert("Identifiants invalides");
           return;
         } else if (data[key] === "Compte non vérifié") {
-          setmessagealert("Compte non vérifié");
-          return;
+          setmessagealert("Compte non vérifié")
+          return
         }
       }
 
@@ -57,8 +69,10 @@ const LoginPage = () => {
       <div className="md:w-1/2 justify-center flex flex-col h-full">
         <div className="flex justify-center">
           <form
+            id="loginForm"
             onSubmit={handleLogin}
             className="flex flex-col rounded-md shadow-md p-10"
+            disabled={isFormDisabled}
           >
             <div className="">
               <label htmlFor="email">Email : </label>

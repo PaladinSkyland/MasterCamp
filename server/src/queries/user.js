@@ -91,7 +91,6 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
     }).catch((error) => {
-      //console.log(error);
       reject(error);
     });
   }
