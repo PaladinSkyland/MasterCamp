@@ -10,17 +10,15 @@ const cryptoIDMessage = require('../middleware/cryptoIDMessage')
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
   const userID = req.user.ID_user;
-  const conversationId = req.params.conversationId;
-  /*
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
   try {
   const encryptedConversationId = req.params.conversationId;
-  const conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
-  console.log("conversationId : ", conversationId);
-  //const decryptConversationId = cryptoIDMessage.decryptConversationId(conversationId);
-  //console.log("decryptConversationId : ", decryptConversationId);
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
   } catch (error) {
     return res.status(401).json({ error: "invalides" });
-  }*/
+  }
 
   let employeeID = "";
 
@@ -47,7 +45,7 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
 
   }).catch((error) => {
     console.error(error);
-    res(error);
+    return res.status(401).json({ error: "invalides" });
   });
 
 
@@ -57,7 +55,15 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
 
 router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) => {
   const userID = req.user.ID_user;
-  const conversationId = req.params.conversationId;
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
 
   let  who = "";
   if (req.user.UserType == "customer"){
@@ -101,5 +107,33 @@ router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) =>
 
 });
 
+router.get("/getconversations",authenticateToken, async (req,res) => {
+  const userID = req.user.ID_user;
+  let employeeID = "";
+
+  employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+    if (result) {
+      employeeID = result.ID_employee;
+    }
+    else {
+      employeeID = "";
+    }
+    conversationqueries.getConvByIDuser(userID,employeeID).then((result) => {
+      if (result) {
+        //cryptage des ID de conversation
+        for (let i = 0; i < result.length; i++) {
+          result[i].ID_conversation = cryptoIDMessage.encryptConversationId(result[i].ID_conversation);
+        }
+        return res.status(200).json(result);
+      }
+    }).catch((error) => {
+      return res.status(401).json({ error: "invalides" });
+    })
+  }).catch((error) => {
+    console.error(error);
+    res(error);
+  });
+
+});
   
 module.exports = router

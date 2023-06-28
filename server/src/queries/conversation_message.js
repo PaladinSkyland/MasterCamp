@@ -48,3 +48,15 @@ exports.insertMessage = function(message,who,conversationId) {
             });
   })
 }
+
+exports.getConvByIDuser = function(userID,employeeID) {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT ID_conversation FROM Conversations WHERE ID_user = ? OR ID_employee = ?", [userID,employeeID], (error, results) => {
+      if (error){
+        return reject(new Error("Conversation not found"));
+      }else {
+        return resolve(results);
+      }
+    });
+  })
+}
