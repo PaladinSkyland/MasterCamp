@@ -55,7 +55,7 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       {
         Email: email,
         Password: encryptedPassword,
-        Name: username,
+        LastName: username,
         FirstName: userfirstname,
         UserType: type
       },
@@ -91,7 +91,6 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       }
     );
     }).catch((error) => {
-      //console.log(error);
       reject(error);
     });
   }
@@ -101,7 +100,7 @@ exports.userInsertInto  = function(email,encryptedPassword,username,userfirstnam
       {
         Email: email,
         Password: encryptedPassword,
-        Name: username,
+        LastName: username,
         FirstName: userfirstname,
       },
       (error, results) => {

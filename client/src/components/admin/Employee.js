@@ -92,7 +92,7 @@ const EmployeePage = () => {
                 <li
                 key = {index}
                 >
-                    {employee.Name}
+                    {employee.LastName}
                     {employee.Status}
 
 
@@ -112,7 +112,7 @@ const EmployeePage = () => {
                 <li
                 key = {index}
                 >
-                    {employee.Name}
+                    {employee.LastName}
                     {employee.Status}
 
 

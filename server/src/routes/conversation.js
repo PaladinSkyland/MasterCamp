@@ -3,62 +3,92 @@ const express = require('express')
 const router = express.Router()
 const db = require('../db')
 const authenticateToken = require('../middleware/authenticateToken')
+const conversationqueries = require('../queries/conversation_message')
+const employeequeries = require('../queries/employee');
+const e = require('express')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
-  const userID = req.user.ID;
+  const userID = req.user.ID_user;
   const conversationId = req.params.conversationId;
 
-  db.query(
-    "SELECT * FROM Conversations WHERE ID_conversation = ? AND (ID_user = ? OR ID_employee = ?)",
-    [conversationId, userID, userID],
-    (error, result) => {
-      if (error) {
-        console.error(error);
-      } else {
-        // Le résultat contient les enregistrements correspondants
-        db.query("SELECT * from Messages where ID_conversation = ?", [conversationId], (error, results) => {
-          if (error){
-            return res.status(401).json({ error: "invalides" });
-          }else {
-            return res.status(200).json(results);
-          }
-        });
-      }
+  let employeeID = "";
+
+  employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+    if (result) {
+      employeeID = result.ID_employee;
     }
-  );
+    else {
+      employeeID = "";
+    }
+    conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+      if (result) {
+        conversationqueries.getMessageByIDconv(conversationId).then((result) => {
+          return res.status(200).json(result);
+        }).catch((error) => {
+          return res.status(401).json({ error: "invalides" });
+        })
+      }
+      
+    })
+    .catch((error) => {
+      return res.status(401).json({ error: "invalides" });
+    })
+
+  }).catch((error) => {
+    console.error(error);
+    res(error);
+  });
+
+
+
 });
 
 
 router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) => {
-  const userID = req.user.ID;
+  const userID = req.user.ID_user;
   const conversationId = req.params.conversationId;
-  console.log("envoie message");
-  
+
+  let  who = "";
+  if (req.user.UserType == "customer"){
+    who = "Client";
+  }
+  else if (req.user.UserType == "employee"){
+    who = "Employee";
+  }
 
   const {message} = req.body;
-  const who = "Client";
 
-  db.query(
-    "SELECT * FROM Conversations WHERE ID_conversation = ? AND (ID_user = ? OR ID_employee = ?)",
-    [conversationId, userID, userID],
-    (error, result) => {
-      if (error) {
-        console.error(error);
-      } else {
-          //Récupération des messages pour une conversation donnée
-          const conversationId = req.params.conversationId;
-          db.query("INSERT INTO Messages (Description, Sender, ID_conversation) VALUES (?,?,?);", 
-          [message,who,conversationId ], (error, results) => {
-            if (error){
-              return res.status(401).json({ error: "invalides", ok: false });
-            }else {
-              return res.status(200).json({ ok: true });
-            }
-          });
-        }
+
+  let employeeID = "";
+
+  employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+    if (result) {
+      employeeID = result.ID_employee;
     }
-  );
+    else {
+      employeeID = "";
+    }
+    conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+      if (result) {
+        conversationqueries.insertMessage(message,who,conversationId).then((result) => {
+          if (result){
+            return res.status(200).json({ ok: true });
+          }
+        }).catch((error) => {
+          return res.status(401).json({ error: "invalides" });
+        })
+  
+      }
+    }).catch((error) => {
+      return res.status(401).json({ error: "Conversation not found" });
+    })
+  }).catch((error) => {
+    console.error(error);
+    res(error);
+  });
+
+
 });
 
   

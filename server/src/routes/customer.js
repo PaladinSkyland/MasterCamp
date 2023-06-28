@@ -100,7 +100,6 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
         interestType,
         monthlyIncome,
         repaymentOptions,
-        insuranceAndGuarantees,
         bankOption,
         description,
         ID_user
@@ -108,8 +107,17 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
     const response = await bankQueries.getIdBankByName(bankOption)
     //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié
     const ID_bank = response ? response.ID_bank : null
-    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,insuranceAndGuarantees,description,ID_user,ID_bank)
+    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,description,ID_user,ID_bank)
     
+})
+
+router.get("/getMyLoans", authenticateToken, customerAccess, async (req, res) => {
+    const id = req.user.ID_user
+    const response = loanQueries.getMyLoans(id)
+
+    response.then(response => {
+        res.json(response)
+    })
 })
 
 module.exports = router
