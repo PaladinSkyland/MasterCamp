@@ -35,8 +35,7 @@ const HomePage = () => {
         </div>
       </div>
     ) : (
-      /* Sinon */
-      <ErrorPage />
+      null
     )
   );
 };
