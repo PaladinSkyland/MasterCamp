@@ -2,7 +2,7 @@ const db = require('../db')
 
 exports.getEmployeePending = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Employees JOIN Users USING (ID_user) where status = 'Pending'", (error, result) => {
+        db.query("SELECT Users.FirstName, Users.LastName, Users.Email, Banks.Name AS BankName, Employees.Status FROM Employees JOIN Users USING (ID_user) JOIN Banks USING (ID_bank) WHERE Employees.status = 'Pending'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -47,6 +47,32 @@ exports.getEmployeeAccepted = function() {
                 reject(error)
             } else {
                 resolve(result)
+            }
+        })
+    })
+}
+
+exports.getEmployeeIDByUserID = function (id) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT ID_employee from Employees where ID_user = ?", [id], (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(result[0])
+            }
+        })
+    })
+}
+
+exports.getBankIDByEmployeeID = function (id) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT ID_Bank from Employees where ID_employee = ?", [id], (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(result[0])
             }
         })
     })

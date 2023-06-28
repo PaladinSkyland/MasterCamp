@@ -18,6 +18,7 @@ import LoanApplicationPage from "./components/customer/LoanApplicationPage";
 import ConversationPage from "./components/common/ConversationPage";
 import FileUploadForm from "./FileUpload";
 import AllLoanApplicationsPage from "./components/employee/allLoanApplicationsPage";
+import MyLoansPage from "./components/customer/MyLoansPage";
 
 const App = () => {
   return (
@@ -53,6 +54,10 @@ const App = () => {
           <Route
             path="/customer/loanApplication"
             element={<UserProvider><LoanApplicationPage/></UserProvider>}
+            />
+          <Route
+            path="/customer/myLoans"
+            element={<UserProvider><MyLoansPage/></UserProvider>}
             />
           <Route
             path="/customer"
