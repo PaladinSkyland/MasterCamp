@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import NavBar from "../NavBar";
 const storedToken = localStorage.getItem("token");
 
 
@@ -87,6 +88,7 @@ const BankPage = () => {
         (
         
         <div>
+            <NavBar/>
             <ul>   
             {bankListPending.map((bank, index) => (
                 <li

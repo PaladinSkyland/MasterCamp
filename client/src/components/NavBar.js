@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import ComponentLogo from "./Logo";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import ComponentLogoNavBar from "./LogoNavbar.";
 
 const NavBar = () => {
   const { getOnglets, userData } = useContext(UserContext);
@@ -15,7 +15,7 @@ const NavBar = () => {
 
   return (
     <div className="h-16 flex justify-between shadow-md">
-      <ComponentLogo />
+      <ComponentLogoNavBar />
       <ul className=" ml-3 flex flex-row gap-x-3 items-center">
         {onglets.map((onglet, index) => (
           <li

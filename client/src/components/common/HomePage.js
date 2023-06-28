@@ -4,7 +4,6 @@ import NavBar from "../NavBar";
 import ErrorPage from "./ErrorPage";
 
 const HomePage = () => {
-  const banque = ["Bank1", "Bank2", "Bank3", "Bank4", "Bank5", "Bank6"];
   const { userData, setUserData } = useContext(UserContext);
 
   const storedToken = localStorage.getItem("token");

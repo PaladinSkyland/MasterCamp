@@ -26,11 +26,9 @@ const LoanApplicationPage = () => {
     interestRate,
     loanDuration,
     loanAmount,
-    //feesAndCosts,
     interestType,
     monthlyIncome,
     repaymentOptions,
-    insuranceAndGuarantees,
     bankOption,
   };
 
@@ -88,13 +86,10 @@ const LoanApplicationPage = () => {
           interestRate: interestRate,
           loanDuration: loanDuration,
           loanAmount: loanAmount,
-          //feesAndCosts: feesAndCosts,
           interestType: interestType,
           monthlyIncome: monthlyIncome,
           repaymentOptions: repaymentOptions,
-          insuranceAndGuarantees: insuranceAndGuarantees,
           description: description,
-          //bankOption: bankOption,
           ID_user: userData.ID_user,
         }),
       };
