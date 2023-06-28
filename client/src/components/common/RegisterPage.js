@@ -302,11 +302,26 @@ const RegisterPage = () => {
         </div>
       </div>
       <div className="md:w-2/3">
-        <img
-          className="w-full h-full object-cover"
-          src="../wallpaper.png"
-          alt="wallpaper"
-        ></img>
+      <div
+          className="flex-grow flex items-center justify-center bg-cover bg-center h-full"
+          style={{ backgroundImage: "url('../wallpaper.png')" }}
+        >
+          <div className="flex flex-col items-center gap-3 m-20 p-10">
+            <div className="text-center">
+              <span className="text-white text-5xl lg:text-7xl font-normal">
+                New in{" "}
+              </span>
+              <span className="text-white text-5xl lg:text-7xl font-bold">
+                CreditExpress
+              </span>
+            </div>
+            <div className="w-1/3 text-center">
+              <span className="text-white text-2xl font-normal">
+                Please Sin In
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
