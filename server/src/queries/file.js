@@ -23,3 +23,17 @@ exports.fileInsertInto = function(title, fileType, fileData, userID) {
         );
     });
 }
+
+exports.SelectFileByUserID = function(userID) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT Title, File_type, File_data FROM Files WHERE ID_user = ?", {userID}, (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } 
+            else {
+                resolve(result)
+            }
+        })
+    })
+}
