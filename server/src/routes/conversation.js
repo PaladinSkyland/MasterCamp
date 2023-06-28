@@ -5,12 +5,22 @@ const db = require('../db')
 const authenticateToken = require('../middleware/authenticateToken')
 const conversationqueries = require('../queries/conversation_message')
 const employeequeries = require('../queries/employee');
-const e = require('express')
+const cryptoIDMessage = require('../middleware/cryptoIDMessage')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
   const userID = req.user.ID_user;
   const conversationId = req.params.conversationId;
+  /*
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  const conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+  console.log("conversationId : ", conversationId);
+  //const decryptConversationId = cryptoIDMessage.decryptConversationId(conversationId);
+  //console.log("decryptConversationId : ", decryptConversationId);
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }*/
 
   let employeeID = "";
 
