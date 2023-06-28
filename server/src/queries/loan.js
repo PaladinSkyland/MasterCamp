@@ -21,7 +21,7 @@ exports.insertLoan = function(interestRate,loanDuration,loanAmount,interestType,
 
 exports.getLoansWithoutBank = function () {
     return new Promise ((resolve,reject) => {
-        db.query("SELECT users.Name, users.FirstName, LoanApplications.* FROM LoanApplications JOIN users USING (ID_user) WHERE ID_bank IS NULL", (error, result) => {
+        db.query("SELECT users.LastName, users.FirstName, LoanApplications.* FROM LoanApplications JOIN users USING (ID_user) WHERE ID_bank IS NULL", (error, result) => {
             if(error){
                 reject(error)
             }else{
