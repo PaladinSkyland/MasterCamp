@@ -47,6 +47,7 @@ const EmployeePage = () => {
     }, [employeeListPendingLength, employeeListAcceptedLength]);
 
     const validateEmployee = async (id) => {
+        console.log(id)
         setEmployeeListPendingLength(employeeListPendingLength - 1)
         const response = fetch("/admin/changeEmployeeStatus", {
             method: "POST",
