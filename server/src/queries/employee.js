@@ -67,7 +67,7 @@ exports.getEmployeeIDByUserID = function (id) {
 
 exports.getBankIDByEmployeeID = function (id) {
     return new Promise((resolve, reject) => {
-        db.query("SELECT ID_Bank from Employees where ID_employee = ?", [id], (error, result) => {
+        db.query("SELECT ID_bank FROM Employees WHERE ID_employee = ?", [id], (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -77,3 +77,17 @@ exports.getBankIDByEmployeeID = function (id) {
         })
     })
 }
+
+exports.getBankIDbyUserID = function (id) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT ID_bank FROM Employees WHERE ID_user = ?", [id], (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(result[0])
+            }
+        })
+    })
+}
+
