@@ -102,14 +102,11 @@ const RegisterPage = () => {
       return;
     }
 
-    console.log(selectedbankOption)
-
     //cryptage
 
     const saltRounds = process.env.cryptedKey;
     const salt = bcrypt.genSaltSync(saltRounds);
     const encryptedPassword = bcrypt.hashSync(password, salt);
-    console.log("Client side", encryptedPassword);
 
     if (radiobutton !== "employee") {
       fetch("/authentification/register", {
