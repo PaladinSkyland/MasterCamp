@@ -72,40 +72,51 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <h1 className="text-2xl font-bold mb-4">Chat</h1>
-      <div className="chat-messages mb-4">
-        {Array.isArray(messages) && messages.length > 0 ? (
-          messages.map((message) => (
+<div className="flex justify-between max-w-screen-lg mx-auto bg-white rounded-lg shadow-md">
+<div className="w-1/4 bg-gray-100 p-6">
+    <h2 className="text-lg font-bold mb-4">Actions</h2>
+    <div className="inline-block p-2 rounded-lg bg-gray-200">
+      <button className="btn-secondary mb-2">Partager des documents</button>
+    </div>
+    <div className="inline-block p-2 rounded-lg bg-gray-200">
+      <button className="btn-secondary">Remplir un formulaire</button>
+    </div>
+  </div>
+  <div className="w-3/4 p-6">
+    <h1 className="text-2xl font-bold mb-4">Chat</h1>
+    <div className="chat-messages mb-4">
+      {Array.isArray(messages) && messages.length > 0 ? (
+        messages.map((message) => (
+          <div
+            key={message.ID_message}
+            className={`mb-4 ${
+              message.Sender === "Client" ? "text-right" : "text-left"
+            }`}
+          >
             <div
-              key={message.ID_message}
-              className={`mb-4 ${
-                message.Sender === "Client" ? "text-right" : "text-left"
+              className={`inline-block p-2 rounded-lg ${
+                message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
               }`}
             >
-              <div
-                className={`inline-block p-2 rounded-lg ${
-                  message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
-                }`}
-              >
-                <p className="text-gray-600">{message.Description}</p>
-              </div>
+              <p className="text-gray-600">{message.Description}</p>
             </div>
-          ))
-        ) : (
-          <div className="text-gray-400">Aucun message</div>
-        )}
-      </div>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
-      />
-      <button onClick={sendMessage} className="btn-primary">
-        Envoyer
-      </button>
+          </div>
+        ))
+      ) : (
+        <div className="text-gray-400">Aucun message</div>
+      )}
     </div>
+    <input
+      type="text"
+      value={newMessage}
+      onChange={(e) => setNewMessage(e.target.value)}
+      className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
+    />
+    <button onClick={sendMessage} className="btn-primary">
+      Envoyer
+    </button>
+  </div>
+</div>
   );
 };
 
