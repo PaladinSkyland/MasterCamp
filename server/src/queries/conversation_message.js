@@ -36,15 +36,27 @@ exports.getMessageByIDconv= function(conversationId) {
   })
 }
 
-exports.insertMessage = function(message,who,conversationId) {
+exports.insertMessage = function(message,who,conversationId,ivmessage) {
   return new Promise((resolve, reject) => {
-    db.query("INSERT INTO Messages (Description, Sender, ID_conversation) VALUES (?,?,?);", 
-            [message,who,conversationId ], (error, results) => {
+    db.query("INSERT INTO Messages (Content, Sender, ID_conversation,iv) VALUES (?,?,?,?);", 
+            [message,who,conversationId,ivmessage ], (error, results) => {
               if (error){
                 return reject(new Error("Conversation not found"));
               }else {
                 return resolve(true);
               }
             });
+  })
+}
+
+exports.getConvByIDuser = function(userID,employeeID) {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT ID_conversation FROM Conversations WHERE ID_user = ? OR ID_employee = ?", [userID,employeeID], (error, results) => {
+      if (error){
+        return reject(new Error("Conversation not found"));
+      }else {
+        return resolve(results);
+      }
+    });
   })
 }

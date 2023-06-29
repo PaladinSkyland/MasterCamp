@@ -19,6 +19,7 @@ import ConversationPage from "./components/common/ConversationPage";
 import FileUploadForm from "./FileUpload";
 import AllLoanApplicationsPage from "./components/employee/allLoanApplicationsPage";
 import MyLoansPage from "./components/customer/MyLoansPage";
+import SelectConversationPage from "./components/common/SelectConversationPage";
 
 const App = () => {
   return (
@@ -101,6 +102,15 @@ const App = () => {
             element={<ErrorPage />}
           />
           
+          <Route
+            path="/conversation/"
+            element={
+              <UserProvider>
+                <SelectConversationPage />
+              </UserProvider>
+            }
+          />
+
         </Routes>
       </AuthProvider>
     </Router>

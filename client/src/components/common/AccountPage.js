@@ -112,9 +112,7 @@ const AccountPage = () => {
     </div>
   ) : (
     /* Sinon */
-    <div>
-      <h1> non connecté</h1>
-    </div>
+    null
   );
 };
 

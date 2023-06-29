@@ -48,20 +48,19 @@ const EmployeePage = () => {
     fetchEmployeeAccepted();
   }, [employeeListPendingLength, employeeListAcceptedLength]);
 
-  const validateEmployee = async (id) => {
-    console.log('validate ' + id);
-    setEmployeeListPendingLength(employeeListPendingLength - 1);
-    const response = fetch('/admin/changeEmployeeStatus', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${storedToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ID_employee: id,
-      }),
-    });
-  };
+    const validateEmployee = async (id) => {
+        setEmployeeListPendingLength(employeeListPendingLength - 1)
+        const response = fetch("/admin/changeEmployeeStatus", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${storedToken}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ID_employee: id
+            })
+        });
+    }
 
   const deleteEmployee = async (id) => {
     console.log('delete ' + id);

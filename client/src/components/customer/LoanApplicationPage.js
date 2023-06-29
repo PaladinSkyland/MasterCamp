@@ -329,7 +329,7 @@ const LoanApplicationPage = () => {
       </div>
     </div>
   ) : (
-    <ErrorPage />
+    null
   );
 };
 

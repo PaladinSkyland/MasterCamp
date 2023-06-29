@@ -19,9 +19,24 @@ exports.insertLoan = function(interestRate,loanDuration,loanAmount,interestType,
     })
 }
 
-exports.getLoansWithoutBank = function () {
+exports.getLoansWithoutBank = function (sqlToAdd) {
+    request = sqlToAdd ? "SELECT users.LastName, users.FirstName, Loanapplications.* FROM loanapplications JOIN users USING (ID_user) WHERE ID_bank IS NULL AND ID_application NOT IN (" + sqlToAdd + ")" :
+    "SELECT users.LastName, users.FirstName, LoanApplications.* FROM LoanApplications JOIN users USING (ID_user) WHERE ID_bank IS NULL" 
     return new Promise ((resolve,reject) => {
-        db.query("SELECT users.LastName, users.FirstName, LoanApplications.* FROM LoanApplications JOIN users USING (ID_user) WHERE ID_bank IS NULL", (error, result) => {
+        db.query(request, (error, result) => {
+            if(error){
+                reject(error)
+            }else{
+                resolve(result)
+            }
+        })
+    })
+}
+
+exports.getLoansWithBank = function (ID_bank, sqlToAdd) {
+        request = sqlToAdd ? "AND ID_application NOT IN (" + sqlToAdd + ")" : ""
+        return new Promise ((resolve,reject) => {
+        db.query("SELECT users.LastName, users.FirstName, LoanApplications.* FROM LoanApplications JOIN users USING (ID_user) WHERE ID_bank = ? " + request, [ID_bank], (error, result) => {
             if(error){
                 reject(error)
             }else{
