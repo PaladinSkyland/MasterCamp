@@ -36,10 +36,10 @@ exports.getMessageByIDconv= function(conversationId) {
   })
 }
 
-exports.insertMessage = function(message,who,conversationId) {
+exports.insertMessage = function(message,who,conversationId,ivmessage) {
   return new Promise((resolve, reject) => {
-    db.query("INSERT INTO Messages (Description, Sender, ID_conversation) VALUES (?,?,?);", 
-            [message,who,conversationId ], (error, results) => {
+    db.query("INSERT INTO Messages (Description, Sender, ID_conversation,iv) VALUES (?,?,?,?);", 
+            [message,who,conversationId,ivmessage ], (error, results) => {
               if (error){
                 return reject(new Error("Conversation not found"));
               }else {

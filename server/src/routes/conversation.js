@@ -32,7 +32,19 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
     conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
       if (result) {
         conversationqueries.getMessageByIDconv(conversationId).then((result) => {
-          return res.status(200).json(result);
+          const encryptedMessages = result;
+          
+          // Parcourir tous les messages
+          const decryptedMessages = encryptedMessages.map((encryptedMessage) => {
+            const decryptedContent = cryptoIDMessage.decryptMessage(encryptedMessage.Description, encryptedMessage.iv);
+            return {
+              Description: decryptedContent,
+              Creation_date: encryptedMessage.Creation_date,
+              Sender: encryptedMessage.Sender
+            };
+          });
+          return res.status(200).json(decryptedMessages);
+          //return res.status(200).json(result);
         }).catch((error) => {
           return res.status(401).json({ error: "invalides" });
         })
@@ -74,6 +86,10 @@ router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) =>
   }
 
   const {message} = req.body;
+  if (message == ""){
+    return res.status(401).json({ error: "message vide" });
+  }
+  const { encryptedMessage, iv } = cryptoIDMessage.encryptMessage(message);
 
 
   let employeeID = "";
@@ -87,7 +103,7 @@ router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) =>
     }
     conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
       if (result) {
-        conversationqueries.insertMessage(message,who,conversationId).then((result) => {
+        conversationqueries.insertMessage(encryptedMessage,who,conversationId,iv).then((result) => {
           if (result){
             return res.status(200).json({ ok: true });
           }
