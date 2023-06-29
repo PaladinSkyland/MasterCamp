@@ -2,7 +2,7 @@ const db = require('../db')
 
 exports.getEmployeePending = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Employees JOIN Users USING (ID_user) where status = 'Pending'", (error, result) => {
+        db.query("SELECT Users.FirstName, Users.LastName, Users.Email, Banks.Name AS BankName, Employees.Status, Employees.ID_employee FROM Employees JOIN Users USING (ID_user) JOIN Banks USING (ID_bank) WHERE Employees.status = 'Pending'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -67,7 +67,7 @@ exports.getEmployeeIDByUserID = function (id) {
 
 exports.getBankIDByEmployeeID = function (id) {
     return new Promise((resolve, reject) => {
-        db.query("SELECT ID_Bank from Employees where ID_employee = ?", [id], (error, result) => {
+        db.query("SELECT ID_bank FROM Employees WHERE ID_employee = ?", [id], (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -77,3 +77,17 @@ exports.getBankIDByEmployeeID = function (id) {
         })
     })
 }
+
+exports.getBankIDbyUserID = function (id) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT ID_bank FROM Employees WHERE ID_user = ?", [id], (error, result) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(result[0])
+            }
+        })
+    })
+}
+
