@@ -49,6 +49,7 @@ const EmployeePage = () => {
   }, [employeeListPendingLength, employeeListAcceptedLength]);
 
   const validateEmployee = async (id) => {
+    console.log('validate ' + id);
     setEmployeeListPendingLength(employeeListPendingLength - 1);
     const response = fetch('/admin/changeEmployeeStatus', {
       method: 'POST',
@@ -63,7 +64,7 @@ const EmployeePage = () => {
   };
 
   const deleteEmployee = async (id) => {
-    console.log(id);
+    console.log('delete ' + id);
     const toDel = employeeListAccepted.filter((employee) => {
       return employee.ID_employee === id;
     });
@@ -141,7 +142,7 @@ const EmployeePage = () => {
         {isChecked ? (
           <div className="p-2 shadow">
             {employeeListAccepted.map((employee, index) => (
-              <div className="flex rounded-2xl gap-4 items-center">
+              <div className="flex rounded-2xl gap-4 items-center" key={index}>
                 <div className="w-1/3 flex flex-col">
                   <p className="text-4xl">{employee.LastName}</p>
                   <p className="text-2xl">{employee.FirstName}</p>
@@ -161,15 +162,19 @@ const EmployeePage = () => {
         ) : (
           <div className="p-2 shadow">
             {employeeListPending.map((employee, index) => (
-              <div className="w-full flex rounded-2xl gap-4 items-center">
+              <div className="flex rounded-2xl gap-4 items-center">
+                <p>{console.log(employee)}</p>
                 <div className="w-1/3 flex flex-col">
                   <p className="text-4xl">{employee.LastName}</p>
                   <p className="text-2xl">{employee.FirstName}</p>
                 </div>
                 <div className="w-1/3">
-                  <p className="text-2xl">{employee.Email}</p>
+                  <p className="text-2xl">{employee.BankName}</p>
                 </div>
-                <div className="w-1/3 flex flex-row gap-4 items-center justify-center">
+                <div
+                  className="w-1/3 flex flex-row gap-4 items-center justify-center"
+                  key={index}
+                >
                   <button
                     className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:bg-green-500 "
                     onClick={() => validateEmployee(employee.ID_employee)}

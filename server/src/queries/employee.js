@@ -2,7 +2,7 @@ const db = require('../db')
 
 exports.getEmployeePending = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT Users.FirstName, Users.LastName, Users.Email, Banks.Name AS BankName, Employees.Status FROM Employees JOIN Users USING (ID_user) JOIN Banks USING (ID_bank) WHERE Employees.status = 'Pending'", (error, result) => {
+        db.query("SELECT Employees.ID_employee, Users.FirstName, Users.LastName, Users.Email, Banks.Name AS BankName, Employees.Status FROM Employees JOIN Users USING (ID_user) JOIN Banks USING (ID_bank) WHERE Employees.status = 'Pending'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
