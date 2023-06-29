@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-const storedToken = localStorage.getItem("token");
+import React, { useState, useEffect } from 'react';
+import NavBar from '../NavBar';
+const storedToken = localStorage.getItem('token');
 
 const EmployeePage = () => {
   const [employeeListPending, setEmployeeListPending] = useState([]);
@@ -15,11 +16,11 @@ const EmployeePage = () => {
   useEffect(() => {
     const fetchEmployeePending = async () => {
       try {
-        const response = await fetch("/admin/getEmployeesPending", {
-          method: "GET",
+        const response = await fetch('/admin/getEmployeesPending', {
+          method: 'GET',
           headers: {
             Authorization: `Bearer ${storedToken}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
         const data = await response.json();
@@ -31,11 +32,11 @@ const EmployeePage = () => {
     fetchEmployeePending();
     const fetchEmployeeAccepted = async () => {
       try {
-        const response = await fetch("/admin/getEmployeesAccepted", {
-          method: "GET",
+        const response = await fetch('/admin/getEmployeesAccepted', {
+          method: 'GET',
           headers: {
             Authorization: `Bearer ${storedToken}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
         const data = await response.json();
@@ -49,11 +50,11 @@ const EmployeePage = () => {
 
   const validateEmployee = async (id) => {
     setEmployeeListPendingLength(employeeListPendingLength - 1);
-    const response = fetch("/admin/changeEmployeeStatus", {
-      method: "POST",
+    const response = fetch('/admin/changeEmployeeStatus', {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${storedToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         ID_employee: id,
@@ -62,20 +63,21 @@ const EmployeePage = () => {
   };
 
   const deleteEmployee = async (id) => {
+    console.log(id);
     const toDel = employeeListAccepted.filter((employee) => {
       return employee.ID_employee === id;
     });
 
-    if (toDel.Status === "Accepted") {
+    if (toDel.Status === 'Accepted') {
       setEmployeeListAcceptedLength(employeeListAcceptedLength - 1);
     } else {
       setEmployeeListPendingLength(employeeListPendingLength - 1);
     }
-    const response = fetch("/admin/deleteEmployee", {
-      method: "DELETE",
+    const response = fetch('/admin/deleteEmployee', {
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${storedToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         ID_employee: id,
@@ -83,44 +85,111 @@ const EmployeePage = () => {
     });
   };
 
-  //todo make it better to the front of this page
+  const [isChecked, setIsChecked] = useState(false);
+
+  const ToggleButton = ({ isChecked }) => {
+    const handleChange = () => {
+      setIsChecked(!isChecked);
+    };
+
+    return (
+      <label className="flex items-center m-3">
+        <div
+          className={`mr-3 ${
+            isChecked ? 'text-blue-200' : 'text-blue-500'
+          } font-bold`}
+        >
+          Employe in attend
+        </div>
+        <div className="relative">
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={isChecked}
+            onChange={handleChange}
+          />
+          <div className="w-9 h-4 bg-gray-300 rounded-full shadow-inner">
+            <div
+              className={`absolute left-0 top-0 transition bg-blue-500 w-4 h-4 rounded-full shadow transform ${
+                isChecked ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            ></div>
+          </div>
+        </div>
+        <div
+          className={`ml-3 ${
+            isChecked ? 'text-blue-500' : 'text-blue-200'
+          } font-bold`}
+        >
+          Employe accepted
+        </div>
+      </label>
+    );
+  };
 
   return employeeListPending ? (
-    <div className="flex flex-col w-full gap-5 p-2 mx-auto bg-white shadow-lg select-none sm:p-4 sm:h-64 rounded-2xl sm:flex-row ">
-      <div className="flex flex-col flex-1 gap-5 sm:p-2">
-        <div className="flex flex-col flex-1 gap-3">
-          <div className="w-full bg-gray-200 h-14 rounded-2xl text-center text-4xl font-bolt">
-            Employee in attend
-          </div>
-          {employeeListPending.map((employee, index) => (
-            <div className="w-full h-3 bg-gray-200 animate-pulse rounded-2xl">
-              <div className="flex flex-row justify-between">{employee}</div>
-            </div>
-          ))}
+    <div>
+      <div className="flex flex-col w-full gap-5 p-2 mx-auto select-none sm:p-4 sm:h-64 rounded-2xl">
+        <div className="flex items-center justify-center">
+          <ToggleButton
+            isChecked={isChecked}
+            setIsChecked={() => {
+              setIsChecked(isChecked);
+            }}
+          />
         </div>
-      </div>
-      <div className="flex flex-col flex-1 gap-5 sm:p-2">
-        <div className="flex flex-col flex-1 gap-3">
-          <div className="w-full bg-gray-200 h-14 rounded-2xl text-center text-4xl font-bolt">
-            Employee accepted
+        {isChecked ? (
+          <div className="p-2 shadow">
+            {employeeListAccepted.map((employee, index) => (
+              <div className="flex rounded-2xl gap-4 items-center">
+                <div className="w-1/3 flex flex-col">
+                  <p className="text-4xl">{employee.LastName}</p>
+                  <p className="text-2xl">{employee.FirstName}</p>
+                </div>
+                <div className="w-1/3">
+                  <p className="text-2xl">{employee.Email}</p>
+                </div>
+                <button
+                  className="w-1/3 items-center justify-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
+                  onClick={() => deleteEmployee(employee.ID_employee)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
           </div>
-          {employeeListAccepted.map((employee, index) => (
-            <div className="w-full flex bg-gray-200 rounded-2xl gap-4 items-center">
-              <p className="text-4xl">{employee.LastName}</p>
-              <button
-                className="items-center justify-center w-24 px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
-                onClick={() => deleteEmployee(employee.ID_employee)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
+        ) : (
+          <div className="p-2 shadow">
+            {employeeListPending.map((employee, index) => (
+              <div className="w-full flex rounded-2xl gap-4 items-center">
+                <div className="w-1/3 flex flex-col">
+                  <p className="text-4xl">{employee.LastName}</p>
+                  <p className="text-2xl">{employee.FirstName}</p>
+                </div>
+                <div className="w-1/3">
+                  <p className="text-2xl">{employee.Email}</p>
+                </div>
+                <div className="w-1/3 flex flex-row gap-4 items-center justify-center">
+                  <button
+                    className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:bg-green-500 "
+                    onClick={() => validateEmployee(employee.ID_employee)}
+                  >
+                    Validate
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
+                    onClick={() => deleteEmployee(employee.ID_employee)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
-  ) : (
-    <p>non</p>
-  );
+  ) : null;
 };
 
 export default EmployeePage;
