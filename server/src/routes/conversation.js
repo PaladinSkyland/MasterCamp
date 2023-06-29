@@ -42,7 +42,6 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
               Sender: encryptedMessage.Sender
             };
           });
-          console.log(decryptedMessages);
           return res.status(200).json(decryptedMessages);
           //return res.status(200).json(result);
         }).catch((error) => {
