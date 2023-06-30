@@ -31,6 +31,7 @@ router.post("/upload", authenticateToken, customerAccess, /*upload.single('filed
 })
 
 router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
+    const ID_user = req.user.ID_user
     const {
         interestRate,
         loanDuration,
@@ -40,13 +41,36 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
         repaymentOptions,
         bankOption,
         description,
-        ID_user
     } = req.body
-    const response = await bankQueries.getIdBankByName(bankOption)
-    //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié
-    const ID_bank = response ? response.ID_bank : null
-    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,description,ID_user,ID_bank)
-    
+
+    bankQueries
+  .getIdBankByName(bankOption)
+  .then((bankData) => {
+    if (!bankData) {
+      bankData = { ID_bank: null };
+    }
+    console.log("bankData : ", bankData);
+    const ID_bank = bankData.ID_bank;
+    return loanQueries.insertLoan(
+      interestRate,
+      loanDuration,
+      loanAmount,
+      interestType,
+      monthlyIncome,
+      repaymentOptions,
+      description,
+      ID_user,
+      ID_bank
+    );
+  })
+  .then(() => {
+    // Traitement après l'insertion du prêt réussie
+    res.status(200).json({ success: "Prêt inséré avec succès" });
+  })
+  .catch((error) => {
+    // Gestion des erreurs
+    res.status(401).json({ error: "Erreur lors de l'insertion du prêt" });
+  });
 })
 
 router.get("/getMyLoans", authenticateToken, customerAccess, async (req, res) => {
