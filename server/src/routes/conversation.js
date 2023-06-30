@@ -33,12 +33,11 @@ router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => 
       if (result) {
         conversationqueries.getMessageByIDconv(conversationId).then((result) => {
           const encryptedMessages = result;
-          
           // Parcourir tous les messages
           const decryptedMessages = encryptedMessages.map((encryptedMessage) => {
-            const decryptedContent = cryptoIDMessage.decryptMessage(encryptedMessage.Description, encryptedMessage.iv);
+            const decryptedContent = cryptoIDMessage.decryptMessage(encryptedMessage.Content, encryptedMessage.iv);
             return {
-              Description: decryptedContent,
+              Content: decryptedContent,
               Creation_date: encryptedMessage.Creation_date,
               Sender: encryptedMessage.Sender
             };

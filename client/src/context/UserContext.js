@@ -1,16 +1,36 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState("");
+
+  const storedToken = localStorage.getItem("token")
+
+  const [userData, setUserData] = useState("")
+
+  useEffect(()=> {
+    if (storedToken != null) {
+      fetch("/home", {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUserData(data);
+        });
+    }    
+  }, [])
 
   const getOnglets = () => {
+
+    
+    
     const type = userData.UserType;
 
     switch (type) {
       case "customer":
-        return [["Demande de prêt","loanApplication"], ["Mes demandes","myLoans"]];
+        return [["Demande de prêt","loanApplication"], ["Mes demandes","myLoans"]];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
       case "employee":
         return [["Demandes","loanApplications"], ["Suivi demandes","myLoans"]];
       case "admin":
