@@ -4,17 +4,26 @@ import { Link } from 'react-router-dom';
 const SelectConversationPage = () => {
   const [conversations, setConversations] = useState([]);
   const storedToken = localStorage.getItem("token");
+  const urlParams = new URLSearchParams(window.location.search);
+  const application = urlParams.get('application');
 
   useEffect(() => {
     // Effectuer une requête pour récupérer la liste des conversations depuis le serveur
+    
     fetch('/conversation/getconversations',
-    {
+    {     
+          method: "POST",
           headers: {
             Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            loanID : application,
+          }),
         })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         setConversations(data);
       })
       .catch(error => {
@@ -22,7 +31,7 @@ const SelectConversationPage = () => {
       });
   }, []);
 
-  return (
+  return conversations ? (
 <div className="h-screen flex flex-col justify-center items-center bg-blue-100">
   <h1 className="text-2xl font-bold mb-4">Liste des Conversations</h1>
   <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
@@ -33,7 +42,7 @@ const SelectConversationPage = () => {
             to={`/conversation/${conversation.ID_conversation}`}
             className="text-blue-500 hover:text-blue-700"
           >
-            Conversation #{conversation.ID_conversation}
+            Conversation #{conversation.Title}
           </Link>
         </li>
       ))}
@@ -42,7 +51,7 @@ const SelectConversationPage = () => {
 </div>
 
 
-  );
+  ) : (null);
 };
 
 export default SelectConversationPage;
