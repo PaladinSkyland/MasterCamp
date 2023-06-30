@@ -40,7 +40,7 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
         monthlyIncome,
         repaymentOptions,
         bankOption,
-        description
+        description,
     } = req.body
 
     bankQueries
