@@ -1,59 +1,59 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import ComponentLogo from "../Logo";
+import ComponentLogo from '../Logo';
 
 const features = [
   {
-    name: "Easy to use",
+    name: 'Easy to use',
     description:
-      "Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.",
-    icon: "test",
+      'Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.',
+    icon: 'tes',
   },
   {
-    name: "Discuss with profesional",
+    name: 'Discuss with profesional',
     description:
-      "Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.",
-    icon: "test",
+      'Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.',
+    icon: 'test',
   },
   {
-    name: "Easy form",
+    name: 'Easy form',
     description:
-      "Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.",
-    icon: "test",
+      'Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.',
+    icon: 'test',
   },
   {
-    name: "Advanced security",
+    name: 'Advanced security',
     description:
-      "Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.",
-    icon: "test",
+      'Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.',
+    icon: 'test',
   },
 ];
 
 const SocialMediaLinks = [
   {
-    name: "LinkedIn",
-    url: "https://www.linkedin.com/in/alexandre-roux-1b1b3b1b9/",
-    icon: "test",
-  },
-  {
-    name: "GitHub",
-    url: "",
-    icon: "test",
-  },
-  {
-    name: "Twitter",
-    url: "",
+    name: 'LinkedIn',
+    url: '#',
     icon: <p></p>,
   },
   {
-    name: "Facebook",
-    url: "",
+    name: 'GitHub',
+    url: 'https://github.com/PaladinSkyland/MasterCamp',
     icon: <p></p>,
   },
   {
-    name: "Instagram",
-    url: "",
+    name: 'Twitter',
+    url: '#',
+    icon: <p></p>,
+  },
+  {
+    name: 'Facebook',
+    url: '',
+    icon: <p></p>,
+  },
+  {
+    name: 'Instagram',
+    url: '',
     icon: <p></p>,
   },
 ];
@@ -120,14 +120,19 @@ export const FooterComponent = () => {
             <h3 className="text-lg font-semibold mb-2">Social Media</h3>
             <ul className="space-y-1">
               {SocialMediaLinks.map((link) => (
-                <li key={link.name}>{link.name}</li>
+                <li>
+                  <a key={link.name} href={link.url}>
+                    {link.name}
+                  </a>
+                </li>
               ))}
             </ul>
           </div>
         </div>
         <div className="mt-6 text-center text-gray-500">
           <p>
-            © {new Date().getFullYear()} Your Company, Inc. All rights reserved.
+            © {new Date().getFullYear()} Credit Express, Inc. All rights
+            reserved.
           </p>
         </div>
       </div>
@@ -155,7 +160,7 @@ const WelcomePage = () => {
           </h1>
           <button
             className="btn-primary"
-            onClick={() => navigate("/authentification/login")}
+            onClick={() => navigate('/authentification/login')}
           >
             Get Started
           </button>
