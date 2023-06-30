@@ -74,6 +74,40 @@ const AllLoanApplicationsPage = () => {
 
     }
 
+    const updateLoanStatus = async (id) => {
+        try {
+            const response = await fetch("/employee/updateLoanStatus", {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ID_application: id
+                })
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const createConversation = async (id) => {
+        try {
+            const response = await fetch("/employee/createConversation", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                    "Content-Type": "application/json",   
+                },
+                body: JSON.stringify({
+                    ID_application: id
+                })
+            });
+        } catch (error){
+            console.log(error)
+        }
+    }
+
     //Lors du chargement de la page, faire : 
     useEffect(() => {
         fetchAllLoans()
@@ -81,9 +115,18 @@ const AllLoanApplicationsPage = () => {
     }, [requestHandled])
 
     const handleRequest = async (event, loan,status) => {
+        console.log("j'appuis sur bouton")
+        console.log(new Date())
         event.stopPropagation()
         await takeRequest(loan,status)
         setRequestHandled(!requestHandled)
+        if (status === "Accepted") {
+            console.log("si accépté")
+            console.log(new Date())
+            await updateLoanStatus(loan.ID_application)
+            console.log(new Date())
+            await createConversation(loan.ID_application)
+        }
     }
 
 
