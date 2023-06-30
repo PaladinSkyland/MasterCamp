@@ -3,7 +3,7 @@ const db = require('../db');
 exports.getBankVerifiedByName = function(name) {
     return new Promise((resolve, reject) => {
       db.query(
-        "SELECT ID_bank FROM Banks WHERE Name = ? AND status = 'Accepted'",
+        "SELECT ID_bank FROM Banks WHERE Name = ? AND Status = 'Accepted'",
         [name],
         (error, results) => {
           if (error) {
@@ -27,7 +27,7 @@ exports.getBankVerifiedByName = function(name) {
   
 exports.getBankNames = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT Name FROM Banks WHERE status = 'Accepted'", (error, results) => {
+        db.query("SELECT Name FROM Banks WHERE Status = 'Accepted'", (error, results) => {
           if (error) {
             console.log(error);
             reject(new Error("Connection to DB failed"));
@@ -40,7 +40,7 @@ exports.getBankNames = function() {
 
 exports.getBankPending = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Banks where status = 'Pending'", (error, result) => {
+        db.query("SELECT * FROM Banks where Status = 'Pending'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -79,7 +79,7 @@ exports.deleteBankByID = function (id) {
 
 exports.getBankAccepted = function() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Banks where status = 'Accepted'", (error, result) => {
+        db.query("SELECT * FROM Banks where Status = 'Accepted'", (error, result) => {
             if (error) {
                 console.log(error)
                 reject(error)
@@ -92,7 +92,7 @@ exports.getBankAccepted = function() {
 
 exports.getIdBankByName = function (name){
     return new Promise((resolve,reject) => {
-        db.query("SELECT ID_bank FROM Banks WHERE Name = ?", [name], (error, result) => {
+        db.query("SELECT ID_bank FROM Banks WHERE Name = ? AND Status = 'Accepted'", [name], (error, result) => {
             if(error){
                 reject(error)
             }else{

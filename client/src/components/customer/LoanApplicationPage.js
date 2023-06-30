@@ -28,7 +28,6 @@ const LoanApplicationPage = () => {
     interestType,
     monthlyIncome,
     repaymentOptions,
-    bankOption,
   };
 
   //Banques valides
@@ -90,14 +89,18 @@ const LoanApplicationPage = () => {
           interestType: interestType,
           monthlyIncome: monthlyIncome,
           repaymentOptions: repaymentOptions,
+          bankOption: bankOption,
           description: description,
-          ID_user: userData.ID_user,
         }),
       };
       fetch("/customer/newLoan", options)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          if (data.error) {
+            setErrorMessage(data.error);
+          }else if (data.success) {
+            setErrorMessage(data.success);
+          }
         })
         .catch((error) => {
           console.log(error);
