@@ -49,14 +49,24 @@ exports.insertMessage = function(message,who,conversationId,ivmessage) {
   })
 }
 
-exports.getConvByIDuser = function(userID,employeeID) {
+exports.getConvByIDuserandIDLoan = function(userID,employeeID,loanID) { //get all conversations of a user or an employee
   return new Promise((resolve, reject) => {
-    db.query("SELECT ID_conversation FROM Conversations WHERE ID_user = ? OR ID_employee = ?", [userID,employeeID], (error, results) => {
-      if (error){
-        return reject(new Error("Conversation not found"));
-      }else {
-        return resolve(results);
-      }
-    });
+    if (loanID === undefined || loanID === null || loanID === "") {
+      db.query("SELECT * FROM Conversations WHERE ID_user = ? OR ID_employee = ?", [userID,employeeID], (error, results) => {
+        if (error){
+          return reject(new Error("Conversation not found"));
+        }else {
+          return resolve(results);
+        }
+      });
+    } else {
+      db.query("SELECT * FROM Conversations WHERE ID_user = ? OR ID_employee = ? OR ID_loan = ?", [userID,employeeID,loanID], (error, results) => {
+        if (error){
+          return reject(new Error("Conversation not found"));
+        }else {
+          return resolve(results);
+        }
+      });
+    }
   })
 }

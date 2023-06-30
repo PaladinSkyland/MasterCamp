@@ -4,17 +4,25 @@ import { Link } from 'react-router-dom';
 const SelectConversationPage = () => {
   const [conversations, setConversations] = useState([]);
   const storedToken = localStorage.getItem("token");
+  const loanID = "";
 
   useEffect(() => {
     // Effectuer une requête pour récupérer la liste des conversations depuis le serveur
+    
     fetch('/conversation/getconversations',
-    {
+    {     
+          method: "POST",
           headers: {
             Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            loanID : loanID,
+          }),
         })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         setConversations(data);
       })
       .catch(error => {
