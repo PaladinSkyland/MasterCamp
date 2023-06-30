@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SelectConversationPage = () => {
   const [conversations, setConversations] = useState([]);
   const storedToken = localStorage.getItem("token");
-  const loanID = "";
   const urlParams = new URLSearchParams(window.location.search);
   const application = urlParams.get('application');
 
