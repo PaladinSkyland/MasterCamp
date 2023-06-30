@@ -137,6 +137,8 @@ router.post("/getconversations", authenticateToken, async (req,res) => {
       if (result) {
         //cryptage des ID de conversation
         for (let i = 0; i < result.length; i++) {
+          delete result[i].ID_employee;
+          delete result[i].ID_user;
           result[i].ID_conversation = cryptoIDMessage.encryptConversationId(result[i].ID_conversation);
         }
         return res.status(200).json(result);

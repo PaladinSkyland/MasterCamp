@@ -43,7 +43,7 @@ const SelectConversationPage = () => {
             to={`/conversation/${conversation.ID_conversation}`}
             className="text-blue-500 hover:text-blue-700"
           >
-            Conversation #{conversation.ID_conversation}
+            Conversation #{conversation.Title}
           </Link>
         </li>
       ))}
