@@ -4,7 +4,6 @@ import ComponentLogo from "../Logo.js";
 const bcrypt = require("bcryptjs");
 
 const RegisterPage = () => {
-  //const navigate = useNavigate()
 
   const [username, setUsername] = useState("");
   const [userfirstname, setUserfirstname] = useState("");

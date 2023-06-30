@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import NavBar from "../NavBar";
+import { useNavigate } from 'react-router-dom';
 
 const LoanApplicationPage = () => {
   //Toutes les infos nécessaires pour un prêt + message d'erreur
@@ -19,6 +20,8 @@ const LoanApplicationPage = () => {
   //Info de l'utilisateur venant du contextUtilisateur
   const { userData, setUserData } = useContext(UserContext);
   const storedToken = localStorage.getItem("token");
+  const navigate = useNavigate()
+
 
   //Nom de tous les states
   const stateValues = {
@@ -109,6 +112,10 @@ const LoanApplicationPage = () => {
           console.log(error);
         });
     }
+    setErrorMessage("Demande créée avec succès")
+    setTimeout(() => {
+      navigate("/customer/myLoans")
+    }, 1000)
   };
 
   return userData ? (
