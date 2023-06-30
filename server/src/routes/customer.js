@@ -31,6 +31,7 @@ router.post("/upload", authenticateToken, customerAccess, /*upload.single('filed
 })
 
 router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
+    const ID_user = req.user.ID_user
     const {
         interestRate,
         loanDuration,
@@ -40,7 +41,6 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
         repaymentOptions,
         bankOption,
         description,
-        ID_user
     } = req.body
     const response = await bankQueries.getIdBankByName(bankOption)
     //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié

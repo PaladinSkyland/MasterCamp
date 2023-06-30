@@ -87,12 +87,11 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
         const infoEmployee = await employeeQueries.getEmployeeIDByUserID(id_userEmployee);
         const infoBank = await employeeQueries.getBankIDByEmployeeID(infoEmployee);
         const accessibleLoan = await loanQueries.getAccessibleLoan(infoBank.ID_bank)
-
         let tab = [];
         accessibleLoan.forEach(app => {
             tab.push(app.ID_application);
         })
-        if (req.body.ID_application in tab === false) {
+        if (!tab.includes(req.body.ID_application)) {
             console.log("failed")
             res.sendStatus(401)
         } else {
