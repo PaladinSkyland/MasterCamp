@@ -70,3 +70,15 @@ exports.getConvByIDuserandIDLoan = function(userID,employeeID,loanID) { //get al
     }
   })
 }
+
+exports.createConversation = function (id_employee, title, id_user, id_application) {
+  return new Promise ((resolve, reject) => {
+    db.query("INSERT INTO Conversations (ID_employee, Title, ID_user, ID_application) VALUES (?,?,?,?)", [id_employee, title, id_user, id_application], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}

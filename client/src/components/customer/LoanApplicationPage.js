@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import NavBar from "../NavBar";
-import ErrorPage from "../common/ErrorPage";
 
 const LoanApplicationPage = () => {
   //Toutes les infos nécessaires pour un prêt + message d'erreur
@@ -18,7 +17,7 @@ const LoanApplicationPage = () => {
   const [errorMessage, setErrorMessage] = useState()
 
   //Info de l'utilisateur venant du contextUtilisateur
-  const { userData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   const storedToken = localStorage.getItem("token");
 
   //Nom de tous les states
@@ -34,6 +33,8 @@ const LoanApplicationPage = () => {
 
   //Banques valides
   const [banks, setBanks] = useState(null);
+
+
 
   //Chargé une seule fois au début de la page pour récupérer les banques valides
   useEffect(() => {

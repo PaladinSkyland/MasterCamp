@@ -1,26 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import NavBar from "../NavBar";
-import ErrorPage from "./ErrorPage";
 
 const HomePage = () => {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
-  const storedToken = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (storedToken != null) {
-      fetch("/home", {
-        headers: {
-          Authorization: `Bearer ${storedToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setUserData(data);
-        });
-    }
-  }, []);
 
   return (
     /* Si connecté */
