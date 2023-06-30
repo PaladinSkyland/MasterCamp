@@ -134,3 +134,15 @@ exports.getUserID = function() {
     });
   })
 }
+
+exports.getLastNameByID = function (id) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT LastName FROM Users WHERE ID_user = ?", [id] , (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}

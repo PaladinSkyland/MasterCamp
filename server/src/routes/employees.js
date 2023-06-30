@@ -4,7 +4,9 @@ const authenticateToken = require('../middleware/authenticateToken')
 const loanQueries = require ('../queries/loan')
 const employeeQueries = require ('../queries/employee')
 const loanBankQueries = require('../queries/loanBank')
+const userQueries = require('../queries/user')
 const employeeAccess = require('../middleware/employeeAccess')
+const conversationQueries = require('../queries/conversation_message')
 
 router.get('/allLoans', authenticateToken, employeeAccess, async (req,res) => {
 
@@ -71,6 +73,57 @@ router.get('/myBankLoans', authenticateToken, employeeAccess, async (req,res) =>
     myBankLoans.then(loans => {
         res.json(loans)
     })
+})
+
+router.put('/updateLoanStatus', authenticateToken, employeeAccess, async (req, res) => {
+    const id = req.body.ID_application
+    await loanQueries.updateLoanStatus(id)
+})
+
+router.post('/createConversation', authenticateToken, employeeAccess, async (req, res) => {
+    try {
+        console.log("router")
+        console.log(new Date())
+
+        const id_userEmployee = req.user.ID_user;
+        console.log(new Date())
+
+        const infoEmployee = await employeeQueries.getEmployeeIDByUserID(id_userEmployee);
+        console.log(new Date())
+
+        const infoBank = await employeeQueries.getBankIDByEmployeeID(infoEmployee);
+        console.log(new Date())
+
+        const accessibleLoan = await loanQueries.getAccessibleLoan(infoBank.ID_bank)
+        let tab = [];
+        accessibleLoan.forEach(app => {
+            tab.push(app.ID_application);
+        })
+        console.log(tab)
+        console.log(new Date())
+        
+        if (req.body.ID_application in tab === false) {
+            console.log("failed")
+            res.sendStatus(401)
+        } else {
+            console.log("succes")
+            const clientInfo = await loanQueries.getUserLastNameAndIDByIDLoan(req.body.ID_application)
+            console.log(clientInfo, "Regarde ici")
+            console.log(new Date())
+
+            const employeeLastName = await userQueries.getLastNameByID(infoEmployee.ID_employee)
+            console.log(new Date())
+
+            const title =  "Conversation entre "+ clientInfo[0].LastName + " et " + employeeLastName[0].LastName
+            conversationQueries.createConversation(infoEmployee.ID_employee, title, clientInfo[0].ID_user, req.body.ID_application)
+            console.log(new Date())
+
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+    //
 })
 
 module.exports = router
