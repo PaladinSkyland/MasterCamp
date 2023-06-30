@@ -100,6 +100,9 @@ const LoanApplicationPage = () => {
             setErrorMessage(data.error);
           }else if (data.success) {
             setErrorMessage(data.success);
+            setTimeout(() => {
+              window.location.href = '/customer/myLoans';
+            }, 1000);
           }
         })
         .catch((error) => {
