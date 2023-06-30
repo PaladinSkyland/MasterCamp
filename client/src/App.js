@@ -70,6 +70,14 @@ const App = () => {
           />
 
           <Route
+            path="/conversation"
+            element={
+              <UserProvider>
+                <SelectConversationPage />
+              </UserProvider>
+            }
+          />
+          <Route
             path="/conversation/:conversationId"
             element={
               <UserProvider>
@@ -102,14 +110,6 @@ const App = () => {
             element={<ErrorPage />}
           />
           
-          <Route
-            path="/conversation/"
-            element={
-              <UserProvider>
-                <SelectConversationPage />
-              </UserProvider>
-            }
-          />
 
         </Routes>
       </AuthProvider>

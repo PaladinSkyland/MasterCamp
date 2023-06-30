@@ -122,10 +122,10 @@ router.post("/sendmessage/:conversationId",authenticateToken, async (req,res) =>
 
 });
 
-router.get("/getconversations",authenticateToken, async (req,res) => {
+router.post("/getconversations", authenticateToken, async (req,res) => {
   const userID = req.user.ID_user;
   let employeeID = "";
-
+  const loanID = req.body.loanID
   employeequeries.getEmployeeIDByUserID(userID).then((result) => {
     if (result) {
       employeeID = result.ID_employee;
@@ -133,10 +133,12 @@ router.get("/getconversations",authenticateToken, async (req,res) => {
     else {
       employeeID = "";
     }
-    conversationqueries.getConvByIDuser(userID,employeeID).then((result) => {
+    conversationqueries.getConvByIDuserandIDLoan(userID,employeeID,loanID).then((result) => {
       if (result) {
         //cryptage des ID de conversation
         for (let i = 0; i < result.length; i++) {
+          delete result[i].ID_employee;
+          delete result[i].ID_user;
           result[i].ID_conversation = cryptoIDMessage.encryptConversationId(result[i].ID_conversation);
         }
         return res.status(200).json(result);
