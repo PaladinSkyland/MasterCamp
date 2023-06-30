@@ -15,7 +15,6 @@ const SelectConversationPage = () => {
         })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setConversations(data);
       })
       .catch(error => {
