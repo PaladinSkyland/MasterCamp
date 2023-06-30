@@ -85,7 +85,7 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
     try {
         const id_userEmployee = req.user.ID_user;
         const infoEmployee = await employeeQueries.getEmployeeIDByUserID(id_userEmployee);
-        const infoBank = await employeeQueries.getBankIDByEmployeeID(infoEmployee);
+        const infoBank = await employeeQueries.getBankIDByEmployeeID(infoEmployee.ID_employee);
         const accessibleLoan = await loanQueries.getAccessibleLoan(infoBank.ID_bank)
         let tab = [];
         accessibleLoan.forEach(app => {
