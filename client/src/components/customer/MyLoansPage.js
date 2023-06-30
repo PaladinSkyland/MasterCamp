@@ -39,12 +39,13 @@ const MyLoansPage = () => {
                     <span>{myLoan.Status}</span>
                     <span>{myLoan.Creation_date}</span>
                   </div>
-                  <Link
+                  {myLoan.Status == "Accepted" ? (<Link
                     to={`/conversation?application=${myLoan.ID_application}`}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg"
                   >
                     View
-                  </Link>
+                  </Link>) : (null)}
+                  
                 </li>
               ))}
             </ul>

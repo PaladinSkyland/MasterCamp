@@ -17,7 +17,7 @@ const LoanApplicationPage = () => {
   const [errorMessage, setErrorMessage] = useState()
 
   //Info de l'utilisateur venant du contextUtilisateur
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const storedToken = localStorage.getItem("token");
 
 
@@ -312,7 +312,7 @@ const LoanApplicationPage = () => {
               value={bankOption}
               onChange={handleSelectOptionChange}
             >
-              <option value="s">Sélectionner une Banque</option>
+              <option value="">Sélectionner une Banque</option>
               {banks &&
                 banks.map((bank, index) => (
                   <option key={index} value={bank.Name}>
