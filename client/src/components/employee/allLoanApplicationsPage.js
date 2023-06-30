@@ -115,16 +115,11 @@ const AllLoanApplicationsPage = () => {
     }, [requestHandled])
 
     const handleRequest = async (event, loan,status) => {
-        console.log("j'appuis sur bouton")
-        console.log(new Date())
         event.stopPropagation()
         await takeRequest(loan,status)
         setRequestHandled(!requestHandled)
         if (status === "Accepted") {
-            console.log("si accépté")
-            console.log(new Date())
             await updateLoanStatus(loan.ID_application)
-            console.log(new Date())
             await createConversation(loan.ID_application)
         }
     }
