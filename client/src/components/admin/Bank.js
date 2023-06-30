@@ -119,7 +119,7 @@ const BankPage = () => {
             ))}
           </div>
         ) : (
-          <div className="shadow">
+          <div className="p-2 shadow">
             {bankListPending.map((bank, index) => (
               <div className="flex gap-7 items-center">
                 <div className="w-1/3">
