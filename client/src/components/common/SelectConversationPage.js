@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const SelectConversationPage = () => {
   const [conversations, setConversations] = useState([]);
   const storedToken = localStorage.getItem("token");
   const loanID = "";
+  const urlParams = new URLSearchParams(window.location.search);
+  const application = urlParams.get('application');
 
   useEffect(() => {
     // Effectuer une requête pour récupérer la liste des conversations depuis le serveur
@@ -17,7 +19,7 @@ const SelectConversationPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            loanID : loanID,
+            loanID : application,
           }),
         })
       .then(response => response.json())
@@ -30,7 +32,7 @@ const SelectConversationPage = () => {
       });
   }, []);
 
-  return (
+  return conversations ? (
 <div className="h-screen flex flex-col justify-center items-center bg-blue-100">
   <h1 className="text-2xl font-bold mb-4">Liste des Conversations</h1>
   <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
@@ -50,7 +52,7 @@ const SelectConversationPage = () => {
 </div>
 
 
-  );
+  ) : (null);
 };
 
 export default SelectConversationPage;

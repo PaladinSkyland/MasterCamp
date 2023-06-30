@@ -60,7 +60,7 @@ exports.getConvByIDuserandIDLoan = function(userID,employeeID,loanID) { //get al
         }
       });
     } else {
-      db.query("SELECT * FROM Conversations WHERE ID_user = ? OR ID_employee = ? OR ID_loan = ?", [userID,employeeID,loanID], (error, results) => {
+      db.query("SELECT * FROM Conversations WHERE (ID_user = ? OR ID_employee = ?) AND ID_application = ?", [userID,employeeID,loanID], (error, results) => {
         if (error){
           return reject(new Error("Conversation not found"));
         }else {
