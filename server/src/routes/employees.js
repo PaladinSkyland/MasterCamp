@@ -78,38 +78,29 @@ router.get('/myBankLoans', authenticateToken, employeeAccess, async (req,res) =>
 router.put('/updateLoanStatus', authenticateToken, employeeAccess, async (req, res) => {
     const id = req.body.ID_application
     await loanQueries.updateLoanStatus(id)
+    res.sendStatus(200)
 })
 
 router.post('/createConversation', authenticateToken, employeeAccess, async (req, res) => {
     try {
         const id_userEmployee = req.user.ID_user;
-
         const infoEmployee = await employeeQueries.getEmployeeIDByUserID(id_userEmployee);
-
         const infoBank = await employeeQueries.getBankIDByEmployeeID(infoEmployee);
-
         const accessibleLoan = await loanQueries.getAccessibleLoan(infoBank.ID_bank)
+
         let tab = [];
         accessibleLoan.forEach(app => {
             tab.push(app.ID_application);
         })
-        console.log(tab)
-        
         if (req.body.ID_application in tab === false) {
             console.log("failed")
             res.sendStatus(401)
         } else {
-            console.log("succes")
             const clientInfo = await loanQueries.getUserLastNameAndIDByIDLoan(req.body.ID_application)
-            console.log(clientInfo, "Regarde ici")
-
-
             const employeeLastName = await userQueries.getLastNameByID(infoEmployee.ID_employee)
-
-
             const title =  "Conversation entre "+ clientInfo[0].LastName + " et " + employeeLastName[0].LastName
             conversationQueries.createConversation(infoEmployee.ID_employee, title, clientInfo[0].ID_user, req.body.ID_application)
-
+            res.sendStatus(200)
 
         }
     } catch (error) {
