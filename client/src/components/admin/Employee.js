@@ -90,68 +90,73 @@ const EmployeePage = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   return employeeListPending ? (
-    <div className="flex flex-col w-full gap-5 p-2 mx-auto select-none sm:p-4 sm:h-64 rounded-2xl">
-      <div className="flex items-center justify-center">
-        <ToggleButton
-          isChecked={isChecked}
-          value="Employe"
-          handleChange={() => setIsChecked(!isChecked)}
-        />
-      </div>
-      {isChecked ? (
-        <div className="p-2 shadow">
-          {employeeListAccepted.map((employee, index) => (
-            <div className="flex rounded-2xl gap-4 items-center" key={index}>
-              <div className="w-1/3 flex flex-col">
-                <p className="text-4xl">{employee.LastName}</p>
-                <p className="text-2xl">{employee.FirstName}</p>
-              </div>
-              <div className="w-1/3">
-                <p className="text-2xl">{employee.Email}</p>
-              </div>
-              <button
-                className="w-1/3 items-center justify-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
-                onClick={() => deleteEmployee(employee.ID_employee)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
+    <div>
+      <NavBar />
+      <div className="flex flex-col w-full gap-5 p-2 mx-auto select-none sm:p-4 sm:h-64 rounded-2xl">
+        <div className="flex items-center justify-center">
+          <ToggleButton
+            isChecked={isChecked}
+            value="Employe"
+            handleChange={() => setIsChecked(!isChecked)}
+          />
         </div>
-      ) : (
-        <div className="p-2 shadow">
-          {employeeListPending.map((employee, index) => (
-            <div className="flex rounded-2xl gap-4 items-center">
-              <div className="w-1/3 flex flex-col">
-                <p className="text-4xl">{employee.LastName}</p>
-                <p className="text-2xl">{employee.FirstName}</p>
-              </div>
-              <div className="w-1/3">
-                <p className="text-2xl">{employee.BankName}</p>
-              </div>
-              <div
-                className="w-1/3 flex flex-row gap-4 items-center justify-center"
-                key={index}
-              >
+        {isChecked ? (
+          <div className="p-2 shadow">
+            {employeeListAccepted.map((employee, index) => (
+              <div className="flex rounded-2xl gap-4 items-center" key={index}>
+                <div className="w-1/3 flex flex-col">
+                  <p className="text-4xl">{employee.LastName}</p>
+                  <p className="text-2xl">{employee.FirstName}</p>
+                </div>
+                <div className="w-1/3">
+                  <p className="text-2xl">{employee.Email}</p>
+                </div>
                 <button
-                  className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:bg-green-500 "
-                  onClick={() => validateEmployee(employee.ID_employee)}
-                >
-                  Validate
-                </button>
-                <button
-                  className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
+                  className="w-1/3 items-center justify-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
                   onClick={() => deleteEmployee(employee.ID_employee)}
                 >
                   Delete
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="p-2 shadow">
+            {employeeListPending.map((employee, index) => (
+              <div className="flex rounded-2xl gap-4 items-center">
+                <div className="w-1/3 flex flex-col">
+                  <p className="text-4xl">{employee.LastName}</p>
+                  <p className="text-2xl">{employee.FirstName}</p>
+                </div>
+                <div className="w-1/3">
+                  <p className="text-2xl">{employee.BankName}</p>
+                </div>
+                <div
+                  className="w-1/3 flex flex-row gap-4 items-center justify-center"
+                  key={index}
+                >
+                  <button
+                    className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:bg-green-500 "
+                    onClick={() => validateEmployee(employee.ID_employee)}
+                  >
+                    Validate
+                  </button>
+                  <button
+                    className="w-full px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
+                    onClick={() => deleteEmployee(employee.ID_employee)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-  ) : null;
+  ) : (
+    <NavBar/>
+  );
 };
 
 export default EmployeePage;
