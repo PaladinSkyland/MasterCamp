@@ -6,6 +6,25 @@ const storedToken = localStorage.getItem("token");
 const MyLoansPage = () => {
     
     const [myLoanList, setMyLoanList] = useState([]);
+    const [refresh, setRefresh] = useState(false)
+
+    const deleteLoan = async (myLoan) => {
+      try{
+        await fetch("/customer/deleteLoan", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`
+          },
+          body: JSON.stringify({
+            ID_application: myLoan.ID_application
+          })
+        })
+      setRefresh(!refresh)
+      }catch (error){
+        console.error("Une erreur s'est produite :", error);
+      }
+    }
 
     useEffect(() => {
         const fetchLoan = async () => {
@@ -24,7 +43,7 @@ const MyLoansPage = () => {
             }
         };
         fetchLoan();
-    }, [])
+    }, [refresh])
 
     return (
         <div className="container mx-auto px-4">
@@ -41,10 +60,12 @@ const MyLoansPage = () => {
                   </div>
                   {myLoan.Status == "Accepted" ? (<Link
                     to={`/conversation?application=${myLoan.ID_application}`}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-blue-500 text-white w-28 px-4 py-2 rounded-lg text-center"
                   >
-                    View
-                  </Link>) : (null)}
+                     Voir
+                  </Link>) : (<div className="w-28 text-white px-4 py-2 bg-red-500 rounded-lg text-center" onClick={() => deleteLoan(myLoan)}>
+                                Supprimer
+                              </div>)}
                   
                 </li>
               ))}

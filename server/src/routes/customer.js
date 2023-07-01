@@ -6,6 +6,7 @@ const bankQueries = require('../queries/bank')
 
 const authenticateToken = require('../middleware/authenticateToken')
 const customerAccess = require('../middleware/customerAccess')
+const { authorized } = require('../db')
 
 
 // const multer = require('multer')
@@ -49,7 +50,6 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
     if (!bankData) {
       bankData = { ID_bank: null };
     }
-    console.log("bankData : ", bankData);
     const ID_bank = bankData.ID_bank;
     return loanQueries.insertLoan(
       interestRate,
@@ -74,12 +74,32 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
 })
 
 router.get("/getMyLoans", authenticateToken, customerAccess, async (req, res) => {
-    const id = req.user.ID_user
-    const response = loanQueries.getMyLoans(id)
+    const ID_user = req.user.ID_user
+    const response = loanQueries.getMyLoans(ID_user)
 
     response.then(response => {
         res.json(response)
     })
 })
+
+router.delete("/deleteLoan", authenticateToken, customerAccess, async (req,res) => {
+  const ID_user = req.user.ID_user
+  const response = await loanQueries.getMyLoansID(ID_user)
+
+  var authorizedIDs = []
+  response.forEach(app => {
+      authorizedIDs.push(app.ID_application)
+    });
+
+  let toDelete = req.body.ID_application
+
+  if(!authorizedIDs.includes(toDelete)){
+    res.sendStatus(401)
+  }else{
+    loanQueries.deleteLoan(toDelete)
+    res.sendStatus(200)
+  }
+
+  })
 
 module.exports = router

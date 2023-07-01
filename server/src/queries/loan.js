@@ -93,3 +93,27 @@ exports.getUserLastNameAndIDByIDLoan = function (id_loan) {
         })
     })
 }
+
+exports.getMyLoansID = function (ID_user) {
+    return new Promise ((resolve, reject) => {
+        db.query("SELECT ID_application FROM LoanApplications WHERE ID_user = ?", [ID_user], (error, result) => {
+            if(error){
+                reject(error)
+            }else {
+                resolve (result)
+            }
+        })
+    })
+}
+
+exports.deleteLoan = function (ID_application) {
+    return new Promise ((resolve, reject) => {
+        db.query("DELETE FROM LoanApplications WHERE ID_application = ?", [ID_application], (error, result) => {
+            if(error){
+                reject(error)
+            }else {
+                resolve (result)
+            }
+        })
+    })
+}
