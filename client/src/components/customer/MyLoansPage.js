@@ -1,7 +1,34 @@
-import React, {useState, useEffect} from "react";
-import NavBar from "../NavBar";
-import { Link} from "react-router-dom";
-const storedToken = localStorage.getItem("token");
+import React, { useState, useEffect } from 'react';
+import NavBar from '../NavBar';
+import { Link } from 'react-router-dom';
+const storedToken = localStorage.getItem('token');
+
+export const LoanDate = ({ date }) => {
+  const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  console.log(date)
+
+  const today = new Date().toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (formattedDate === today) {
+    return (
+      <span className="text-gray-500">
+        Aujourd'hui à {new Date(date).getHours()}:
+        {new Date(date).getUTCMinutes()}
+      </span>
+    );
+  } else {
+    return <span className="text-gray-500">{formattedDate}</span>;
+  }
+};
 
 const MyLoansPage = () => {
   const [myLoanList, setMyLoanList] = useState([]);
@@ -25,40 +52,17 @@ const MyLoansPage = () => {
     fetchLoan();
   }, []);
 
-  const LoanDate = ({ date }) => {
-    const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    const today = new Date().toLocaleDateString('fr-FR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    if (formattedDate === today) {
-      return (
-        <span className="text-gray-500">
-          Aujourd'hui à {new Date(date).getHours()}:
-          {new Date(date).getUTCMinutes()}
-        </span>
-      );
-    } else {
-      return <span className="text-gray-500">{formattedDate}</span>;
-    }
-  };
+  
 
   const LoanStatus = ({ status }) => {
     let statusStyle = '';
 
     switch (status) {
-      case 'Pending':
-        statusStyle = 'orange';
+      case "Pending":
+        statusStyle = "orange";
         break;
       case 'Accepted':
-        statusStyle = 'green';
+        statusStyle = "green";
         break;
       case 'Finished':
         statusStyle = 'blue';
@@ -70,11 +74,13 @@ const MyLoansPage = () => {
         statusStyle = 'gray';
     }
 
+   
+
     return (
       <span
-        className={`mr-3 text-${statusStyle}-500 bg-${statusStyle}-100 font-bold p-2 rounded-full`}
+        className={`m-3 text-${statusStyle}-500 bg-${statusStyle}-100 font-bold p-2 rounded-full`}
       >
-        {status}{' '}
+        {status}
       </span>
     );
   };
@@ -102,7 +108,7 @@ const MyLoansPage = () => {
         />
       </svg>
     ) : (
-      <div>
+      <div className="flex-col items-center justify-center">
         <svg
           fill="none"
           viewBox="0 0 24 24"
@@ -142,27 +148,31 @@ const MyLoansPage = () => {
                 </div>
                 <ChevronButton>
                   <div className="">
-                    <span className="font-bold">ID : hello</span>
+                    <span className="font-bold">
+                      ID : {myLoan.ID_application}
+                    </span>
                   </div>
                 </ChevronButton>
-                {myLoan.Status == "Accepted" ? (<Link
+                {myLoan.Status === 'Accepted' ? (
+                  <Link
                     to={`/conversation?application=${myLoan.ID_application}`}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg"
                   >
                     <svg
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-                    />
-                  </svg>
-                  </Link>) : (null)}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
+                      />
+                    </svg>
+                  </Link>
+                ) : null}
               </li>
             ))}
           </ul>

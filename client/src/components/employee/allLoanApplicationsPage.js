@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import NavBar from "../NavBar";
+import ToggleButton from "../ToggleButton";
+import { LoanDate } from "../customer/MyLoansPage";
 
 
 
@@ -128,14 +131,13 @@ const AllLoanApplicationsPage = () => {
     //Test pour voir si tous les loans sont bien retournés
     return (
         <div>
-            <button onClick={() => setShowBank(!showBank)}>
-                switch
-            </button>
-            {showBank == true ? (
+            <NavBar/>
+            <ToggleButton isChecked={showBank} value="Loan" handleChange={() => setShowBank(!showBank)} />
+            {showBank  ? (
                 <div>
                     {allLoans ? (
                         <div>
-                            <div className="w-3/4 m-auto">
+                            <div className="flex flex-col m-2">
                                 {allLoans.map((loan, index) => (
                                     <div className="shadow-md my-5 p-6 flex flex-row text-xl justify-between hover:bg-blue-100" onClick={() => openPopup(loan)}>
                                         <div className=" flex flex-row gap-x-10">
@@ -158,23 +160,43 @@ const AllLoanApplicationsPage = () => {
 
                                 <div>
                                     {isOpen && (
-                                        <div className="border-4 ">
-                                            <div className="w-3/5 h-3/5 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-200">
-                                                {/* Mettre et styliser toutes les infos de la demande, pour l'instant je met juste tout en vrac*/}
-                                                <p>{selectedLoan.ID_application}</p>
-                                                <p>Nom du client : {selectedLoan.Name} {selectedLoan.FirstName}</p>
-                                                <p>Montant demandé : {selectedLoan.Amount}</p>
-                                                <p>Taux d'intérêt : {selectedLoan.interestRate}%, {selectedLoan.interestType}</p>
-                                                <p>Durée du prêt : {selectedLoan.Duration}</p>
-                                                <p>Revenus mensuels : {selectedLoan.MonthlyIncome}</p>
-                                                <p>Options de remboursements {selectedLoan.RepaymentOptions}</p>
-                                                <p>Assurance et garanties : {selectedLoan.InsuranceAndGuarantees}</p>
-                                                <p>Description : {selectedLoan.Description}</p>
-                                                <p>Date de la demande {selectedLoan.Creation_date}</p>
+                                        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-opacity-75 bg-white">
+                                            <div className="bg-white p-4 rounded-lg ring-blue-300 ring-2 ring-offset-2">
+                                            {/* Mettre et styliser toutes les infos de la demande, pour l'instant je met juste tout en vrac*/}
+                                                <div className="bg-white p-4 rounded-lg ring-blue-300 ring-2 ring-offset-2">
+                                                <p className="text-lg font-bold text-blue-700">Demande de prêt n°{selectedLoan.ID_application}</p>
+                                                <p>
+                                                <span className="font-semibold">Nom du client :</span> {selectedLoan.Name} {selectedLoan.FirstName}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Montant demandé :</span> {selectedLoan.Amount}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Taux d'intérêt :</span> {selectedLoan.interestRate}%, {selectedLoan.interestType}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Durée du prêt :</span> {selectedLoan.Duration}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Revenus mensuels :</span> {selectedLoan.MonthlyIncome}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Options de remboursements :</span> {selectedLoan.RepaymentOptions}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Assurance et garanties :</span> {selectedLoan.InsuranceAndGuarantees}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Description :</span> {selectedLoan.Description}
+                                                </p>
+                                                <p>
+                                                <span className="font-semibold">Date de la demande :</span> <LoanDate date={selectedLoan.Creation_date} />
+                                                </p>
+                
 
-                                                {/* Styliser aussi fermer popup */}
-                                                <button onClick={closePopup}>Fermer</button>
-                                            </div>
+                                                <button onClick={closePopup} className="py-2 px-4  btn-primary hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">Fermer</button>
+                                                </div>
+                                                </div>
                                         </div>
                                     )}
 
@@ -212,7 +234,7 @@ const AllLoanApplicationsPage = () => {
                                 <div>
                                     {isOpen && (
                                         <div className="border-4 ">
-                                            <div className="w-3/5 h-3/5 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-200">
+                                            <div className="w-1/2 h-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-3">
                                                 {/* Mettre et styliser toutes les infos de la demande, pour l'instant je met juste tout en vrac*/}
                                                 <p>{selectedLoan.ID_application}</p>
                                                 <p>Nom du client : {selectedLoan.Name} {selectedLoan.FirstName}</p>
@@ -226,7 +248,8 @@ const AllLoanApplicationsPage = () => {
                                                 <p>Date de la demande {selectedLoan.Creation_date}</p>
 
                                                 {/* Styliser aussi fermer popup */}
-                                                <button onClick={closePopup}>Fermer</button>
+                                                <button onClick={closePopup} className="py-2 px-4  btn-primary hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+              >Fermer</button>
                                             </div>
                                         </div>
                                     )}
