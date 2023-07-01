@@ -50,7 +50,6 @@ const EmployeePage = () => {
   }, [employeeListPendingLength, employeeListAcceptedLength]);
 
   const validateEmployee = async (id) => {
-    console.log('validate ' + id);
     setEmployeeListPendingLength(employeeListPendingLength - 1);
     const response = fetch('/admin/changeEmployeeStatus', {
       method: 'POST',
@@ -65,7 +64,6 @@ const EmployeePage = () => {
   };
 
   const deleteEmployee = async (id) => {
-    console.log('delete ' + id);
     const toDel = employeeListAccepted.filter((employee) => {
       return employee.ID_employee === id;
     });
@@ -155,7 +153,7 @@ const EmployeePage = () => {
       </div>
     </div>
   ) : (
-    <NavBar/>
+    <NavBar />
   );
 };
 
