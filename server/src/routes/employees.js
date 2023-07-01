@@ -105,8 +105,16 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
     } catch (error) {
         console.log(error)
     }
+})
 
-    //
+router.get('/getMyLoans', authenticateToken, employeeAccess, async (req, res) => {
+    const id = req.user.ID_user
+    const id_employee = await employeeQueries.getEmployeeIDByUserID(id)
+    const response = employeeQueries.getEmployeeLoans(id_employee)
+
+    response.then(response => {
+        res.json(response)
+    })
 })
 
 module.exports = router
