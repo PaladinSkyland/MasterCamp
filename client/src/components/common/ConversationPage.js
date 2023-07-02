@@ -80,9 +80,8 @@ const ChatPage = () => {
   return (
 <div className="page-container flex flex-col h-screen overflow-hidden">
   <NavBar />
-  <div className="flex justify-between max-w-screen-lg mx-auto bg-white" style={{ height: "calc(100vh - 64px)" }}>
-    <div className="w-1/4 bg-gray-100 p-6">
-      {/* En-tête du chat */}
+  <div className="flex justify-between bg-white w-full" style={{ height: "calc(100vh - 64px)" }}>
+    <div className="w-2/5 bg-gray-100 p-6">
       <div className="flex items-center mb-4">
         <button className="flex items-center text-blue-500 font-bold" onClick={handleArrowClick}>
           <svg className="w-6 h-6 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,39 +99,46 @@ const ChatPage = () => {
       </div>
     </div>
     <div className="p-6 flex-grow overflow-hidden">
-      {/* Liste des messages */}
+      {/* Titre du chat */}
       <h1 className="text-2xl font-bold mb-4">Chat</h1>
-      <div className="chat-messages h-full overflow-y-auto flex flex-col-reverse">
-        {Array.isArray(messages) && messages.length > 0 ? (
-          messages.slice().reverse().map((message) => (
-            <div
-              key={message.ID_message}
-              className={`mb-4 ${
-                message.Sender === "Client" ? "text-right" : "text-left"
-              }`}
-            >
+      {/* Conteneur pour les messages et le formulaire d'envoi */}
+      <div className="h-full flex flex-col">
+        {/* Liste des messages */}
+        <div className="chat-messages overflow-y-auto flex-grow">
+          {Array.isArray(messages) && messages.length > 0 ? (
+            messages.slice().map((message) => (
               <div
-                className={`inline-block p-2 rounded-lg ${
-                  message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
+                key={message.ID_message}
+                className={`mb-4 ${
+                  message.Sender === "Client" ? "text-right" : "text-left"
                 }`}
               >
-                <p className="text-gray-600">{message.Content}</p>
+                <div
+                  className={`inline-block p-2 rounded-lg ${
+                    message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
+                  } whitespace-normal break-words`}
+                >
+                  <p className="text-gray-600">{message.Content}</p>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-gray-400">Aucun message</div>
-        )}
+            ))
+          ) : (
+            <div className="text-gray-400">Aucun message</div>
+          )}
+        </div>
+        {/* Formulaire d'envoi */}
+        <div className="flex mb-6">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
+          />
+          <button onClick={sendMessage} className="btn-primary ml-2">
+            Envoyer
+          </button>
+        </div>
       </div>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
-      />
-      <button onClick={sendMessage} className="btn-primary">
-        Envoyer
-      </button>
     </div>
   </div>
 </div>
