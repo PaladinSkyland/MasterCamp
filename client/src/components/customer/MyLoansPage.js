@@ -46,8 +46,10 @@ const MyLoansPage = () => {
     }, [refresh])
 
     return (
+      <div>
+      <NavBar />
         <div className="container mx-auto px-4">
-        <NavBar />
+        
         <div className="mt-8">
           {myLoanList.length > 0 ? (
             <ul className="space-y-4">
@@ -74,6 +76,7 @@ const MyLoansPage = () => {
             <p className="text-gray-500 italic">Aucune demande de prêt</p>
           )}
         </div>
+      </div>
       </div>
       );
 };
