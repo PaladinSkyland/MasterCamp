@@ -96,7 +96,9 @@ router.delete("/deleteLoan", authenticateToken, customerAccess, async (req,res) 
   if(!authorizedIDs.includes(toDelete)){
     res.sendStatus(401)
   }else{
-    loanQueries.deleteLoan(toDelete)
+    loanQueries.deleteLoan(toDelete).catch((error) => {
+      console.log(error)
+    })
     res.sendStatus(200)
   }
 
