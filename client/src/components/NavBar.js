@@ -25,7 +25,11 @@ const NavBar = () => {
 
   return onglets ? (
     <div className="h-16 flex justify-between shadow-md">
-      <ComponentLogoNavBar />
+      <div className="flex items-center justify-between p-4">
+        <div className="flex gap-x-4">
+          <ComponentLogoNavBar />
+        </div>
+      </div>
       <ul className=" ml-3 flex flex-row gap-x-3 items-center">
         {onglets.map((onglet, index) => (
           <li
