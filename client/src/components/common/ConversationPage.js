@@ -80,11 +80,10 @@ const ChatPage = () => {
     <div className="flex justify-between max-w-screen-lg mx-auto bg-white rounded-lg shadow-md">
       <div className="w-1/4 bg-gray-100 p-6">
         <div className="flex items-center mb-4">
-          <div className="w-4 h-4 bg-gray-500 transform rotate-45"></div>
-          <button
-            className="text-blue-500 font-bold ml-2"
-            onClick={handleArrowClick}
-          >
+          <button className="flex items-center text-blue-500 font-bold" onClick={handleArrowClick}>
+            <svg className="w-6 h-6 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
             Retour
           </button>
         </div>
