@@ -127,7 +127,7 @@ export const FooterComponent = () => {
         </div>
         <div className="mt-6 text-center text-gray-500">
           <p>
-            © {new Date().getFullYear()} Your Company, Inc. All rights reserved.
+            © {new Date().getFullYear()} Credit Express, Inc. All rights reserved.
           </p>
         </div>
       </div>
