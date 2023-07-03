@@ -1,35 +1,17 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../NavBar";
 import { Link} from "react-router-dom";
+import EmployeePage from "../admin/Employee";
 const storedToken = localStorage.getItem("token");
 
-const MyLoansPage = () => {
+const EmployeeLoanPage = () => {
     
     const [myLoanList, setMyLoanList] = useState([]);
-    const [refresh, setRefresh] = useState(false)
-
-    const deleteLoan = async (myLoan) => {
-      try{
-        await fetch("/customer/deleteLoan", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${storedToken}`
-          },
-          body: JSON.stringify({
-            ID_application: myLoan.ID_application
-          })
-        })
-      setRefresh(!refresh)
-      }catch (error){
-        console.error("Une erreur s'est produite :", error);
-      }
-    }
 
     useEffect(() => {
         const fetchLoan = async () => {
             try {
-                const response = await fetch("/customer/getMyLoans", {
+                const response = await fetch("/employee/getMyLoans", {
                     method: "GET",
                     headers: {
                     Authorization: `Bearer ${storedToken}`,
@@ -43,13 +25,11 @@ const MyLoansPage = () => {
             }
         };
         fetchLoan();
-    }, [refresh])
+    }, [])
 
     return (
-      <div>
-      <NavBar />
         <div className="container mx-auto px-4">
-        
+        <NavBar />
         <div className="mt-8">
           {myLoanList.length > 0 ? (
             <ul className="space-y-4">
@@ -60,15 +40,12 @@ const MyLoansPage = () => {
                     <span>{myLoan.Status}</span>
                     <span>{myLoan.Creation_date}</span>
                   </div>
-                  {myLoan.Status == "Accepted" ? (<Link
+                  <Link
                     to={`/conversation?application=${myLoan.ID_application}`}
-                    className="bg-blue-500 text-white w-28 px-4 py-2 rounded-lg text-center"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
                   >
-                     Voir
-                  </Link>) : (<div className="w-28 text-white px-4 py-2 bg-red-500 rounded-lg text-center" onClick={() => deleteLoan(myLoan)}>
-                                Supprimer
-                              </div>)}
-                  
+                    View
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -77,8 +54,7 @@ const MyLoansPage = () => {
           )}
         </div>
       </div>
-      </div>
       );
 };
 
-export default MyLoansPage;
+export default EmployeeLoanPage;

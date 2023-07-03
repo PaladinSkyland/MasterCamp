@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useHistory } from 'react-router-dom';
 import ComponentLogo from "../Logo.js";
 const bcrypt = require("bcryptjs");
 
 const RegisterPage = () => {
-  //const navigate = useNavigate()
 
   const [username, setUsername] = useState("");
   const [userfirstname, setUserfirstname] = useState("");

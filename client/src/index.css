@@ -21,6 +21,8 @@ code {
 @layer components {
   .btn-primary {
     @apply bg-gradient-to-r from-cyan-300 via-blue-500 to-violet-300 rounded-full text-white px-4 py-2 my-3 hover:text-black;
+    background-image: var(--dgrade-bleu, linear-gradient(270deg, rgba(0, 26, 255, 0.63) 0%, rgba(113, 212, 255, 0.93) 100%));
   }
 }
+
 

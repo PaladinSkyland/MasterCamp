@@ -19,6 +19,8 @@ import ConversationPage from "./components/common/ConversationPage";
 import FileUploadForm from "./components/customer/FileUpload";
 import AllLoanApplicationsPage from "./components/employee/allLoanApplicationsPage";
 import MyLoansPage from "./components/customer/MyLoansPage";
+import SelectConversationPage from "./components/common/SelectConversationPage";
+import EmployeeLoanPage from "./components/employee/employeeLoans";
 
 const App = () => {
   return (
@@ -73,6 +75,14 @@ const App = () => {
           />
 
           <Route
+            path="/conversation"
+            element={
+              <UserProvider>
+                <SelectConversationPage />
+              </UserProvider>
+            }
+          />
+          <Route
             path="/conversation/:conversationId"
             element={
               <UserProvider>
@@ -101,10 +111,15 @@ const App = () => {
             element={<UserProvider><AllLoanApplicationsPage/></UserProvider>}
             />
           <Route
+            path="/employee/myLoans"
+            element={<UserProvider><EmployeeLoanPage/></UserProvider>}
+            />
+          <Route
             path="/*"
             element={<ErrorPage />}
           />
           
+
         </Routes>
       </AuthProvider>
     </Router>

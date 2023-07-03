@@ -11,6 +11,7 @@ const fileQueries = require("../queries/file")
 
 const authenticateToken = require('../middleware/authenticateToken')
 const customerAccess = require('../middleware/customerAccess')
+const { authorized } = require('../db')
 
 //set up multer storage configuration
 const storage = multer.diskStorage({
@@ -178,6 +179,7 @@ router.get('/download/:fileType', authenticateToken, customerAccess, async (req,
 })
 
 router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
+    const ID_user = req.user.ID_user
     const {
         interestRate,
         loanDuration,
@@ -187,22 +189,66 @@ router.post('/newLoan', authenticateToken, customerAccess, async (req, res) => {
         repaymentOptions,
         bankOption,
         description,
-        ID_user
     } = req.body
-    const response = await bankQueries.getIdBankByName(bankOption)
-    //Si l'utilisateur n'a pas spécifié de banque, alors on insère null, sinon on insère l'ID de la banque spéicifié
-    const ID_bank = response ? response.ID_bank : null
-    loanQueries.insertLoan(interestRate,loanDuration,loanAmount,interestType,monthlyIncome,repaymentOptions,description,ID_user,ID_bank)
-    
+
+    bankQueries
+  .getIdBankByName(bankOption)
+  .then((bankData) => {
+    if (!bankData) {
+      bankData = { ID_bank: null };
+    }
+    const ID_bank = bankData.ID_bank;
+    return loanQueries.insertLoan(
+      interestRate,
+      loanDuration,
+      loanAmount,
+      interestType,
+      monthlyIncome,
+      repaymentOptions,
+      description,
+      ID_user,
+      ID_bank
+    );
+  })
+  .then(() => {
+    // Traitement après l'insertion du prêt réussie
+    res.status(200).json({ success: "Prêt inséré avec succès" });
+  })
+  .catch((error) => {
+    // Gestion des erreurs
+    res.status(401).json({ error: "Erreur lors de l'insertion du prêt" });
+  });
 })
 
 router.get("/getMyLoans", authenticateToken, customerAccess, async (req, res) => {
-    const id = req.user.ID_user
-    const response = loanQueries.getMyLoans(id)
+    const ID_user = req.user.ID_user
+    const response = loanQueries.getMyLoans(ID_user)
 
     response.then(response => {
         res.json(response)
     })
 })
+
+router.delete("/deleteLoan", authenticateToken, customerAccess, async (req,res) => {
+  const ID_user = req.user.ID_user
+  const response = await loanQueries.getMyLoansID(ID_user)
+
+  var authorizedIDs = []
+  response.forEach(app => {
+      authorizedIDs.push(app.ID_application)
+    });
+
+  let toDelete = req.body.ID_application
+
+  if(!authorizedIDs.includes(toDelete)){
+    res.sendStatus(401)
+  }else{
+    loanQueries.deleteLoan(toDelete).catch((error) => {
+      console.log(error)
+    })
+    res.sendStatus(200)
+  }
+
+  })
 
 module.exports = router
