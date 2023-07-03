@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import NavBar from "../NavBar";
 
 const SelectConversationPage = () => {
   const [conversations, setConversations] = useState([]);
@@ -32,7 +33,9 @@ const SelectConversationPage = () => {
   }, []);
 
   return conversations ? (
+    <div><NavBar />
 <div className="h-screen flex flex-col justify-center items-center bg-blue-100">
+  
   <h1 className="text-2xl font-bold mb-4">Liste des Conversations</h1>
   <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
     <ul className="space-y-4">
@@ -48,6 +51,7 @@ const SelectConversationPage = () => {
       ))}
     </ul>
   </div>
+</div>
 </div>
 
 
