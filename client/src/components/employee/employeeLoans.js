@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../NavBar";
 import { Link} from "react-router-dom";
-import EmployeePage from "../admin/Employee";
-const storedToken = localStorage.getItem("token");
+
 
 const EmployeeLoanPage = () => {
     
     const [myLoanList, setMyLoanList] = useState([]);
+    const storedToken = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchLoan = async () => {

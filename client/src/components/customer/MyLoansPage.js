@@ -31,9 +31,10 @@ export const LoanDate = ({ date }) => {
 };
 
 const MyLoansPage = () => {
-    const storedToken = localStorage.getItem('token');
     const [myLoanList, setMyLoanList] = useState([]);
-    const [refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false)
+    const storedToken = localStorage.getItem("token");
+   
 
     const deleteLoan = async (myLoan) => {
       try{
