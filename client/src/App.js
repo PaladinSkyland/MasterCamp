@@ -16,7 +16,7 @@ import AccountPage from "./components/common/AccountPage";
 import ErrorPage from "./components/common/ErrorPage";
 import LoanApplicationPage from "./components/customer/LoanApplicationPage";
 import ConversationPage from "./components/common/ConversationPage";
-import FileUploadForm from "./FileUpload";
+import FileUploadForm from "./components/customer/FileUpload";
 import AllLoanApplicationsPage from "./components/employee/allLoanApplicationsPage";
 import MyLoansPage from "./components/customer/MyLoansPage";
 import SelectConversationPage from "./components/common/SelectConversationPage";
@@ -50,6 +50,10 @@ const App = () => {
                 <AccountPage />
               </UserProvider>
             }
+          />
+          <Route 
+            path="/customer/fileUpload" 
+            element={<UserProvider><FileUploadForm /></UserProvider>}
           />
           <Route
             path="/customer/loanApplication"
