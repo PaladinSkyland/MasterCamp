@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../NavBar";
 import { Link} from "react-router-dom";
-const storedToken = localStorage.getItem("token");
 
 const MyLoansPage = () => {
     
     const [myLoanList, setMyLoanList] = useState([]);
     const [refresh, setRefresh] = useState(false)
+    const storedToken = localStorage.getItem("token");
+   
 
     const deleteLoan = async (myLoan) => {
       try{
