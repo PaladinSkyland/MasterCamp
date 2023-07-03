@@ -8,6 +8,8 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const storedToken = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [myDocList, setMyDocList] = useState([]);
+
 
   const handleArrowClick = () => {
     navigate('/conversation/');
@@ -63,9 +65,26 @@ const ChatPage = () => {
     }
   };
 
+  const fetchMyDoc = async () => {
+    try {
+        const response = await fetch(`/conversation/getMyDoc/${conversationId}`, {
+            method: "GET",
+            headers: {
+            Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        setMyDocList(data);
+    } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+    }
+  };
+
   // Charger les messages au chargement initial
   useEffect(() => {
     fetchMessages();
+    fetchMyDoc();
   }, []);
 
   // Rafraîchir les messages toutes les 5 secondes
@@ -76,6 +95,18 @@ const ChatPage = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const setToVisible = async (id) => {
+    setIsChecked(!isChecked)  
+    if (isChecked == false) {
+      //check si il existe si oui suppr sinon rien
+    } else {
+      //creer dans la table file conversation
+    }
+  }
+  
 
   return (
 <div className="page-container flex flex-col h-screen overflow-hidden">
@@ -94,6 +125,16 @@ const ChatPage = () => {
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary mb-2">Partager des documents</button>
       </div>
+      {myDocList.map((doc, index) => (
+        <div key={index}>
+          <p>{doc.Title}</p>
+          <div>
+            <input type="checkBox"
+              checked={isChecked}
+              onChange={() => setToVisible(doc.ID_file)}/>
+          </div>
+        </div>
+      ))}
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>

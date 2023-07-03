@@ -152,5 +152,17 @@ router.post("/getconversations", authenticateToken, async (req,res) => {
   });
 
 });
+
+router.get("/getMyDoc/:conversationId", authenticateToken, async (req,res) => {
+  //Récupération des messages pour une conversation donnée
+  const userID = req.user.ID_user;
+  
+  const response = conversationqueries.getMyDoc(userID)
+
+  response.then(response => {
+    res.json(response)
+  })
+
+})
   
 module.exports = router

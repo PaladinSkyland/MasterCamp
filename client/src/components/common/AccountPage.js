@@ -201,7 +201,7 @@ const AccountPage = () => {
     }
   }
 
-  return userData.UserType === "customer" ? (
+  return (
     <div>
       <NavBar />
       <UserInfomation>
@@ -223,10 +223,7 @@ const AccountPage = () => {
           ))}
       </div>
     </div>
-  ) : (
-    /* Sinon */
-    null
-  );
+  )
 };
 
 export default AccountPage;

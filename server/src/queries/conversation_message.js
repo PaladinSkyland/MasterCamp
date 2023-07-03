@@ -82,3 +82,15 @@ exports.createConversation = function (id_employee, title, id_user, id_applicati
     })
   })
 }
+
+exports.getMyDoc = function (id_user) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT * FROM Files WHERE ID_user = ?", [id_user], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
