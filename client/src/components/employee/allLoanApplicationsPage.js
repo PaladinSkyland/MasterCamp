@@ -21,6 +21,7 @@ const AllLoanApplicationsPage = () => {
 
     const openPopup = (loan) => {
         setSelectedLoan(loan)
+        console.log(loan)
         setIsOpen(true);
     };
 
@@ -133,7 +134,7 @@ const AllLoanApplicationsPage = () => {
     return (
         <div>
             <NavBar/>
-            <ToggleButton isChecked={showBank} value="Loan" handleChange={() => setShowBank(!showBank)} />
+            <ToggleButton isChecked={showBank} value={["My bank loans", "All loans"]} handleChange={() => setShowBank(!showBank)} />
             {showBank  ? (
                 <div>
                     {allLoans ? (
@@ -173,7 +174,7 @@ const AllLoanApplicationsPage = () => {
                                                 <span className="font-semibold">Montant demandé :</span> {selectedLoan.Amount} €
                                                 </p>
                                                 <p>
-                                                <span className="font-semibold">Taux d'intérêt :</span> {selectedLoan.interestRate}%, {selectedLoan.interestType}
+                                                <span className="font-semibold">Taux d'intérêt :</span> {selectedLoan.InterestRate}%, {selectedLoan.InterestType}
                                                 </p>
                                                 <p>
                                                 <span className="font-semibold">Durée du prêt :</span> {selectedLoan.Duration}

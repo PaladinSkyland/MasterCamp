@@ -1,75 +1,12 @@
 import NavBar from "../NavBar";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { AuthContext } from "../../context/AuthContext";
 
 const AccountPage = () => {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const { logout } = useContext(AuthContext);
-  const storedToken = localStorage.getItem("token");
-  const [allFiles, setAllFiles] = useState([]);
 
-  useEffect(() => {
-    async function fetchAllFiles() {
-      await fetch('/customer/files', 
-      {
-        method: "GET", 
-        headers: {
-          Authorization: `Bearer ${storedToken}`
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        setAllFiles(data);
-      })
-    }
-    fetchAllFiles();
-  }, []);
-
-  const getFileLabel = (fileType) => {
-    switch(fileType) {
-      case 'avisImpot1':
-        return "Avis d'imposition 1";
-      case 'avisImpot2':
-        return "Avis d'imposition 2";
-      case 'justifIdentite': 
-        return "Justificatif d'identité";
-      case 'bulletinSalaire1':
-        return "Bulletin de salaire 1";
-      case 'bulletinSalaire2':
-        return "Bulletin de salaire 2";
-      case 'bulletinSalaire3':
-        return "Bulletin de salaire 3";
-      case 'releveBancaire1':
-        return "Relevé de compte en banque 1";
-      case 'releveBancaire2':
-        return "Relevé de compte en banque 2";
-      case 'releveBancaire3':
-        return "relevé de compte en banque 3";
-      case 'justifDomicile':
-        return "Justificatif de domicile";
-      case 'justifApportPersonnel':
-        return "Justificatif de l'apport personnel";
-      case 'compromisVente':
-        return "Compromis de vente";
-      case 'titreRetraite':
-        return "Titre de retraite ou de pension";
-      case 'attestationCAF':
-        return "Attestation de la CAF";
-      case 'attestationRevenusFonciers':
-        return "Attestation de revenus fonciers";
-      case 'justifSituationFamiliale':
-        return "Justificatif de situation familiale";
-      case 'contratTravail':
-        return "Contrat de travail";
-      case 'contratPret':
-        return "Contrat de prêt";
-      case 'avenantPret':
-        return "Avenant de prêt";
-      case 'tableauAmortissement':
-        return "Tableau d'amortissement";
-    }
-  }
 
   const UserInfomation = (props) => {
     return (
@@ -162,18 +99,7 @@ const AccountPage = () => {
     );
   };
 
-  const handleClick = async (event) => {
-    //get an identifier to know which file have been clicked
-    const fileType = event.target.value;
-    
-    //get the corresponding file on the server
-    const response = await fetch(`/customer/download/${fileType}`, 
-    {
-      method: "GET", 
-      headers: {
-        Authorization: `Bearer ${storedToken}`
-      }
-    });
+  
 
     if (response.ok) {
       //get the file name from the response headers
@@ -212,16 +138,7 @@ const AccountPage = () => {
           Logout
         </button>
       </UserInfomation>
-      <div>
-          {allFiles.map((file, index) => (
-            <div key={index}>
-              <p>{file.Title}</p>
-              <button value={file.File_type} onClick={handleClick}>
-                {getFileLabel(file.File_type)}
-              </button>
-            </div>
-          ))}
-      </div>
+      
     </div>
   )
 };

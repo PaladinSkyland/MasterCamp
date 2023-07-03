@@ -1,6 +1,7 @@
 import React from 'react';
 
 const ToggleButton = ({ isChecked, value, handleChange }) => {
+  
   return (
     <label className="flex items-center m-3">
       <div
@@ -8,7 +9,7 @@ const ToggleButton = ({ isChecked, value, handleChange }) => {
           isChecked ? 'text-blue-200' : 'text-blue-500'
         } font-bold`}
       >
-        {value} pending
+        {value[0]}
       </div>
       <div className="relative">
         <input
@@ -30,7 +31,7 @@ const ToggleButton = ({ isChecked, value, handleChange }) => {
           isChecked ? 'text-blue-500' : 'text-blue-200'
         } font-bold`}
       >
-        {value} accepted
+        {value[1]}
       </div>
     </label>
   );

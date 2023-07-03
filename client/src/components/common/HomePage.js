@@ -24,12 +24,6 @@ const HomePage = () => {
           <h1 className="text-6xl font-mono text-center text-black">
             {userData.LastName}
           </h1>
-          <button
-            className="btn-primary"
-            onClick={() => console.log("Get Started")}
-          >
-            Get Started
-          </button>
         </div>
       </div>
       <FeatureComponent />
