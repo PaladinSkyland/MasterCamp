@@ -1,4 +1,3 @@
-const e = require('express');
 const db = require('../db'); //Chemin vers les infos de connexion à la db
 const bankQueries = require('./bank');
 
@@ -133,5 +132,17 @@ exports.getUserID = function() {
         }
       }
     });
+  })
+}
+
+exports.getLastNameByID = function (id) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT LastName FROM Users WHERE ID_user = ?", [id] , (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }

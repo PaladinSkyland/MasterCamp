@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
+import NavBar from "../NavBar";
 
 const ChatPage = () => {
   const { conversationId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const storedToken = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  const handleArrowClick = () => {
+    navigate('/conversation/');
+  };
   //const { userData } = useContext(UserContext);
 
   // Fonction pour envoyer un message
@@ -72,40 +78,70 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+<div className="page-container flex flex-col h-screen overflow-hidden">
+  <NavBar />
+  <div className="flex justify-between bg-white w-full" style={{ height: "calc(100vh - 64px)" }}>
+    <div className="w-2/5 bg-gray-100 p-6">
+      <div className="flex items-center mb-4">
+        <button className="flex items-center text-blue-500 font-bold" onClick={handleArrowClick}>
+          <svg className="w-6 h-6 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Retour
+        </button>
+      </div>
+      <h2 className="text-lg font-bold mb-4">Actions</h2>
+      <div className="inline-block p-2 rounded-lg bg-gray-200">
+        <button className="btn-secondary mb-2">Partager des documents</button>
+      </div>
+      <div className="inline-block p-2 rounded-lg bg-gray-200">
+        <button className="btn-secondary">Remplir un formulaire</button>
+      </div>
+    </div>
+    <div className="p-6 flex-grow overflow-hidden">
+      {/* Titre du chat */}
       <h1 className="text-2xl font-bold mb-4">Chat</h1>
-      <div className="chat-messages mb-4">
-        {Array.isArray(messages) && messages.length > 0 ? (
-          messages.map((message) => (
-            <div
-              key={message.ID_message}
-              className={`mb-4 ${
-                message.Sender === "Client" ? "text-right" : "text-left"
-              }`}
-            >
+      {/* Conteneur pour les messages et le formulaire d'envoi */}
+      <div className="h-full flex flex-col">
+        {/* Liste des messages */}
+        <div className="chat-messages overflow-y-auto flex-grow">
+          {Array.isArray(messages) && messages.length > 0 ? (
+            messages.slice().map((message) => (
               <div
-                className={`inline-block p-2 rounded-lg ${
-                  message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
+                key={message.ID_message}
+                className={`mb-4 ${
+                  message.Sender === "Client" ? "text-right" : "text-left"
                 }`}
               >
-                <p className="text-gray-600">{message.Description}</p>
+                <div
+                  className={`inline-block p-2 rounded-lg ${
+                    message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
+                  } whitespace-normal break-words`}
+                >
+                  <p className="text-gray-600">{message.Content}</p>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-gray-400">Aucun message</div>
-        )}
+            ))
+          ) : (
+            <div className="text-gray-400">Aucun message</div>
+          )}
+        </div>
+        {/* Formulaire d'envoi */}
+        <div className="flex mb-6">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
+          />
+          <button onClick={sendMessage} className="btn-primary ml-2">
+            Envoyer
+          </button>
+        </div>
       </div>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 mb-2 w-full"
-      />
-      <button onClick={sendMessage} className="btn-primary">
-        Envoyer
-      </button>
     </div>
+  </div>
+</div>
   );
 };
 

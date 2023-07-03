@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ComponentLogoNavBar from "./LogoNavbar.";
@@ -6,16 +6,30 @@ import ComponentLogoNavBar from "./LogoNavbar.";
 const NavBar = () => {
   const { getOnglets, userData } = useContext(UserContext);
 
-  const onglets = getOnglets();
+  const [onglets, setOnglets] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const ongletsData = await getOnglets();
+      setOnglets(ongletsData);
+
+    };
+
+    fetchData();
+  }, [getOnglets]);
 
   const goTo = (onglet) => {
     navigate("/" + userData.UserType + "/" + onglet);
   };
 
-  return (
+  return onglets ? (
     <div className="h-16 flex justify-between shadow-md">
-      <ComponentLogoNavBar />
+      <div className="flex items-center justify-between p-4">
+        <div className="flex gap-x-4">
+          <ComponentLogoNavBar />
+        </div>
+      </div>
       <ul className=" ml-3 flex flex-row gap-x-3 items-center">
         {onglets.map((onglet, index) => (
           <li
@@ -34,7 +48,7 @@ const NavBar = () => {
         />
       </ul>
     </div>
-  );
+  ) : (null);
 };
 
 export default NavBar;
