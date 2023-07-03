@@ -2,7 +2,6 @@ import NavBar from "../NavBar";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { AuthContext } from "../../context/AuthContext";
-import ErrorPage from "./ErrorPage";
 
 const AccountPage = () => {
   const { userData, setUserData } = useContext(UserContext);
@@ -29,7 +28,7 @@ const AccountPage = () => {
 
   const getFileLabel = (fileType) => {
     switch(fileType) {
-      case 'avisImpots1':
+      case 'avisImpot1':
         return "Avis d'imposition 1";
       case 'avisImpot2':
         return "Avis d'imposition 2";
@@ -165,7 +164,6 @@ const AccountPage = () => {
 
   const handleClick = async (event) => {
     //get an identifier to know which file have been clicked
-    console.log(event.target.value);
     const fileType = event.target.value;
     
     //get the corresponding file on the server
@@ -214,17 +212,16 @@ const AccountPage = () => {
           Logout
         </button>
       </UserInfomation>
-      <h3>My Account</h3>
+      <div>
           {allFiles.map((file, index) => (
-            <div>
+            <div key={index}>
               <p>{file.Title}</p>
-              <button key={index} value={file.File_type} onClick={handleClick}>
+              <button value={file.File_type} onClick={handleClick}>
                 {getFileLabel(file.File_type)}
               </button>
             </div>
           ))}
-          <br/>
-      <button className="btn-primary" onClick={logout}>deco</button>
+      </div>
     </div>
   ) : (
     /* Sinon */

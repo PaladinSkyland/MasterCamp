@@ -58,10 +58,10 @@ router.post("/upload", authenticateToken, customerAccess, upload.single('file'),
 
         if (!fs.existsSync("files/" + userID))
         try {
-            fs.mkdir('files/' + userID, { recursive: true });
+            fs.mkdirSync('files/' + userID, { recursive: true });
         }
         catch {
-            console.error('Upload : Erreur création du répertoire utilisateur', error);
+            console.error('Upload : Erreur création du répertoire utilisateur');
         }
 
         //write the ciphered contents to a new file
