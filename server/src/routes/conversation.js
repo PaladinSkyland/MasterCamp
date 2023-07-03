@@ -6,6 +6,8 @@ const authenticateToken = require('../middleware/authenticateToken')
 const conversationqueries = require('../queries/conversation_message')
 const employeequeries = require('../queries/employee');
 const cryptoIDMessage = require('../middleware/cryptoIDMessage')
+const contratqueries = require('../queries/contrat')
+const employeeAccess = require('../middleware/employeeAccess')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
@@ -152,5 +154,98 @@ router.post("/getconversations", authenticateToken, async (req,res) => {
   });
 
 });
+
+router.get("/getcontract/:conversationId", authenticateToken, async (req,res) => {
+  const userID = req.user.ID_user;
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  let employeeID = "";
+
+  employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+    if (result) {
+      employeeID = result.ID_employee;
+    }
+    else {
+      employeeID = "";
+    }
+    conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+      if (result) {
+        contratqueries.getContratByIDCONV(conversationId).then((result) => {
+          delete result[0].ID_conversation;
+          delete result[0].ID_bank;
+          res.status(200).json(result[0]);
+        }).catch((error) => {
+          return res.status(401).json({ error: "invalides" });
+        })
+      }
+    })
+    .catch((error) => {
+      return res.status(401).json({ error: "invalides" });
+    })
+
+  }).catch((error) => {
+    console.error(error);
+    return res.status(401).json({ error: "invalides" });
+  });
+
+});
+
+router.post("/sendcontrat/:conversationId", authenticateToken, employeeAccess,  async (req,res) => {
+  const userID = req.user.ID_user;
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  let employeeID = "";
+
+  //Récupération du body de manière sécurisée
+  //Le body doit contenir les champs suivants et que les champs suivants: Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees
+  const {Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees} = req.body;
+
+  employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+    if (result) {
+      employeeID = result.ID_employee;
+    }
+    else {
+      employeeID = "";
+    }
+    conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+      if (result) {
+        contratqueries.modifyContratByIDCONV(conversationId,{Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees}).then((result) => {
+          if (result){
+            return res.status(200).json({ ok: true });
+          }
+        }
+        ).catch((error) => {
+          return res.status(401).json({ error: "invalides" });
+        })
+      }
+    })
+    .catch((error) => {
+      return res.status(401).json({ error: "invalides" });
+    })
+
+  }).catch((error) => {
+    console.error(error);
+    return res.status(401).json({ error: "invalides" });
+  });
+
+});
+
+
   
 module.exports = router
