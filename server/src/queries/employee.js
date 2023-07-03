@@ -91,3 +91,14 @@ exports.getBankIDbyUserID = function (id) {
     })
 }
 
+exports.getEmployeeLoans = function (id_employee) {
+    return new Promise ((resolve, reject) => {
+        db.query("SELECT * FROM Loan_Bank JOIN LoanApplications USING(ID_application) JOIN Users USING(ID_user) WHERE Loan_Bank.ID_employee = ?", [id_employee], (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}

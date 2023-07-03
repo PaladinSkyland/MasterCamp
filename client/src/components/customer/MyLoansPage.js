@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import { Link } from 'react-router-dom';
-const storedToken = localStorage.getItem('token');
+
 
 export const LoanDate = ({ date }) => {
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
@@ -31,107 +31,132 @@ export const LoanDate = ({ date }) => {
 };
 
 const MyLoansPage = () => {
-  const [myLoanList, setMyLoanList] = useState([]);
+    const storedToken = localStorage.getItem('token');
+    const [myLoanList, setMyLoanList] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
-  useEffect(() => {
-    const fetchLoan = async () => {
-      try {
-        const response = await fetch('/customer/getMyLoans', {
-          method: 'GET',
+    const deleteLoan = async (myLoan) => {
+      try{
+        await fetch("/customer/deleteLoan", {
+          method: "DELETE",
           headers: {
-            Authorization: `Bearer ${storedToken}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedToken}`
           },
-        });
-        const data = await response.json();
-        setMyLoanList(data);
-      } catch (error) {
+          body: JSON.stringify({
+            ID_application: myLoan.ID_application
+          })
+        })
+      setRefresh(!refresh)
+      }catch (error){
         console.error("Une erreur s'est produite :", error);
       }
-    };
-    fetchLoan();
-  }, []);
-
-  
-
-  const LoanStatus = ({ status }) => {
-    let statusStyle = '';
-
-    switch (status) {
-      case "Pending":
-        statusStyle = "orange";
-        break;
-      case 'Accepted':
-        statusStyle = "green";
-        break;
-      case 'Finished':
-        statusStyle = 'blue';
-        break;
-      case 'Canceled':
-        statusStyle = 'red';
-        break;
-      default:
-        statusStyle = 'gray';
     }
 
-   
+    useEffect(() => {
+        const fetchLoan = async () => {
+            try {
+                const response = await fetch("/customer/getMyLoans", {
+                    method: "GET",
+                    headers: {
+                    Authorization: `Bearer ${storedToken}`,
+                    "Content-Type": "application/json",
+                    },
+                });
+                const data = await response.json();
+                setMyLoanList(data);
+            } catch (error) {
+                console.error("Une erreur s'est produite :", error);
+            }
+        };
+        fetchLoan();
+    }, [refresh])
 
-    return (
-      <span
-        className={`m-3 text-${statusStyle}-500 bg-${statusStyle}-100 font-bold p-2 rounded-full`}
-      >
-        {status}
-      </span>
-    );
-  };
-
-  const ChevronButton = ({ children }) => {
-    const [isToggled, setIsToggled] = useState(true);
-
-    const handleChange = () => {
-      setIsToggled(!isToggled);
+    const LoanStatus = ({ status }) => {
+      let statusStyle = '';
+  
+      switch (status) {
+        case "Pending":
+          return (<span
+            className={`m-3 text-orange-500 bg-orange-100 font-bold p-2 rounded-full`}
+          >
+            {status}
+          </span>)
+        case "Accepted":
+          return (<span
+            className={`m-3 text-green-500 bg-green-100 font-bold p-2 rounded-full`}
+          >
+            {status}
+          </span>)
+        case 'Finished':
+          return (<span
+            className={`m-3 text-blue-500 bg-blue-100 font-bold p-2 rounded-full`}
+          >
+            {status}
+          </span>)
+        case 'Canceled':
+          return (<span
+            className={`m-3 text-red-500 bg-red-100 font-bold p-2 rounded-full`}
+          >
+            {status}
+          </span>)
+        default:
+          return (<span
+            className={`m-3 text-gray-500 bg-gray-100 font-bold p-2 rounded-full`}
+          >
+            {status}
+          </span>)
+      }
     };
-
-    return isToggled ? (
-      <svg
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6 cursor-pointer"
-        onClick={handleChange}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-        />
-      </svg>
-    ) : (
-      <div className="flex-col items-center justify-center">
+  
+    const ChevronButton = ({ children }) => {
+      const [isToggled, setIsToggled] = useState(true);
+  
+      const handleChange = () => {
+        setIsToggled(!isToggled);
+      };
+  
+      return isToggled ? (
         <svg
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth={2}
+          strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6  cursor-pointer"
+          className="w-6 h-6 cursor-pointer"
           onClick={handleChange}
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
+            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
           />
         </svg>
-        {children}
-      </div>
-    );
-  };
+      ) : (
+        <div className="flex-col items-center justify-center">
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6  cursor-pointer"
+            onClick={handleChange}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
+            />
+          </svg>
+          {children}
+        </div>
+      );
+    };
 
-  return (
-    <div>
-      <NavBar />
-      <div className="mt-8">
+    return (
+        <div>
+        <NavBar />
+        <div className="container mx-auto px-4">
+        <div className="mt-8">
         {myLoanList.length > 0 ? (
           <ul className="space-y-4">
             {myLoanList.map((myLoan, index) => (
@@ -172,16 +197,19 @@ const MyLoansPage = () => {
                       />
                     </svg>
                   </Link>
-                ) : null}
+                ) : <div className="w-28 text-white px-4 py-2 bg-red-500 rounded-lg text-center cursor-pointer" onClick={() => deleteLoan(myLoan)}>
+                Supprimer
+              </div>}
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="text-gray-500 italic">Aucune demande de prêt</p>
-        )}
+          ) : (
+            <p className="text-gray-500 italic">Aucune demande de prêt</p>
+          )}
+        </div>
       </div>
-    </div>
-  );
+      </div>
+      );
 };
 
 export default MyLoansPage;
