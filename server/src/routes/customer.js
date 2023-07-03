@@ -28,78 +28,78 @@ const storage = multer.diskStorage({
 //create multer instance with the storage configuration
 const upload = multer({ storage });
 
-router.post("/upload", authenticateToken, customerAccess, upload.single('file'), async (req, res) => {
-    const file = req.file; //uploaded file
-    const type = req.body.fileType; //selected option
-    const name = req.body.fileName; //file name
-    const userID = req.user.ID_user; //user ID
+    router.post("/upload", authenticateToken, customerAccess, upload.single('file'), async (req, res) => {
+        const file = req.file; //uploaded file
+        const type = req.body.fileType; //selected option
+        const name = req.body.fileName; //file name
+        const userID = req.user.ID_user; //user ID
 
-    const fileExist = fileQueries.CheckIfFileExist(type, userID);
+        const fileExist = fileQueries.CheckIfFileExist(type, userID);
 
-    fileExist.then((response) => {
-        if (response > 0) {
-            fileQueries.DeleteFile(type, userID);
-            console.log("Upload : Fichier précédent supprimé");
-        }
+        fileExist.then((response) => {
+            if (response > 0) {
+                fileQueries.DeleteFile(type, userID);
+                console.log("Upload : Fichier précédent supprimé");
+            }
 
-        //get the file to cipher
-        const inputFile = "uploads/" + name;
-        const inputBuffer = fs.readFileSync(inputFile);
+            //get the file to cipher
+            const inputFile = "uploads/" + name;
+            const inputBuffer = fs.readFileSync(inputFile);
 
-        //get the encryption key and the IV from the .env file 
-        const cipherKey = Buffer.from(process.env.cipherKey, 'hex');
-        const iv = Buffer.from(process.env.IV, 'hex');
+            //get the encryption key and the IV from the .env file 
+            const cipherKey = Buffer.from(process.env.cipherKey, 'hex');
+            const iv = Buffer.from(process.env.IV, 'hex');
 
-        //create a cipher using the encryption key
-        const cipher = crypto.createCipheriv('aes-256-cbc', cipherKey, iv);
+            //create a cipher using the encryption key
+            const cipher = crypto.createCipheriv('aes-256-cbc', cipherKey, iv);
 
-        //cipher the file contents
-        const cipheredBuffer = Buffer.concat([cipher.update(inputBuffer), cipher.final()]);
+            //cipher the file contents
+            const cipheredBuffer = Buffer.concat([cipher.update(inputBuffer), cipher.final()]);
 
-        if (!fs.existsSync("files/" + userID))
-        try {
-            fs.mkdirSync('files/' + userID, { recursive: true });
-        }
-        catch {
-            console.error('Upload : Erreur création du répertoire utilisateur');
-        }
+            if (!fs.existsSync("files/" + userID))
+            try {
+                fs.mkdirSync('files/' + userID, { recursive: true });
+            }
+            catch {
+                console.error('Upload : Erreur création du répertoire utilisateur');
+            }
 
-        //write the ciphered contents to a new file
-        const outputFile = "files/" + userID + "/" + name;
-        try {
-            fs.writeFileSync(outputFile, cipheredBuffer);
-        }
-        catch {
-            console.error('Upload : Erreur écriture du fichier chiffré')
-        }
-        
-        try {
-            //inserting into the DB
-            const fileInsertInto = fileQueries.fileInsertInto(name, type, outputFile, userID);
+            //write the ciphered contents to a new file
+            const outputFile = "files/" + userID + "/" + name;
+            try {
+                fs.writeFileSync(outputFile, cipheredBuffer);
+            }
+            catch {
+                console.error('Upload : Erreur écriture du fichier chiffré')
+            }
+            
+            try {
+                //inserting into the DB
+                const fileInsertInto = fileQueries.fileInsertInto(name, type, outputFile, userID);
 
-            //return the result of the insertion request
-            fileInsertInto.then((result) => {
-                if (result) {
-                    fs.unlink(file.path, (error) => {
-                        if (error) {
-                        console.error('Upload : Erreur supression du fichier temporaire : ', error);
-                        } 
-                        else {
-                        console.log('Upload : Fichier temporaire supprimé');
-                        }
-                    })
-                    return res.status(200).send("Fichier ajouté avec succès");
-                }
-            });
-        }
-        catch (error) {
-            res.status(500).json({error: "Erreur lors de l'insertion du fichier"});
-        }
-    })
-    .catch((error) => {
-        console.error(error);
-    })
-});
+                //return the result of the insertion request
+                fileInsertInto.then((result) => {
+                    if (result) {
+                        fs.unlink(file.path, (error) => {
+                            if (error) {
+                            console.error('Upload : Erreur supression du fichier temporaire : ', error);
+                            } 
+                            else {
+                            console.log('Upload : Fichier temporaire supprimé');
+                            }
+                        })
+                        return res.sendStatus(200)
+                    }
+                });
+            }
+            catch (error) {
+                res.status(500).json({error: "Erreur lors de l'insertion du fichier"});
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    });
 
 router.get('/files', authenticateToken, customerAccess, async (req, res) => {
     //get the files by ID user

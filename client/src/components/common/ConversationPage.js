@@ -28,7 +28,6 @@ const ChatPage = () => {
           body: JSON.stringify({ message: newMessage }),
         }
       );
-
       if (response.ok) {
         setNewMessage("");
         fetchMessages();

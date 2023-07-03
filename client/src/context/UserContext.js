@@ -30,7 +30,7 @@ export const UserProvider = ({ children }) => {
 
     switch (type) {
       case "customer":
-        return [["Demande de prêt","loanApplication"], ["Mes demandes","myLoans"]];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        return [["Demande de prêt","loanApplication"], ["Mes demandes","myLoans"], ["Mes fichiers", "fileUpload"]];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
       case "employee":
         return [["Demandes","loanApplications"], ["Suivi demandes","myLoans"]];
       case "admin":
