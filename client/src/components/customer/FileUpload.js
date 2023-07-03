@@ -3,37 +3,56 @@ import React, { useState } from 'react';
 const FileUploadForm = () => {
   const [file, setFile] = useState();
   const [selectedOption, setSelectedOption] = useState('');
+  const storedToken = localStorage.getItem("token");
+  const MAX_FILE_SIZE = 16 * 1024 * 1024; // 16MB
+  const allowedExtensions = ['pdf', 'png', 'jpeg']; //allowed extensions
 
   const handleSelectChange = (e) => {
     e.preventDefault();
     setSelectedOption(e.target.value);
   }
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
-    console.log("file : ", file);
-    console.log("option : ", selectedOption);
 
-    const formData = new FormData();
-    formData.append('fileType', selectedOption);
-    formData.append('file', file);
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        console.log('File size exceeds the limit.');
+        return;
+      }
 
-    fetch("/customer/upload", {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json", 
-      },
-      body: 
-        formData 
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    })
-  }
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
+
+      // Check the file extension
+      if (!allowedExtensions.includes(fileExtension)) {
+        console.log('Invalid file extension.');
+        return;
+      }
+
+      //creating a FormData to send the data to the server
+      const formData = new FormData();
+      formData.append('fileType', selectedOption);
+      formData.append('fileName', file.name);
+      formData.append('file', file);
+
+      //sending the data to the server
+      try {
+        const response = await fetch('/customer/upload', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+          body: formData,
+        });
+
+        const data = await response.json();
+        console.log(data);
+      } 
+      catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -78,5 +97,6 @@ const FileUploadForm = () => {
     </div>
   );
 };
+
 
 export default FileUploadForm;
