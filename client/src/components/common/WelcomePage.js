@@ -3,34 +3,34 @@ import { useNavigate } from "react-router-dom";
 
 import ComponentLogo from "../Logo";
 
-const features = [
+export const features = [
   {
-    name: "Easy to use",
+    name: "Facile à utiliser",
     description:
-      "Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.",
+      "Notre plateforme est conçue pour être simple et intuitive. Vous pouvez naviguer facilement et trouver les informations dont vous avez besoin sans tracas.",
     icon: "test",
   },
   {
-    name: "Discuss with profesional",
+    name: "Discutez avec des professionnels",
     description:
-      "Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.",
+      "Nous mettons à votre disposition une équipe de professionnels expérimentés dans le domaine immobilier. Vous pouvez discuter avec eux pour obtenir des conseils personnalisés et des réponses à vos questions.",
     icon: "test",
   },
   {
-    name: "Easy form",
+    name: "Formulaire facile",
     description:
-      "Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.",
+      "Remplir notre formulaire est un jeu d'enfant. Nous avons simplifié le processus pour que vous puissiez fournir les informations requises rapidement et facilement.",
     icon: "test",
   },
   {
-    name: "Advanced security",
+    name: "Sécurité avancée",
     description:
-      "Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.",
+      "La sécurité de vos informations est notre priorité. Nous utilisons des mesures de sécurité avancées pour protéger vos données personnelles et garantir la confidentialité de vos transactions.",
     icon: "test",
   },
 ];
 
-const SocialMediaLinks = [
+export const SocialMediaLinks = [
   {
     name: "LinkedIn",
     url: "https://www.linkedin.com/in/alexandre-roux-1b1b3b1b9/",
@@ -62,17 +62,15 @@ export const FeatureComponent = () => {
   return (
     <div className="py-10 sm:py-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto lg:text-center">
+      <div className="max-w-2xl mx-auto lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-blue-500">
-            Obtain the best credit
+            Obtenez le meilleur crédit
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Everything you want to obtain faster your credit
+            Obtenez facilement le meilleur crédit
           </p>
           <p className="mt-6 text-lg leading-8">
-            Quis tellus eget adipiscing convallis sit sit eget aliquet quis.
-            Suspendisse eget egestas a elementum pulvinar et feugiat blandit at.
-            In mi viverra elit nunc.
+            Notre plateforme vous aide à obtenir le crédit dont vous avez besoin de manière rapide et efficace. Nous mettons à votre disposition les outils et les ressources nécessaires pour vous guider tout au long du processus. Que vous cherchiez à acheter une maison, à investir dans l'immobilier ou à refinancer votre prêt existant, nous sommes là pour vous accompagner. Nos experts sont disponibles pour répondre à vos questions et vous aider à trouver la meilleure solution adaptée à vos besoins. Obtenez le meilleur crédit dès maintenant !
           </p>
         </div>
         <div className="mt-16 max-w-2xl mx-auto sm:mt-20 lg:mt-24 lg:max-w-4xl">
