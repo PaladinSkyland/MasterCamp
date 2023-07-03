@@ -32,9 +32,7 @@ const App = () => {
           <Route
             path="/authentification/register"
             element={
-              <UserProvider>
                 <RegisterPage />
-              </UserProvider>
             }
           />
           <Route
