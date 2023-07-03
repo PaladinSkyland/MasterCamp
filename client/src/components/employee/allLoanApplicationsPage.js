@@ -13,6 +13,7 @@ const AllLoanApplicationsPage = () => {
     const [onlyBankLoan, setOnlyBankLoan] = useState("")
     const [showBank, setShowBank] = useState(false)
 
+
     const [requestHandled, setRequestHandled] = useState(false)
 
     const storedToken = localStorage.getItem("token")
@@ -169,7 +170,7 @@ const AllLoanApplicationsPage = () => {
                                                 <span className="font-semibold">Nom du client :</span> {selectedLoan.Name} {selectedLoan.FirstName}
                                                 </p>
                                                 <p>
-                                                <span className="font-semibold">Montant demandé :</span> {selectedLoan.Amount}
+                                                <span className="font-semibold">Montant demandé :</span> {selectedLoan.Amount} €
                                                 </p>
                                                 <p>
                                                 <span className="font-semibold">Taux d'intérêt :</span> {selectedLoan.interestRate}%, {selectedLoan.interestType}
