@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 //create multer instance with the storage configuration
 const upload = multer({ storage });
 
-router.post("/upload", authenticateToken, customerAccess, upload.single('file'), async (req, res) => {
+router.post("/upload", authenticateToken, upload.single('file'), async (req, res) => {
     const file = req.file; //uploaded file
     const type = req.body.fileType; //selected option
     const name = req.body.fileName; //file name
@@ -101,8 +101,8 @@ router.post("/upload", authenticateToken, customerAccess, upload.single('file'),
     })
 });
 
-router.get('/files', authenticateToken, customerAccess, async (req, res) => {
-    //get the files by ID user
+router.get('/files', authenticateToken, async (req, res) => {
+    //get the files by ID user  
     const response = fileQueries.SelectFileByUserID(req.user.ID_user);
 
     response.then(response => {
@@ -110,7 +110,7 @@ router.get('/files', authenticateToken, customerAccess, async (req, res) => {
     });
 });
 
-router.get('/download/:fileType', authenticateToken, customerAccess, async (req, res) => {
+router.get('/download/:fileType', authenticateToken, async (req, res) => {
     //get the encryption key and the IV from the .env file 
     const cipherKey = Buffer.from(process.env.cipherKey, 'hex');
     const iv = Buffer.from(process.env.IV, 'hex');

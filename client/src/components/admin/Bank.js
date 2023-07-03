@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import ToggleButton from '../ToggleButton';
 
-const storedToken = localStorage.getItem('token');
 
 const BankPage = () => {
   const [bankListPending, setBankListPending] = useState([]);
@@ -14,6 +13,9 @@ const BankPage = () => {
   const [bankListAcceptedLength, setBankListAcceptedLength] = useState(
     bankListPending.length
   );
+
+  const storedToken = localStorage.getItem('token');
+
 
   useEffect(() => {
     const fetchBankPending = async () => {
