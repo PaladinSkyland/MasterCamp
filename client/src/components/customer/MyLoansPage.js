@@ -30,6 +30,42 @@ export const LoanDate = ({ date }) => {
   }
 };
 
+export const LoanStatus = ({ status }) => {
+
+  switch (status) {
+    case "Pending":
+      return (<span
+        className={`m-3 text-orange-500 bg-orange-100 font-bold p-2 rounded-full`}
+      >
+        {status}
+      </span>)
+    case "Accepted":
+      return (<span
+        className={`m-3 text-green-500 bg-green-100 font-bold p-2 rounded-full`}
+      >
+        {status}
+      </span>)
+    case 'Finished':
+      return (<span
+        className={`m-3 text-blue-500 bg-blue-100 font-bold p-2 rounded-full`}
+      >
+        {status}
+      </span>)
+    case 'Canceled':
+      return (<span
+        className={`m-3 text-red-500 bg-red-100 font-bold p-2 rounded-full`}
+      >
+        {status}
+      </span>)
+    default:
+      return (<span
+        className={`m-3 text-gray-500 bg-gray-100 font-bold p-2 rounded-full`}
+      >
+        {status}
+      </span>)
+  }
+};
+
 const MyLoansPage = () => {
     const [myLoanList, setMyLoanList] = useState([]);
     const [refresh, setRefresh] = useState(false)
@@ -73,42 +109,6 @@ const MyLoansPage = () => {
         fetchLoan();
     }, [refresh])
 
-    const LoanStatus = ({ status }) => {
-      let statusStyle = '';
-  
-      switch (status) {
-        case "Pending":
-          return (<span
-            className={`m-3 text-orange-500 bg-orange-100 font-bold p-2 rounded-full`}
-          >
-            {status}
-          </span>)
-        case "Accepted":
-          return (<span
-            className={`m-3 text-green-500 bg-green-100 font-bold p-2 rounded-full`}
-          >
-            {status}
-          </span>)
-        case 'Finished':
-          return (<span
-            className={`m-3 text-blue-500 bg-blue-100 font-bold p-2 rounded-full`}
-          >
-            {status}
-          </span>)
-        case 'Canceled':
-          return (<span
-            className={`m-3 text-red-500 bg-red-100 font-bold p-2 rounded-full`}
-          >
-            {status}
-          </span>)
-        default:
-          return (<span
-            className={`m-3 text-gray-500 bg-gray-100 font-bold p-2 rounded-full`}
-          >
-            {status}
-          </span>)
-      }
-    };
   
     const ChevronButton = ({ children }) => {
       const [isToggled, setIsToggled] = useState(true);
