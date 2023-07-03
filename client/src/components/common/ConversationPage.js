@@ -116,9 +116,9 @@ const ChatPage = () => {
                 <div
                   className={`inline-block p-2 rounded-lg ${
                     message.Sender === "Client" ? "bg-blue-200" : "bg-gray-200"
-                  } whitespace-normal break-words`}
+                  } whitespace-normal break-words max-w-md`}
                 >
-                  <p className="text-gray-600">{message.Content}</p>
+                  <p className="text-gray-600 text-left">{message.Content}</p>
                 </div>
               </div>
             ))
