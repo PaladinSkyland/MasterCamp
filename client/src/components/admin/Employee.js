@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import ToggleButton from '../ToggleButton';
-const storedToken = localStorage.getItem('token');
 
 const EmployeePage = () => {
+
+  const storedToken = localStorage.getItem("token");
   const [employeeListPending, setEmployeeListPending] = useState([]);
   const [employeeListPendingLength, setEmployeeListPendingLength] = useState(
     employeeListPending.length

@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from "react";
 import NavBar from "../NavBar";
-const storedToken = localStorage.getItem("token");
-
 
 const BankPage = () => {
 
@@ -10,6 +8,7 @@ const BankPage = () => {
 
     const [bankListAccepted, setBankListAccepted] = useState([]);
     const [bankListAcceptedLength, setBankListAcceptedLength] = useState(bankListPending.length)
+    const storedToken = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchBankPending = async () => {
