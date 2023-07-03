@@ -10,7 +10,14 @@ exports.CheckIfFileExist = function(fileType, userID) {
                     reject(new Error("CheckIfFileExist : Une erreur s'est produite"));
                 }
                 else {
-                    resolve(true);
+                    if (results.length > 0) {
+                        console.log("Upload : Fichier existant dans la base de donnée");
+                        resolve(results.length);
+                    }
+                    else {
+                        console.log("Upload : Pas de fichier existant dans la base de donnée");
+                        resolve(0);
+                    }
                 }
             }
         )
