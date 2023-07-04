@@ -131,8 +131,12 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
       <p>Date de création: {contractData.Creation_date}</p>
       <p>Assurances et garanties: {contractData.InsuranceAndGuarantees}</p>
       <p>Statut: {contractData.Status}</p>
-      <button onClick={handleAccept}>Accepter</button>
-      <button onClick={handleRefuse}>Refuser</button>
+      {contractData.Status !== "Accepted" && contractData.Status !== "Canceled" && (
+        <button onClick={handleRefuse}>Annuler</button>
+      )}
+      {contractData.Status === "Progress" && (
+        <button onClick={handleAccept}>Accepter</button>
+      )}
     </div>
     );
   };
@@ -186,6 +190,9 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
         />
       </div>
       <button onClick={handleSubmit}>Mettre à jour</button>
+      {contractData.Status !== "Accepted" && contractData.Status !== "Canceled" && (
+        <button onClick={handleRefuse}>Annuler</button>
+      )}
       </div>
     );
   };
@@ -218,6 +225,7 @@ const ChatPage = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setContractData(data)
       } else {
         throw new Error("Error fetching messages");

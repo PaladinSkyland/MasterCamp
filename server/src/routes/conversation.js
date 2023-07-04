@@ -368,7 +368,7 @@ router.post("/sendcontrat/:conversationId", authenticateToken, employeeAccess,  
   //Récupération du body de manière sécurisée
   //Le body doit contenir les champs suivants et que les champs suivants: Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees
   const {Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees} = req.body;
-
+  const Status = "Progress"
   employeequeries.getEmployeeIDByUserID(userID).then((result) => {
     if (result) {
       employeeID = result.ID_employee;
@@ -380,7 +380,7 @@ router.post("/sendcontrat/:conversationId", authenticateToken, employeeAccess,  
     ID_user = "";
     conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
       if (result) {
-        contratqueries.modifyContratByIDCONV(conversationId,{Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees}).then((result) => {
+        contratqueries.modifyContratByIDCONV(conversationId,{Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees,Status}).then((result) => {
           if (result){
             return res.status(200).json({ ok: true });
           }
@@ -421,21 +421,58 @@ router.post("/statuscontract/:conversationId", authenticateToken,  async (req,re
   //Le body doit contenir les champs suivants et que les champs suivants: Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees
   const status = req.body.Status;
 
-  conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
-    if (result) {
-      contratqueries.modifyStatusContratByIDCONV(conversationId, status).then((result) => {
-        if (result){
-          return res.status(200).json({ ok: true });
-        }
+
+  if (status == "Canceled" || status == "Progress" ){
+    employeequeries.getEmployeeIDByUserID(userID).then((result) => {
+      if (result) {
+        employeeID = result.ID_employee;
       }
-      ).catch((error) => {
+      else {
+        employeeID = "";
+      }
+      if (status == "Prgoress"){
+        userID = "";
+      }
+      conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+        if (result) {
+          contratqueries.modifyStatusContratByIDCONV(conversationId, status).then((result) => {
+            if (result){
+              return res.status(200).json({ ok: true });
+            }
+          }
+          ).catch((error) => {
+            return res.status(401).json({ error: "invalides" });
+          })
+        }
+      })
+      .catch((error) => {
         return res.status(401).json({ error: "invalides" });
       })
-    }
-  })
-  .catch((error) => {
+  }).catch((error) => {
+    console.log(error);
     return res.status(401).json({ error: "invalides" });
-  })
+  });
+
+
+  
+  } else if (status == "Accepted"){
+    conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+      if (result) {
+        contratqueries.modifyStatusContratByIDCONV(conversationId, status).then((result) => {
+          if (result){
+            return res.status(200).json({ ok: true });
+          }
+        }
+        ).catch((error) => {
+          return res.status(401).json({ error: "invalides" });
+        })
+      }
+    })
+    .catch((error) => {
+      return res.status(401).json({ error: "invalides" });
+    })
+
+  }
 
 });
 
