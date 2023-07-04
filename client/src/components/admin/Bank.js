@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import ToggleButton from '../ToggleButton';
+import { LoanStatus } from '../customer/MyLoansPage';
 
 
 const BankPage = () => {
@@ -107,7 +108,7 @@ const BankPage = () => {
                   <p className="text-4xl">{bank.Name}</p>
                 </div>
                 <div className="w-1/3">
-                  <p className="text-2xl">{bank.Status}</p>
+                  <LoanStatus status={bank.Status} />
                 </div>
                 <button
                   className="w-1/3 items-center justify-center px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:bg-red-500"
