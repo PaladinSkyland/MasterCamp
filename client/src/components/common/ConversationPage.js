@@ -80,6 +80,42 @@ const ChatPage = () => {
     }
   };
 
+  const fetchDeleteFC = async (id) => {
+    try {
+        const response = await fetch(`/conversation/deleteFC/${conversationId}`, {
+            method: "DELETE",
+            headers: {
+            Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ID_file: id,
+            }),
+        });
+    } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+    }
+  };
+
+
+  const fetchCreateFC = async (id) => {
+    console.log(id, "fetch")
+    try {
+        const response = await fetch(`/conversation/createFC/${conversationId}`, {
+            method: "POST",
+            headers: {
+            Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ID_file: id,
+            }),
+        });
+    } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+    }
+  };
+
   // Charger les messages au chargement initial
   useEffect(() => {
     fetchMessages();
@@ -95,17 +131,16 @@ const ChatPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const [isChecked, setIsChecked] = useState(false);
 
-  const setToVisible = async (id) => {
-    setIsChecked(!isChecked)  
-    if (isChecked == false) {
-      //check si il existe si oui suppr sinon rien
+  const setToVisible = (id, isChecked) => {
+    if (isChecked) {
+      fetchDeleteFC(id)
+      fetchCreateFC(id)
     } else {
-      //creer dans la table file conversation
+      fetchDeleteFC(id)
+
     }
   }
-  
 
   return (
 <div className="page-container flex flex-col h-screen overflow-hidden">
@@ -124,16 +159,19 @@ const ChatPage = () => {
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary mb-2">Partager des documents</button>
       </div>
-      {myDocList.map((doc, index) => (
+
+      {Array.isArray(myDocList) && myDocList.length > 0 ? (
+         myDocList.map((doc, index) => (
         <div key={index}>
           <p>{doc.Title}</p>
           <div>
-            <input type="checkBox"
-              checked={isChecked}
-              onChange={() => setToVisible(doc.ID_file)}/>
+            <input type="checkbox"
+              id="myCheckbox"
+              onChange={(e) => setToVisible(doc.ID_file, e.target.checked)}/>
           </div>
         </div>
-      ))}
+      ))) : (<p>Magie Magie</p>)
+         }
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>

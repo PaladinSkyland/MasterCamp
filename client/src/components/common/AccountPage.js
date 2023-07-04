@@ -99,34 +99,6 @@ const AccountPage = () => {
     );
   };
 
-  
-
-    if (response.ok) {
-      //get the file name from the response headers
-      const dispositionHeader = response.headers.get('Content-Disposition');
-      const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-      const [, fileName] = fileNameRegex.exec(dispositionHeader);
-  
-      //create a blob from the response data
-      const blob = await response.blob();
-  
-      //create a temporary download link
-      const downloadLink = document.createElement('a');
-      downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = fileName;
-  
-      //trigger the download by programmatically clicking the link
-      downloadLink.click();
-  
-      //clean up the temporary download link
-      URL.revokeObjectURL(downloadLink.href);
-      downloadLink.remove();
-    } else {
-      //handle error response
-      console.error('Failed to download the file');
-    }
-  }
-
   return (
     <div>
       <NavBar />

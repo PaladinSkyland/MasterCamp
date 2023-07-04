@@ -6,6 +6,7 @@ const authenticateToken = require('../middleware/authenticateToken')
 const conversationqueries = require('../queries/conversation_message')
 const employeequeries = require('../queries/employee');
 const cryptoIDMessage = require('../middleware/cryptoIDMessage')
+const customerAccess = require('../middleware/customerAccess')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
@@ -154,7 +155,7 @@ router.post("/getconversations", authenticateToken, async (req,res) => {
 
 });
 
-router.get("/getMyDoc/:conversationId", authenticateToken, async (req,res) => {
+router.get("/getMyDoc/:conversationId", authenticateToken, customerAccess,async (req,res) => {
   //Récupération des messages pour une conversation donnée
   const userID = req.user.ID_user;
   
@@ -166,4 +167,45 @@ router.get("/getMyDoc/:conversationId", authenticateToken, async (req,res) => {
 
 })
   
+router.delete("/deleteFC/:conversationId", authenticateToken, customerAccess ,async (req,res) => {
+  const id_file = req.body.ID_file
+
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  const response = conversationqueries.deleteFC(id_file, conversationId)
+
+  response.then(response => {
+    res.json(response)
+  })
+})
+
+router.post("/createFC/:conversationId", authenticateToken, customerAccess ,async (req,res) => {
+  const id_file = req.body.ID_file
+  console.log(id_file)
+
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  const response = conversationqueries.createFC(id_file, conversationId)
+
+  response.then(response => {
+    res.json(response)
+  })
+})
+
 module.exports = router

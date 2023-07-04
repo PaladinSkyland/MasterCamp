@@ -89,6 +89,31 @@ exports.getMyDoc = function (id_user) {
       if (error) {
         reject(error)
       } else {
+        console.log(result, "result")
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.deleteFC = function (id_file, id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("DELETE FROM Files_Conversations WHERE ID_file = ? AND ID_conversation = ?", [id_file, id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.createFC = function (id_file, id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("INSERT INTO Files_Conversations VALUES (?,?)", [id_file, id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
         resolve(result)
       }
     })
