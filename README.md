@@ -21,7 +21,7 @@ Les principales fonctionnalités sont :
 ## Installation
 
 - Importer la BDD (déjà peuplée)
-- Ecrire npm install dans le dossier "server" puis dans le dossier client
+- Exécuter npm install dans le dossier "server" puis dans le dossier "client"
 - Configuration des .env : 
 
 - Dans le fichier .env se trouvant dans "server" mettre :
