@@ -118,6 +118,8 @@ const FileUploadForm = () => {
         return "Avenant de prêt";
       case 'tableauAmortissement':
         return "Tableau d'amortissement";
+      default:
+        return "Fichier inconnu";
     }
   }
 
@@ -167,6 +169,11 @@ const FileUploadForm = () => {
         onSubmit={handleUpload}
       >
         <div className='flex flex-col justify-center gap-2 w-2/3 m-auto my-12 shadow-md p-5 bg-white'>
+
+        <div className='flex justify-center m-auto'>
+          <p className='text-4xl font-medium text-blue-400 my-12'>Mes fichiers</p>
+        </div>
+
         <label className='font-medium'>Choisissez un type de fichier : </label>
         
         <select className="p-2 bg-blue-100" value={selectedOption} onChange={handleSelectChange}>
@@ -204,9 +211,7 @@ const FileUploadForm = () => {
         <button className="btn-primary" type="submit">Submit</button>
         </div>
         
-        <div className='flex justify-center m-auto'>
-          <p className='text-4xl font-medium text-blue-400 my-12'>Mes fichiers</p>
-        </div>
+        
 
         <div className='flex flex-col m-auto w-2/3'>
           {allFiles.map((file, index) => (
