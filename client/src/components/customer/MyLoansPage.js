@@ -22,7 +22,7 @@ export const LoanDate = ({ date }) => {
     return (
       <span className="text-gray-500">
         Aujourd'hui à {new Date(date).getHours()}:
-        {new Date(date).getUTCMinutes()}
+        {("0" + new Date(date).getMinutes()).slice(-2)}
       </span>
     );
   } else {
