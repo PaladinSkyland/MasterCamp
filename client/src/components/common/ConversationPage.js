@@ -5,17 +5,61 @@ import NavBar from "../NavBar";
 
 
 
-const ContractElement = ({ contractData, storedToken, conversationId }) => {
-  const [amount, setAmount] = useState(contractData.Amount);
-  const [interestRate, setInterestRate] = useState(contractData.InterestRate);
-  const [duration, setDuration] = useState(contractData.Duration);
-  const [interestType, setInterestType] = useState(contractData.InterestType);
-  const [monthlyIncome, setMonthlyIncome] = useState(contractData.MonthlyIncome);
-  const [repaymentOptions, setRepaymentOptions] = useState(contractData.RepaymentOptions);
-  const [description, setDescription] = useState(contractData.Description);
-  const [feesAndCosts, setFeesAndCosts] = useState(contractData.FeesAndCosts);
-  const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState(contractData.InsuranceAndGuarantees);
+const ContractElement = ({storedToken, conversationId }) => {
+  const [contractData, setContractData] = useState();
+
+  const [amount, setAmount] = useState();
+  const [interestRate, setInterestRate] = useState();
+  const [duration, setDuration] = useState();
+  const [interestType, setInterestType] = useState();
+  const [monthlyIncome, setMonthlyIncome] = useState();
+  const [repaymentOptions, setRepaymentOptions] = useState();
+  const [description, setDescription] = useState();
+  const [feesAndCosts, setFeesAndCosts] = useState();
+  const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState();
   const { getOnglets, userData } = useContext(UserContext);
+
+
+  const getcontract = async () => {
+    try {
+      const response = await fetch(
+        `/conversation/getcontract/${conversationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.Amount);
+        setContractData(data);
+      } else {
+        throw new Error("Error fetching messages");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getcontract();
+  }, []);
+
+  useEffect(() => {
+    if (!contractData) return;
+    setAmount(contractData.Amount);
+    setInterestRate(contractData.InterestRate);
+    setDuration(contractData.Duration);
+    setInterestType(contractData.InterestType);
+    setMonthlyIncome(contractData.MonthlyIncome);
+    setRepaymentOptions(contractData.RepaymentOptions);
+    setDescription(contractData.Description);
+    setFeesAndCosts(contractData.FeesAndCosts);
+    setInsuranceAndGuarantees(contractData.InsuranceAndGuarantees);
+  }, [contractData]);
+
 
   const handleAmountChange = (e) => {
     setAmount(e.target.value);
@@ -70,6 +114,7 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
 
       if (response.ok) {
         console.log("Contrat mis à jour avec succès");
+        getcontract();
       } else {
         throw new Error("Erreur lors de la mise à jour du contrat");
       }
@@ -114,7 +159,7 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
   };
 
 
-  const renderContractInfo = (contractData) => {
+  const renderContractInfo = () => {
     return (
       <div>
       <h2>Informations du contrat</h2>
@@ -189,6 +234,7 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
           onChange={handleInsuranceAndGuaranteesChange}
         />
       </div>
+      <p>Statut: {contractData.Status}</p>
       <button onClick={handleSubmit}>Mettre à jour</button>
       {contractData.Status !== "Accepted" && contractData.Status !== "Canceled" && (
         <button onClick={handleRefuse}>Annuler</button>
@@ -197,48 +243,23 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
     );
   };
 
-  return (userData.UserType == "employee") ? renderEditableContractInfo(contractData) : renderContractInfo(contractData);
+  return (userData.UserType === "employee" && contractData) ? renderEditableContractInfo(contractData) : (contractData ? renderContractInfo(contractData) : null);
+
 }
 
 const ChatPage = () => {
   const { conversationId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [contractData, setContractData] = useState(null);
   const storedToken = localStorage.getItem("token");
   const navigate = useNavigate();
   const [myDocList, setMyDocList] = useState([]);
   const [myVisibleList, setMyVisibleList] = useState([]);
 
 
-
-  const getcontract = async () => {
-    try {
-      const response = await fetch(
-        `/conversation/getcontract/${conversationId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        setContractData(data)
-      } else {
-        throw new Error("Error fetching messages");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleArrowClick = () => {
     navigate('/conversation/');
   };
-  //const { userData } = useContext(UserContext);
 
   // Fonction pour envoyer un message
   const sendMessage = async () => {
@@ -360,7 +381,6 @@ const ChatPage = () => {
     fetchMessages();
     fetchMyDoc();
     fetchMyVisibleDoc()
-    getcontract();
   }, []);
 
   // Rafraîchir les messages toutes les 5 secondes
@@ -510,9 +530,7 @@ const ChatPage = () => {
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>
-      {contractData && (
-        <ContractElement contractData={contractData} storedToken={storedToken} conversationId= {conversationId}  />
-      )}
+        <ContractElement storedToken={storedToken} conversationId= {conversationId}  />
     </div>
     <div className="p-6 flex-grow overflow-hidden">
       {/* Titre du chat */}
