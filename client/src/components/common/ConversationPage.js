@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate  } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 import NavBar from "../NavBar";
 
 
 
-const ContractElement = ({ contractData, isEmployee, storedToken, conversationId }) => {
+const ContractElement = ({ contractData, storedToken, conversationId }) => {
   const [amount, setAmount] = useState(contractData.Amount);
   const [interestRate, setInterestRate] = useState(contractData.InterestRate);
   const [duration, setDuration] = useState(contractData.Duration);
@@ -14,6 +15,7 @@ const ContractElement = ({ contractData, isEmployee, storedToken, conversationId
   const [description, setDescription] = useState(contractData.Description);
   const [feesAndCosts, setFeesAndCosts] = useState(contractData.FeesAndCosts);
   const [insuranceAndGuarantees, setInsuranceAndGuarantees] = useState(contractData.InsuranceAndGuarantees);
+  const { getOnglets, userData } = useContext(UserContext);
 
   const handleAmountChange = (e) => {
     setAmount(e.target.value);
@@ -151,7 +153,7 @@ const ContractElement = ({ contractData, isEmployee, storedToken, conversationId
     );
   };
 
-  return isEmployee ? renderEditableContractInfo(contractData) : renderContractInfo(contractData);
+  return (userData.UserType == "employee") ? renderEditableContractInfo(contractData) : renderContractInfo(contractData);
 }
 
 const ChatPage = () => {
@@ -464,7 +466,7 @@ const ChatPage = () => {
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>
       {contractData && (
-        <ContractElement contractData={contractData} isEmployee={true} storedToken={storedToken} conversationId= {conversationId}  />
+        <ContractElement contractData={contractData} storedToken={storedToken} conversationId= {conversationId}  />
       )}
     </div>
     <div className="p-6 flex-grow overflow-hidden">
