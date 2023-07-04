@@ -162,22 +162,6 @@ const ChatPage = () => {
   const storedToken = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  const contractData2 = {
-    ID_contrat: 1,
-    Amount: 10000,
-    InterestRate: 5,
-    Duration: 12,
-    InterestType: "Fixed",
-    MonthlyIncome: 2000,
-    RepaymentOptions: "Monthly",
-    Description: "Loan contract",
-    ID_bank: 123,
-    FeesAndCosts: "Lorem ipsum dolor sit amet...",
-    Creation_date: "2023-07-02 10:00:00",
-    InsuranceAndGuarantees: "Lorem ipsum dolor sit amet...",
-    Status: "Pending",
-  };
-
   const getcontract = async () => {
     try {
       const response = await fetch(
