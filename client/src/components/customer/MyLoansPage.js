@@ -10,7 +10,6 @@ export const LoanDate = ({ date }) => {
     day: 'numeric',
   });
 
-  console.log(date)
 
   const today = new Date().toLocaleDateString('fr-FR', {
     year: 'numeric',

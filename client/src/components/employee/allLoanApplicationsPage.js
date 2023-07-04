@@ -21,7 +21,6 @@ const AllLoanApplicationsPage = () => {
 
     const openPopup = (loan) => {
         setSelectedLoan(loan)
-        console.log(loan)
         setIsOpen(true);
     };
 
