@@ -121,7 +121,7 @@ router.get('/download/:fileType', authenticateToken, async (req, res) => {
     try {
         //get file path with the user ID and the file type
         const response = fileQueries.SelectFilePathByFileTypeAndUserID(req.user.ID_user, req.params.fileType);
-
+        
         response.then((response) => {
             //decipher the file
             //get the file to decipher

@@ -119,3 +119,27 @@ exports.createFC = function (id_file, id_conv) {
     })
   })
 }
+
+exports.getVisibleDoc = function (id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT Files.* FROM Files_Conversations JOIN Conversations using(ID_conversation) JOIN Files using (ID_file) WHERE ID_conversation = ?", [id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.getCustomerID = function (id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT ID_user FROM Conversations where ID_conversation = ?", [id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}

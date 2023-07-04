@@ -2,11 +2,15 @@ require('dotenv').config() //Fichier de configuration .env
 const express = require('express')
 const router = express.Router()
 const db = require('../db')
+const crypto = require('crypto')
+const fs = require('fs')
 const authenticateToken = require('../middleware/authenticateToken')
 const conversationqueries = require('../queries/conversation_message')
 const employeequeries = require('../queries/employee');
 const cryptoIDMessage = require('../middleware/cryptoIDMessage')
 const customerAccess = require('../middleware/customerAccess')
+const employeeAccess = require('../middleware/employeeAccess')
+const fileQueries = require('../queries/file')
 
 router.get("/getmessage/:conversationId", authenticateToken, async (req,res) => {
   //Récupération des messages pour une conversation donnée
@@ -189,7 +193,6 @@ router.delete("/deleteFC/:conversationId", authenticateToken, customerAccess ,as
 
 router.post("/createFC/:conversationId", authenticateToken, customerAccess ,async (req,res) => {
   const id_file = req.body.ID_file
-  console.log(id_file)
 
   //Décryptage de l'ID de la conversation
   let conversationId = "";
@@ -206,6 +209,102 @@ router.post("/createFC/:conversationId", authenticateToken, customerAccess ,asyn
   response.then(response => {
     res.json(response)
   })
+})
+
+router.get("/getMyVisibleDoc/:conversationId", authenticateToken, employeeAccess,async (req,res) => {
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+    const encryptedConversationId = req.params.conversationId;
+
+    conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  const response = conversationqueries.getVisibleDoc(conversationId)
+
+  response.then(response => {
+    res.json(response)
+  })
+
+})
+
+router.get('/download/:fileType/:conversationId', authenticateToken, async (req, res) => {
+  //get the encryption key and the IV from the .env file 
+  const cipherKey = Buffer.from(process.env.cipherKey, 'hex');
+  const iv = Buffer.from(process.env.IV, 'hex');
+
+  //create a decipher using the encryption key
+  const decipher = crypto.createDecipheriv('aes-256-cbc', cipherKey, iv);
+  let conversationId = "";
+  try {
+    const encryptedConversationId = req.params.conversationId;
+
+    conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+  const userid = await conversationqueries.getCustomerID(conversationId)
+  try {
+      //get file path with the user ID and the file type
+      const response = fileQueries.SelectFilePathByFileTypeAndUserID(userid[0].ID_user, req.params.fileType);
+
+      response.then((response) => {
+
+          //decipher the file
+          //get the file to decipher
+          const inputFile = response[0].File_path;
+          const inputBuffer = fs.readFileSync(inputFile);
+
+          //decipher the file contents
+          const decipheredBuffer = Buffer.concat([decipher.update(inputBuffer), decipher.final()]);
+
+          //write the deciphered contents to a new file
+          if (!fs.existsSync("downloads/" + req.user.ID_user))
+              try {
+                  fs.mkdirSync('downloads/' + req.user.ID_user, { recursive: true });
+              }
+              catch {
+                  console.error('Download : Erreur création du répertoire utilisateur');
+              }
+          
+          const outputFile = "downloads/" + req.user.ID_user + "/" + response[0].Title;
+          try {
+              fs.writeFileSync(outputFile, decipheredBuffer)
+          }
+          catch (err) {
+              console.error('Download : Erreur écriture du fichier déchiffré : ', err);
+          }
+
+          //send file to download
+          //set the appropriate headers for the file download
+          res.setHeader('Content-Type', 'application/octet-stream');
+          res.setHeader('Content-Disposition', `attachment; filename="${response[0].Title}"`);
+
+          //stream the file to the response
+          const fileStream = fs.createReadStream(outputFile);
+          fileStream.pipe(res);
+
+          //delete the temporary file after sending it
+          fileStream.on('end', () => {
+              fs.unlink(outputFile, (error) => {
+                  if (error) {
+                      console.error('Download : Erreur suppression du fichier temporaire : ', error);
+                  } else {
+                      console.log('Download : Fichier temporaire supprimé');
+                  }
+              });
+          });
+      })
+  }
+  catch {
+      res.status(500).json({error: "Erreur lors de la récupération du fichier"});
+  }
 })
 
 module.exports = router

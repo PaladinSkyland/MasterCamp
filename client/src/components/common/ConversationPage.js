@@ -9,6 +9,8 @@ const ChatPage = () => {
   const storedToken = localStorage.getItem("token");
   const navigate = useNavigate();
   const [myDocList, setMyDocList] = useState([]);
+  const [myVisibleList, setMyVisibleList] = useState([]);
+
 
 
   const handleArrowClick = () => {
@@ -64,6 +66,22 @@ const ChatPage = () => {
     }
   };
 
+  const fetchMyVisibleDoc = async () => {
+    try {
+        const response = await fetch(`/conversation/getMyVisibleDoc/${conversationId}`, {
+            method: "GET",
+            headers: {
+            Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        setMyVisibleList(data);
+    } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+    }
+  };
+
   const fetchMyDoc = async () => {
     try {
         const response = await fetch(`/conversation/getMyDoc/${conversationId}`, {
@@ -99,7 +117,6 @@ const ChatPage = () => {
 
 
   const fetchCreateFC = async (id) => {
-    console.log(id, "fetch")
     try {
         const response = await fetch(`/conversation/createFC/${conversationId}`, {
             method: "POST",
@@ -120,6 +137,7 @@ const ChatPage = () => {
   useEffect(() => {
     fetchMessages();
     fetchMyDoc();
+    fetchMyVisibleDoc()
   }, []);
 
   // Rafraîchir les messages toutes les 5 secondes
@@ -139,6 +157,89 @@ const ChatPage = () => {
     } else {
       fetchDeleteFC(id)
 
+    }
+  }
+
+  const getFileLabel = (fileType) => {
+    switch(fileType) {
+      case 'avisImpot1':
+        return "Avis d'imposition 1";
+      case 'avisImpot2':
+        return "Avis d'imposition 2";
+      case 'justifIdentite': 
+        return "Justificatif d'identité";
+      case 'bulletinSalaire1':
+        return "Bulletin de salaire 1";
+      case 'bulletinSalaire2':
+        return "Bulletin de salaire 2";
+      case 'bulletinSalaire3':
+        return "Bulletin de salaire 3";
+      case 'releveBancaire1':
+        return "Relevé de compte en banque 1";
+      case 'releveBancaire2':
+        return "Relevé de compte en banque 2";
+      case 'releveBancaire3':
+        return "relevé de compte en banque 3";
+      case 'justifDomicile':
+        return "Justificatif de domicile";
+      case 'justifApportPersonnel':
+        return "Justificatif de l'apport personnel";
+      case 'compromisVente':
+        return "Compromis de vente";
+      case 'titreRetraite':
+        return "Titre de retraite ou de pension";
+      case 'attestationCAF':
+        return "Attestation de la CAF";
+      case 'attestationRevenusFonciers':
+        return "Attestation de revenus fonciers";
+      case 'justifSituationFamiliale':
+        return "Justificatif de situation familiale";
+      case 'contratTravail':
+        return "Contrat de travail";
+      case 'contratPret':
+        return "Contrat de prêt";
+      case 'avenantPret':
+        return "Avenant de prêt";
+      case 'tableauAmortissement':
+        return "Tableau d'amortissement";
+    }
+  }
+
+  const handleClick = async (event) => {
+    //get an identifier to know which file have been clicked
+    const fileType = event.target.value;
+    
+    //get the corresponding file on the server
+    const response = await fetch(`/conversation/download/${fileType}/${conversationId}`, 
+    {
+      method: "GET", 
+      headers: {
+        Authorization: `Bearer ${storedToken}`
+      }
+    });
+    if (response.ok) {
+      //get the file name from the response headers
+      const dispositionHeader = response.headers.get('Content-Disposition');
+      const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+      const [, fileName] = fileNameRegex.exec(dispositionHeader);
+  
+      //create a blob from the response data
+      const blob = await response.blob();
+  
+      //create a temporary download link
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = fileName;
+  
+      //trigger the download by programmatically clicking the link
+      downloadLink.click();
+  
+      //clean up the temporary download link
+      URL.revokeObjectURL(downloadLink.href);
+      downloadLink.remove();
+    } else {
+      //handle error response
+      console.error('Failed to download the file');
     }
   }
 
@@ -170,8 +271,19 @@ const ChatPage = () => {
               onChange={(e) => setToVisible(doc.ID_file, e.target.checked)}/>
           </div>
         </div>
-      ))) : (<p>Magie Magie</p>)
+      ))) : (null)
          }
+
+      {Array.isArray(myVisibleList) && myVisibleList.length > 0 ? (
+        myVisibleList.map((visible, index) => (
+          <div key={index}> 
+            <p>{visible.Title}</p>
+              <button value={visible.File_type} onClick={handleClick}>
+                {getFileLabel(visible.File_type)}
+              </button>
+          </div>
+        ))
+      ) : (null)}
       <div className="inline-block p-2 rounded-lg bg-gray-200">
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>
