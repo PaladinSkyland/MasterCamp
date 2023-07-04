@@ -79,6 +79,41 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
   };
 
 
+  const StatusContract = async (Status) => {
+    try {
+      const response = await fetch(`/conversation/statuscontract/${conversationId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify({Status}),
+      });
+
+      if (response.ok) {
+        console.log("Status mides à jour");
+      } else {
+        throw new Error("Erreur lors de la mise à jour du status");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const handleAccept = async (e) => {
+    e.preventDefault();
+    console.log("accepted")
+    StatusContract("Accepted")
+  };
+
+
+  const handleRefuse = async (e) => {
+    console.log("canceled")
+    StatusContract("Canceled");
+  };
+
+
   const renderContractInfo = (contractData) => {
     return (
       <div>
@@ -96,6 +131,8 @@ const ContractElement = ({ contractData, storedToken, conversationId }) => {
       <p>Date de création: {contractData.Creation_date}</p>
       <p>Assurances et garanties: {contractData.InsuranceAndGuarantees}</p>
       <p>Statut: {contractData.Status}</p>
+      <button onClick={handleAccept}>Accepter</button>
+      <button onClick={handleRefuse}>Refuser</button>
     </div>
     );
   };

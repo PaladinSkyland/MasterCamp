@@ -403,4 +403,41 @@ router.post("/sendcontrat/:conversationId", authenticateToken, employeeAccess,  
 
 
 
+router.post("/statuscontract/:conversationId", authenticateToken,  async (req,res) => {
+  const userID = req.user.ID_user;
+  //Décryptage de l'ID de la conversation
+  let conversationId = "";
+  try {
+  const encryptedConversationId = req.params.conversationId;
+  conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
+
+  } catch (error) {
+    return res.status(401).json({ error: "invalides" });
+  }
+
+  let employeeID = "";
+
+  //Récupération du body de manière sécurisée
+  //Le body doit contenir les champs suivants et que les champs suivants: Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees
+  const status = req.body.Status;
+
+  conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+    if (result) {
+      contratqueries.modifyStatusContratByIDCONV(conversationId, status).then((result) => {
+        if (result){
+          return res.status(200).json({ ok: true });
+        }
+      }
+      ).catch((error) => {
+        return res.status(401).json({ error: "invalides" });
+      })
+    }
+  })
+  .catch((error) => {
+    return res.status(401).json({ error: "invalides" });
+  })
+
+});
+
+
 module.exports = router

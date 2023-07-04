@@ -23,3 +23,15 @@ exports.modifyContratByIDCONV = function (ID_conversation, newContrat) {
         })
     })
 }
+
+exports.modifyStatusContratByIDCONV = function (ID_conversation, Status) {
+    return new Promise ((resolve, reject) => {
+        db.query("UPDATE Contrats SET Status = ? WHERE ID_conversation = ?", [Status, ID_conversation], (error, results) => {
+            if (error) {
+                return reject(new Error("Contrat not found"));
+            } else {
+                return resolve(results);
+            }
+        })
+    })
+}

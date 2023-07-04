@@ -77,6 +77,24 @@ exports.createConversation = function (id_employee, title, id_user, id_applicati
       if (error) {
         reject(error)
       } else {
+        const id_conversation = result.insertId
+        //take de application and copy it in the new contract
+        db.query("SELECT * FROM LoanApplications WHERE ID_application = ?", [id_application], (error, result) => {
+          if (error){
+            reject(error)
+          } else {
+            db.query("INSERT INTO Contrats (ID_conversation, Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, ID_bank, Creation_date) VALUES (?,?,?,?,?,?,?,?,?,?)", 
+            [id_conversation, result[0].Amount, result[0].InterestRate, result[0].Duration, result[0].InterestType, result[0].MonthlyIncome, result[0].RepaymentOptions, result[0].Description, result[0].ID_bank, result[0].Creation_date], (error, result) => {
+              if (error) {
+                console.log(error)
+                reject(error)
+              } else {
+                resolve(result)
+              }
+
+            })
+          }
+        })
         resolve(result)
       }
     })
