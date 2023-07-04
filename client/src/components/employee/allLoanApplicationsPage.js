@@ -139,7 +139,7 @@ const AllLoanApplicationsPage = () => {
                 <div>
                     {allLoans ? (
                         <div>
-                            <div className="flex flex-col m-2">
+                            <div className="w-3/4 m-auto">
                                 {allLoans.map((loan, index) => (
                                     <div className="shadow-md my-5 p-6 flex flex-row text-xl justify-between hover:bg-blue-100" onClick={() => openPopup(loan)}>
                                         <div className=" flex flex-row gap-x-10">
