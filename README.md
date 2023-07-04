@@ -57,3 +57,5 @@ Les principales fonctionnalités sont :
 ## Utilisation
 
 Aller voir le scénario dans le compte rendu à IX. Scénario
+
+- Les fichiers de test (Avis d'imposition, salaire etc...) sont disponibles dans le .zip pour pouvoir être importés sur le site
