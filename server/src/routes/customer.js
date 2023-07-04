@@ -39,7 +39,7 @@ router.post("/upload", authenticateToken, upload.single('file'), async (req, res
         fileExist.then((response) => {
             if (response > 0) {
                 fileQueries.DeleteFile(type, userID);
-                console.log("Upload : Fichier précédent supprimé");
+
             }
 
             //get the file to cipher

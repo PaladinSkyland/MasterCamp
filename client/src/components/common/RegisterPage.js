@@ -63,8 +63,8 @@ const RegisterPage = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     //Password validation
-    //const passwordError = validatePassword(event.target.value);
-    //setmessagealert(passwordError);
+    const passwordError = validatePassword(event.target.value);
+    setmessagealert(passwordError);
   };
 
   const handleSelectOptionChange = (event) => {

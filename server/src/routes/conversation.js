@@ -315,7 +315,6 @@ router.get("/getcontract/:conversationId", authenticateToken, async (req,res) =>
   try {
   const encryptedConversationId = req.params.conversationId;
   conversationId = cryptoIDMessage.decryptConversationId(encryptedConversationId);
-
   } catch (error) {
     return res.status(401).json({ error: "invalides" });
   }
@@ -329,7 +328,9 @@ router.get("/getcontract/:conversationId", authenticateToken, async (req,res) =>
     else {
       employeeID = "";
     }
+
     conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
+
       if (result) {
         contratqueries.getContratByIDCONV(conversationId).then((result) => {
           delete result[0].ID_conversation;
@@ -345,6 +346,7 @@ router.get("/getcontract/:conversationId", authenticateToken, async (req,res) =>
     })
 
   }).catch((error) => {
+
     console.error(error);
     return res.status(401).json({ error: "invalides" });
   });

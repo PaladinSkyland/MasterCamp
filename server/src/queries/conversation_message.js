@@ -107,7 +107,6 @@ exports.getMyDoc = function (id_user) {
       if (error) {
         reject(error)
       } else {
-        console.log(result, "result")
         resolve(result)
       }
     })

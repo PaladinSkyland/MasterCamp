@@ -92,7 +92,6 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
             tab.push(app.ID_application);
         })
         if (!tab.includes(req.body.ID_application)) {
-            console.log("failed")
             res.sendStatus(401)
         } else {
             const clientInfo = await loanQueries.getUserLastNameAndIDByIDLoan(req.body.ID_application)
