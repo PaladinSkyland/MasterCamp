@@ -82,3 +82,64 @@ exports.createConversation = function (id_employee, title, id_user, id_applicati
     })
   })
 }
+
+exports.getMyDoc = function (id_user) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT * FROM Files WHERE ID_user = ?", [id_user], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        console.log(result, "result")
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.deleteFC = function (id_file, id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("DELETE FROM Files_Conversations WHERE ID_file = ? AND ID_conversation = ?", [id_file, id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.createFC = function (id_file, id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("INSERT INTO Files_Conversations VALUES (?,?)", [id_file, id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.getVisibleDoc = function (id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT Files.* FROM Files_Conversations JOIN Conversations using(ID_conversation) JOIN Files using (ID_file) WHERE ID_conversation = ?", [id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+exports.getCustomerID = function (id_conv) {
+  return new Promise ((resolve, reject) => {
+    db.query("SELECT ID_user FROM Conversations where ID_conversation = ?", [id_conv], (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}

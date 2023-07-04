@@ -95,7 +95,7 @@ const EmployeePage = () => {
         <div className="flex items-center justify-center">
           <ToggleButton
             isChecked={isChecked}
-            value="Employe"
+            value={["Employees pending", "Employees accepted"]}
             handleChange={() => setIsChecked(!isChecked)}
           />
         </div>

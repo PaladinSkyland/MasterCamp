@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar';
 import ToggleButton from '../ToggleButton';
 
-const storedToken = localStorage.getItem('token');
 
 const BankPage = () => {
   const [bankListPending, setBankListPending] = useState([]);
   const [bankListPendingLength, setBankListPendingLength] = useState(
     bankListPending.length
   );
+  const storedToken = localStorage.getItem('token');
 
   const [bankListAccepted, setBankListAccepted] = useState([]);
   const [bankListAcceptedLength, setBankListAcceptedLength] = useState(
@@ -91,19 +91,19 @@ const BankPage = () => {
   return bankListPending ? (
     <div>
       <NavBar />
-      <div className="flex flex-col w-full p-2 mx-auto select-none sm:p-4 sm:h-64 rounded-2xl">
+      <div className="flex flex-col mx-auto select-none sm:p-4 sm:h-64 rounded-2xl">
         <div className="flex items-center justify-center">
           <ToggleButton
             isChecked={isChecked}
-            value="Banks"
+            value={["Banks pending", "Banks accepted"]}
             handleChange={() => setIsChecked(!isChecked)}
           />
         </div>
         {isChecked ? (
           <div className="p-2 shadow">
             {bankListAccepted.map((bank, index) => (
-              <div className="flex rounded-2xl gap-4 items-center" key={index}>
-                <div className="w-1/3 flex flex-col">
+              <div className="flex rounded-2xl items-center" key={index}>
+                <div className="w-1/3 flex flex-col py-2">
                   <p className="text-4xl">{bank.Name}</p>
                 </div>
                 <div className="w-1/3">

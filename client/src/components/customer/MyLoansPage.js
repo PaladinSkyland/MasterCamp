@@ -169,16 +169,16 @@ const MyLoansPage = () => {
                   <LoanDate date={myLoan.Creation_date} />
                   <div className="flex flex-row m-2 space-x-4 items-center">
                     <LoanStatus status={myLoan.Status} />
-                    <span className="font-bold">{myLoan.Amount}$</span>
+                    <span className="font-bold">{myLoan.Amount}€</span>
                   </div>
                 </div>
-                <ChevronButton>
+                {/* <ChevronButton>
                   <div className="">
                     <span className="font-bold">
                       ID : {myLoan.ID_application}
                     </span>
                   </div>
-                </ChevronButton>
+                </ChevronButton> */}
                 {myLoan.Status === 'Accepted' ? (
                   <Link
                     to={`/conversation?application=${myLoan.ID_application}`}
