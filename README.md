@@ -23,6 +23,9 @@ Les principales fonctionnalités sont :
 - Importer la BDD (déjà peuplée)
 - Ecrire npm install dans le dossier "server" puis dans le dossier client
 - Configuration des .env : 
+
+- Dans le fichier .env se trouvant dans "server" mettre :
+
 - Si récupération du .env via le .zip
 
     * MYSQL_HOST : l’ip et le port la BDD sur votre ordinateur
@@ -32,7 +35,7 @@ Les principales fonctionnalités sont :
     Le reste des clés sont déjà attribuées 
 
 - Si récupération du .env via github : 
-    - Dans le fichier .env se trouvant dans "server" remplacer :
+    
 
     * MYSQL_DATABASE = creditexpressdb ou CreditExpressDB sur Linux
     * MYSQL_HOST : l’ip et le port la BDD sur votre ordinateur
@@ -46,6 +49,10 @@ Les principales fonctionnalités sont :
 
 - Dans le terminal cd /server éxecuter: npm run server
 - Dans le terminal cd /client éxecuter : npm run client
+
+- Dans le fichier .env se trouvant dans "client" mettre :
+
+    * cryptedKey : 11
 
 ## Utilisation
 
