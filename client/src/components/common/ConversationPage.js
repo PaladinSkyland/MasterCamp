@@ -31,7 +31,6 @@ const ContractElement = ({ storedToken, conversationId }) => {
           },
         }
       );
-      console.log(response)
 
       if (response.ok) {
         const data = await response.json();
@@ -165,120 +164,138 @@ const ContractElement = ({ storedToken, conversationId }) => {
       <div className="p-4 rounded-lg bg-white my-4">
         <h2 className="text-2xl font-bold mb-4">Informations du contrat</h2>
         <p className="mb-2">
-          <span className="font-bold">ID contrat:</span> {contractData.ID_conversation}
+          <span className="font-bold">Montant :</span> {contractData.Amount}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Montant:</span> {contractData.Amount}
+          <span className="font-bold">Taux d'intérêt :</span> {contractData.InterestRate}%
         </p>
         <p className="mb-2">
-          <span className="font-bold">Taux d'intérêt:</span> {contractData.InterestRate}%
+          <span className="font-bold">Durée :</span> {contractData.Duration} mois
         </p>
         <p className="mb-2">
-          <span className="font-bold">Durée:</span> {contractData.Duration} mois
+          <span className="font-bold">Type d'intérêt :</span> {contractData.InterestType}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Type d'intérêt:</span> {contractData.InterestType}
+          <span className="font-bold">Revenu mensuel :</span> {contractData.MonthlyIncome}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Revenu mensuel:</span> {contractData.MonthlyIncome}
+          <span className="font-bold">Options de remboursement :</span> {contractData.RepaymentOptions}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Options de remboursement:</span> {contractData.RepaymentOptions}
+          <span className="font-bold">Description :</span> {contractData.Description}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Description:</span> {contractData.Description}
+          <span className="font-bold">Frais et coûts :</span> {contractData.FeesAndCosts}
         </p>
         <p className="mb-2">
-          <span className="font-bold">ID banque:</span> {contractData.ID_bank}
+          <span className="font-bold">Date de création :</span> <LoanDate date={contractData.Creation_date} />
         </p>
         <p className="mb-2">
-          <span className="font-bold">Frais et coûts:</span> {contractData.FeesAndCosts}
+          <span className="font-bold">Assurances et garanties :</span> {contractData.InsuranceAndGuarantees}
         </p>
         <p className="mb-2">
-          <span className="font-bold">Date de création:</span> {contractData.Creation_date}
+          <span className="font-bold">Statut :</span> {contractData.Status}
         </p>
-        <p className="mb-2">
-          <span className="font-bold">Assurances et garanties:</span> {contractData.InsuranceAndGuarantees}
-        </p>
-        <p className="mb-2">
-          <span className="font-bold">Statut:</span> {contractData.Status}
-        </p>
-        <div className="mt-4 space-x-2">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-400" onClick={handleAccept}>
-            Accepter
-          </button>
-          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-400" onClick={handleRefuse}>
-            Refuser
-          </button>
+        <div className="mt-4 flex space-x-2 text-white font-semibold">
+          {contractData.Status !== "Accepted" && contractData.Status !== "Canceled" && (
+            <button className="bg-red-500 p-2 w-1/2 hover:bg-red-400 rounded-sm" onClick={handleRefuse}>Annuler le contrat</button>
+          )}
+          {contractData.Status === "Progress" && (
+            <button className="bg-green-500 p-2 w-1/2 hover:bg-green-400 rounded-sm" onClick={handleAccept}>Accepter le contrat</button>
+          )}
         </div>
+
       </div>
     );
   };
 
   const renderEditableContractInfo = () => {
     return (
-      <div className="p-4 bg-gray-100 bg-white my-4 rounded-lg">
+      <div className="p-4 bg-gray-100 bg-white my-3 rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Informations du contrat</h2>
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Montant :</span> {contractData.Amount}€
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="number" placeholder={amount} onChange={handleAmountChange} />
+        </p>
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Taux d'intérêt :</span> {contractData.InterestRate}%
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="number" placeholder={interestRate} onChange={handleInterestRateChange} />
+        </p>
 
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Montant:</span> {contractData.Amount}€
-          <input className="bg-gray-200 flex-grow" type="number" value={amount} onChange={handleAmountChange} />
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Durée :</span> {contractData.Duration} mois
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="number" placeholder={duration} onChange={handleDurationChange} />
         </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Taux d'intérêt:</span> {contractData.InterestRate}%
-          <input className="bg-gray-200 flex-grow" type="number" value={interestRate} onChange={handleInterestRateChange} />
+
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Type d'intérêt :</span> {contractData.InterestType}
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="text" placeholder={interestType} onChange={handleInterestTypeChange} />
+        </p>
+
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Revenu mensuel :</span> {contractData.MonthlyIncome}
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="number" placeholder={monthlyIncome} onChange={handleMonthlyIncomeChange} />
+        </p>
+
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Options de remboursement :</span> {contractData.RepaymentOptions}
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="text" placeholder={repaymentOptions} onChange={handleRepaymentOptionsChange} />
+        </p>
+
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span className="font-bold">Description :</span> {contractData.Description}
+        </p>
+
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Frais et coûts :</span> {contractData.FeesAndCosts}
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="text" placeholder={feesAndCosts} onChange={handleFeesAndCostsChange} />
+        </p>
+
+        <p className="flex mb-2 p-2 gap-2">
+          <span className="font-bold">Date de création : </span>
+          <span><LoanDate date={contractData.Creation_date} /></span>
 
         </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Durée:</span> {contractData.Duration} mois
-          <input className="bg-gray-200 flex-grow" type="number" value={duration} onChange={handleDurationChange} />
 
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Assurances et garanties :</span> {contractData.InsuranceAndGuarantees}
+          </span>
+          <input className="bg-white p-2 border-2 rounded-md flex-grow" type="text" placeholder={insuranceAndGuarantees} onChange={handleInsuranceAndGuaranteesChange} />
         </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Type d'intérêt:</span> {contractData.InterestType}
-          <input className="bg-gray-200 flex-grow" type="text" value={interestType} onChange={handleInterestTypeChange} />
 
+        <p className="flex mb-2 p-2 gap-2 flex-col">
+          <span>
+            <span className="font-bold">Statut : </span> {contractData.Status}
+          </span>
         </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Revenu mensuel:</span> {contractData.MonthlyIncome}
-          <input className="bg-gray-200 flex-grow" type="number" value={monthlyIncome} onChange={handleMonthlyIncomeChange} />
 
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Options de remboursement:</span> {contractData.RepaymentOptions}
-          <input className="bg-gray-200 flex-grow"
-            type="text" value={repaymentOptions} onChange={handleRepaymentOptionsChange} />
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Description:</span> {contractData.Description}
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Frais et coûts:</span> {contractData.FeesAndCosts}
-          <input className="bg-gray-200 flex-grow" type="text" value={feesAndCosts} onChange={handleFeesAndCostsChange} />
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Date de création:</span> <LoanDate date = {contractData.Creation_date} />
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Assurances et garanties:</span> {contractData.InsuranceAndGuarantees}
-          <input className="bg-gray-200 flex-grow" type="text" value={insuranceAndGuarantees} onChange={handleInsuranceAndGuaranteesChange} />
-        </p>
-        <p className="flex mb-2 p-2 gap-2 ">
-          <span className="font-bold">Statut:</span> {contractData.Status}
-        </p>
-        <div className="mt-4 space-x-2">
-          <p>Statut: {contractData.Status}</p>
-          <button onClick={handleSubmit}>Mettre à jour</button>
+        <div className="mt-4 flex space-x-2 text-white font-semibold">
+          <button className="bg-green-500 p-2 w-1/2 hover:bg-green-400 rounded-sm" onClick={handleSubmit}>Mettre à jour et valider le contrat</button>
           {contractData.Status !== "Accepted" && contractData.Status !== "Canceled" && (
-            <button onClick={handleRefuse}>Annuler</button>
+            <button className="bg-red-500 p-2 w-1/2 hover:bg-red-400 rounded-sm" onClick={handleRefuse}>Annuler le contrat</button>
           )}
         </div>
       </div>
     );
-  
+
   };
 
-return (userData.UserType === "employee" && contractData) ? renderEditableContractInfo(contractData) : (contractData ? renderContractInfo(contractData) : null);
+  return (userData.UserType === "employee" && contractData) ? renderEditableContractInfo(contractData) : (contractData ? renderContractInfo(contractData) : null);
 
 }
 
@@ -292,7 +309,7 @@ const ChatPage = () => {
   const [myVisibleList, setMyVisibleList] = useState([]);
   const [toggle, setToggle] = useState(false)
   const [checkedItems, setCheckedItems] = useState([]);
-  const {userData} = useContext(UserContext)
+  const { userData } = useContext(UserContext)
 
 
   const handleArrowClick = () => {
@@ -419,6 +436,7 @@ const ChatPage = () => {
     fetchMessages();
     fetchMyDoc();
     fetchMyVisibleDoc()
+
   }, []);
 
   // Rafraîchir les messages toutes les 5 secondes
@@ -545,7 +563,7 @@ const ChatPage = () => {
           </div>
           <h2 className="text-lg font-bold mb-4">Actions</h2>
           <div className="flex justify-center">
-            <div className="inline-block p-2 rounded-lg bg-blue-200 hover:bg-blue-300 cursor-pointer" onClick={() => setToggle(!toggle)}>
+            <div className="inline-block p-3 rounded-lg bg-blue-400 hover:bg-blue-300 cursor-pointer my-4" onClick={() => setToggle(!toggle)}>
               {toggle ? "Voir le contrat" : "Voir les documents"}
             </div>
           </div>
@@ -571,10 +589,10 @@ const ChatPage = () => {
                     </div>
                   </div>
                 ))
-              ) : ( <div> 
-                {userData.userType === "customer" ? (null) : (<div className="font-semibold text-center my-4"> Vous n'avez importé aucun fichier pour le moment</div>)}
+              ) : (<div>
+                {userData.UserType == "customer" ? (<div className="font-semibold text-center my-4"> Vous n'avez importé aucun fichier pour le moment</div>) : (null)}
               </div>
-                
+
               )}
 
               {Array.isArray(myVisibleList) && myVisibleList.length > 0 ? (
@@ -587,10 +605,10 @@ const ChatPage = () => {
                   </div>
                 ))
               ) : (
-                <div> 
-                {userData.userType === "employee" ? (null) : (<div className="font-semibold text-center my-4"> Le client n'a partagé aucun document pour le moment</div>) }
-              </div>
-                
+                <div>
+                  {userData.UserType == "employee" ? (<div className="font-semibold text-center my-4"> Le client n'a partagé aucun document pour le moment</div>) : (null)}
+                </div>
+
               )}
             </>
           ) : (

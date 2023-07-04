@@ -1,7 +1,6 @@
 const db = require('../db');
 
 exports.getContratByIDCONV = function (ID_conversation) {
-    
     return new Promise ((resolve, reject) => {
         db.query("SELECT * FROM Contrats WHERE ID_conversation = ?", [ID_conversation], (error, results) => {
             if (error) {
