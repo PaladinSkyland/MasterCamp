@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import NavBar from '../NavBar';
 
 const FileUploadForm = () => {
   const [file, setFile] = useState();
@@ -161,13 +162,15 @@ const FileUploadForm = () => {
 
   return (
     <div>
+      <NavBar/>
       <form 
         onSubmit={handleUpload}
       >
-        <label>Choisissez un type de fichier : </label>
+        <div className='flex flex-col justify-center gap-2 w-2/3 m-auto my-12 shadow-md p-5 bg-white'>
+        <label className='font-medium'>Choisissez un type de fichier : </label>
         
-        <select value={selectedOption} onChange={handleSelectChange}>
-          <option value="">Choisissez un type de fichier</option>
+        <select className="p-2 bg-blue-100" value={selectedOption} onChange={handleSelectChange}>
+          <option value="">Aucun type de fichier</option>
           <option value="avisImpot1">1er avis d'imposition</option>
           <option value="avisImpot2">2ème avis d'imposition</option>
           <option value="justifIdentite">Justificatif d'identité</option>
@@ -190,22 +193,28 @@ const FileUploadForm = () => {
           <option value="tableauAmortissement">Tableau d'amortissement</option>
         </select>
         
-        <label>Insérez un fichier ici : </label>
+        <label className='font-medium'>Insérez un fichier : </label>
         
-        <input
+        
+        <input  
           type="file" 
           onChange={(e) => setFile(e.target.files[0])}
         />
         
         <button className="btn-primary" type="submit">Submit</button>
+        </div>
+        
+        <div className='flex justify-center m-auto'>
+          <p className='text-4xl font-medium text-blue-400 my-12'>Mes fichiers</p>
+        </div>
 
-        <div>
+        <div className='flex flex-col m-auto w-2/3'>
           {allFiles.map((file, index) => (
-            <div key={index}>
-              <p>{file.Title}</p>
-              <button value={file.File_type} onClick={handleClick}>
+            <div key={index} className='flex flex-row gap-4 justify-between bg-white my-2 p-4'>
+              <button className='font-medium' value={file.File_type} onClick={handleClick}>
                 {getFileLabel(file.File_type)}
               </button>
+              <p>{file.Title}</p>
             </div>
           ))}
       </div>
