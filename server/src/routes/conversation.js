@@ -223,6 +223,8 @@ router.post("/sendcontrat/:conversationId", authenticateToken, employeeAccess,  
     else {
       employeeID = "";
     }
+    //ID_suer = ""
+    ID_user = "";
     conversationqueries.getConvByIDandIDuser(conversationId,userID,employeeID).then((result) => {
       if (result) {
         contratqueries.modifyContratByIDCONV(conversationId,{Amount, InterestRate, Duration, InterestType, MonthlyIncome, RepaymentOptions, Description, FeesAndCosts, InsuranceAndGuarantees}).then((result) => {

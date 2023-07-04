@@ -3,29 +3,8 @@ import { useParams, useNavigate  } from "react-router-dom";
 import NavBar from "../NavBar";
 
 
-const contractElement = (contractData) => {
-  return (
-    <div>
-      <h2>Informations du contrat</h2>
-      <p>ID contrat: {contractData.ID_contrat}</p>
-      <p>Montant: {contractData.Amount}</p>
-      <p>Taux d'intérêt: {contractData.InterestRate}%</p>
-      <p>Durée: {contractData.Duration} mois</p>
-      <p>Type d'intérêt: {contractData.InterestType}</p>
-      <p>Revenu mensuel: {contractData.MonthlyIncome}</p>
-      <p>Options de remboursement: {contractData.RepaymentOptions}</p>
-      <p>Description: {contractData.Description}</p>
-      <p>ID banque: {contractData.ID_bank}</p>
-      <p>Frais et coûts: {contractData.FeesAndCosts}</p>
-      <p>Date de création: {contractData.Creation_date}</p>
-      <p>Assurances et garanties: {contractData.InsuranceAndGuarantees}</p>
-      <p>Statut: {contractData.Status}</p>
-    </div>
-  );
-};
 
-const ContractElement = ({ contractData, isEmployee }) => {
-
+const ContractElement = ({ contractData, isEmployee, storedToken, conversationId }) => {
   const [amount, setAmount] = useState(contractData.Amount);
   const [interestRate, setInterestRate] = useState(contractData.InterestRate);
   const [duration, setDuration] = useState(contractData.Duration);
@@ -71,7 +50,31 @@ const ContractElement = ({ contractData, isEmployee }) => {
   const handleInsuranceAndGuaranteesChange = (e) => {
     setInsuranceAndGuarantees(e.target.value);
   };
-  console.log(contractData);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/conversation/sendcontrat/${conversationId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify({Amount: amount,IntersestRate: interestRate,Duration: duration,InterestType: interestType,
+          MonthlyIncome: monthlyIncome,RepaymentOptions: repaymentOptions,Description: description,FeesAndCosts: feesAndCosts,
+          InsuranceAndGuarantees: insuranceAndGuarantees}),
+      });
+
+      if (response.ok) {
+        console.log("Contrat mis à jour avec succès");
+      } else {
+        throw new Error("Erreur lors de la mise à jour du contrat");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   const renderContractInfo = (contractData) => {
@@ -96,65 +99,54 @@ const ContractElement = ({ contractData, isEmployee }) => {
   };
 
   const renderEditableContractInfo = () => {
-    
-    const {
-      Amount,
-      InterestRate,
-      Duration,
-      InterestType,
-      MonthlyIncome,
-      RepaymentOptions,
-      Description,
-      FeesAndCosts,
-      InsuranceAndGuarantees,
-    } = contractData;
     return (
       <div>
         <h2>Informations du contrat (Modifiable)</h2>
       <div className="contract-field">
       <p>Montant: {contractData.Amount}</p>
-        <input type="number" value={amount} onChange={(e) => console.log(e.target.value)} />
+        <input type="number" value={amount} onChange={handleAmountChange} />
       </div>
       <div className="contract-field">
       <p>Taux d'intérêt: {contractData.InterestRate}%</p>
-        <input type="number" value={interestRate} onChange={(e) => console.log(e.target.value)} />
+        <input type="number" value={interestRate} onChange={handleInterestRateChange} />
       </div>
       <div className="contract-field">
       <p>Durée: {contractData.Duration} mois</p>
-        <input type="number" value={duration} onChange={(e) => console.log(e.target.value)} />
+        <input type="number" value={duration} onChange={handleDurationChange} />
       </div>
       <div className="contract-field">
       <p>Type d'intérêt: {contractData.InterestType}</p>
-        <input type="text" value={interestType} onChange={(e) => console.log(e.target.value)} />
+        <input type="text" value={interestType} onChange={handleInterestTypeChange} />
       </div>
       <div className="contract-field">
       <p>Revenu mensuel: {contractData.MonthlyIncome}</p>
-        <input type="number" value={monthlyIncome} onChange={(e) => console.log(e.target.value)} />
+        <input type="number" value={monthlyIncome} onChange={handleMonthlyIncomeChange} />
       </div>
       <div className="contract-field">
       <p>Options de remboursement: {contractData.RepaymentOptions}</p>
         <input
           type="text"
           value={repaymentOptions}
-          onChange={(e) => console.log(e.target.value)}
+          onChange={handleRepaymentOptionsChange}
         />
       </div>
       <div className="contract-field">
         <p>Description: {contractData.Description}</p>
-        <input type="text" value={description} onChange={(e) => console.log(e.target.value)} />
+        <input type="text" value={description} onChange={handleDescriptionChange} />
       </div>
       <div className="contract-field">
       <p>Frais et coûts: {contractData.FeesAndCosts}</p>
-        <input type="text" value={feesAndCosts} onChange={(e) => console.log(e.target.value)} />
+        <input type="text" value={feesAndCosts} onChange={handleFeesAndCostsChange} />
       </div>
       <div className="contract-field">
       <p>Assurances et garanties: {contractData.InsuranceAndGuarantees}</p>
         <input
           type="text"
           value={insuranceAndGuarantees}
-          onChange={(e) => console.log(e.target.value)}
+          onChange={handleInsuranceAndGuaranteesChange}
         />
       </div>
+      <button onClick={handleSubmit}>Mettre à jour</button>
       </div>
     );
   };
@@ -166,11 +158,11 @@ const ChatPage = () => {
   const { conversationId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [contractData2, setContractData] = useState(null);
+  const [contractData, setContractData] = useState(null);
   const storedToken = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  const contractData = {
+  const contractData2 = {
     ID_contrat: 1,
     Amount: 10000,
     InterestRate: 5,
@@ -298,7 +290,7 @@ const ChatPage = () => {
         <button className="btn-secondary">Remplir un formulaire</button>
       </div>
       {contractData && (
-        <ContractElement contractData={contractData} isEmployee={true} />
+        <ContractElement contractData={contractData} isEmployee={true} storedToken={storedToken} conversationId= {conversationId}  />
       )}
     </div>
     <div className="p-6 flex-grow overflow-hidden">
