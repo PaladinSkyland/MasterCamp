@@ -504,9 +504,9 @@ const ChatPage = () => {
     }
   }
 
-  const handleClick = async (event) => {
+  const handleClick = async (fileType) => {
     //get an identifier to know which file have been clicked
-    const fileType = event.target.value;
+    //const fileType = event.target.value;
 
     //get the corresponding file on the server
     const response = await fetch(`/conversation/download/${fileType}/${conversationId}`,
@@ -594,16 +594,24 @@ const ChatPage = () => {
               </div>
 
               )}
-
               {Array.isArray(myVisibleList) && myVisibleList.length > 0 ? (
-                myVisibleList.map((visible, index) => (
-                  <div key={index}>
-                    <p>{visible.Title}</p>
-                    <button value={visible.File_type} onClick={handleClick}>
-                      {getFileLabel(visible.File_type)}
-                    </button>
-                  </div>
-                ))
+                <div className="bg-white p-2 m-4 rounded-lg">
+                  {myVisibleList.map((visible, index) => (
+
+                    <div key={index} className="py-2">
+                      <p className="font-bold">{getFileLabel(visible.File_type)} :</p>
+                      
+                      <div className="cursor-pointer flex flex-row gap-2" onClick={() => handleClick(visible.File_type)}>
+                        <p>{visible.Title}</p>
+                        <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
+                        </svg>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+
               ) : (
                 <div>
                   {userData.UserType == "employee" ? (<div className="font-semibold text-center my-4"> Le client n'a partagé aucun document pour le moment</div>) : (null)}
