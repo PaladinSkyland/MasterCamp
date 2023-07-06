@@ -95,7 +95,7 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
             res.sendStatus(401)
         } else {
             const clientInfo = await loanQueries.getUserLastNameAndIDByIDLoan(req.body.ID_application)
-            const employeeLastName = await userQueries.getLastNameByID(infoEmployee.ID_employee)
+            const employeeLastName = await userQueries.getLastNameByID(id_userEmployee)
             const title =  "Conversation entre "+ clientInfo[0].LastName + " et " + employeeLastName[0].LastName
             conversationQueries.createConversation(infoEmployee.ID_employee, title, clientInfo[0].ID_user, req.body.ID_application)
             res.sendStatus(200)
@@ -109,7 +109,7 @@ router.post('/createConversation', authenticateToken, employeeAccess, async (req
 router.get('/getMyLoans', authenticateToken, employeeAccess, async (req, res) => {
     const id = req.user.ID_user
     const id_employee = await employeeQueries.getEmployeeIDByUserID(id)
-    const response = employeeQueries.getEmployeeLoans(id_employee)
+    const response = employeeQueries.getEmployeeLoans(id_employee.ID_employee)
 
     response.then(response => {
         res.json(response)
